@@ -6,6 +6,8 @@ import org.jgrapht.graph.DirectedWeightedPseudograph;
 @SuppressWarnings("serial")
 public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 
+	//TODO: criar lista para guardar vertices?
+	
 	@SuppressWarnings("unchecked")
 	public Graph(Class<? extends DefaultEdge> edgeClass) {
 		super((Class<? extends Edge>) edgeClass);
