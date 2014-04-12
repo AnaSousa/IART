@@ -10,7 +10,7 @@ public class demo {
 	public static void main(String [] args) {
 		Class<? extends DefaultEdge> edgeClass = null;
 		DirectedPseudograph<String, DefaultEdge> a = new DirectedPseudograph<String, DefaultEdge>((Class<? extends DefaultEdge>) edgeClass);
-
+		
 		a.addVertex("1");
 		a.addVertex("2");
 		a.addVertex("3");
