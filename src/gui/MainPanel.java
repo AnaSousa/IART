@@ -24,10 +24,10 @@ public class MainPanel extends JPanel {
 	private BufferedImage roadV;
 	private BufferedImage roadH;
 	private BufferedImage roadX;
-	
-	private final int X = 50;
-	private final int Y = 50;
-	private final int L = 75;
+
+	private final int X = 5;
+	private final int Y = 5;
+	private final int L = 50;
 
 	public MainPanel(Graph graph) {
 
@@ -71,7 +71,7 @@ public class MainPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		//g.drawImage(roadV, 200, 200,75,75,null);
+		//g.drawImage(roadH, 70, 70,75,75,null);
 
 		for(int x = 0; x < nodes.length; x++) {
 			for(int y = 0; y< nodes[x].length; y++) {
@@ -79,37 +79,48 @@ public class MainPanel extends JPanel {
 					g.drawImage(roadX, X + x * L, Y + y * L, L, L, null);
 			}	
 		}
-		
+
 		for(Edge i : edges) {
+
+
 			int x1,x2,y1,y2, deltax, deltay;
-			
+
 			x1 = i.getSource().getX();
 			x2 = i.getTarget().getX();
 			y1 = i.getSource().getY();
 			y2 = i.getTarget().getY();
-			
+
 			deltax = x1 - x2;
 			deltay = y1 - y2;
-			
+
+			//System.out.printf("V1(%d,%d) V2(%d,%d) Dx=%d Dy=%d",x1,y1,x2,y2,deltax,deltay);
 			if(deltax == 0) {
-				int inc = deltay < 0 ? -1 : 1;
-				
+				//System.out.printf("  X\n");
+				int inc = deltay < 0 ? 1 : -1;
+
 				int y = y1 + inc;
-				
-				while(y1 != y2) {
+				while(y != y2) {
 					g.drawImage(roadV, X + x1 * L, Y + y * L, L, L, null);
 					y += inc;
 				}
 			}
 			else if(deltay == 0) {
-				
+				//System.out.printf("  Y\n");
+				int inc = deltax < 0 ? 1 : -1;
+
+				int x = x1 + inc;
+
+				while(x != x2) {
+					g.drawImage(roadH, X + x * L, Y + y1 * L, L, L, null);
+					x += inc;
+				}
 			}
 			else
 				System.out.println("NSADUIDKASJ");
-			
+
 		}
-		
-		
+
+
 
 
 

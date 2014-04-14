@@ -1,5 +1,6 @@
 package gui;
 
+import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
@@ -7,6 +8,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
 public class MainWindow {
@@ -96,6 +98,11 @@ public class MainWindow {
 		graph.addEdge(n5,n6,false);
 		graph.addEdge(n6,n7,false);
 		graph.addEdge(n8,n7,false);
+		graph.addEdge(n9,n10,false);
+		
+		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
+		System.out.println(b.getPath());
+		System.out.println(b.getPathLength());
 	}
 
 	/**

@@ -114,4 +114,12 @@ public class Node implements Comparable<Node> {
 	public int compareTo(Node arg0) {
 		return Integer.compare(id, arg0.getId());
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return  id + "";
+	}
 }
