@@ -1,5 +1,6 @@
 package graph;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.jgrapht.graph.DefaultEdge;
@@ -46,11 +47,15 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 		return addEdge(edge.getSource(), edge.getTarget(), edge);
 	}
 	
-	public Set<Edge> getEdges() {
+	public Set<Edge> getSetEdges() {
 		return edgeSet();
 	}
 	
-	public void calculateDistances() {
+	public ArrayList<Edge> getEdges() {
+		return new ArrayList<Edge>(getSetEdges());
+	}
+	
+	public void calculateDistances() { //TODO
 		//calcultateDistanceDump();
 		//calculateDistanceStation();
 	}
