@@ -37,7 +37,7 @@ public class Node {
 	
 	public Node(int type) {
 		
-		if(type<SIMPLE_NODE || type>PETROL_STATION) {
+		if(type!=SIMPLE_NODE || type!=CROSSROAD || type!=GARBAGE_CONTAINER || type!=DUMP || type!=PETROL_STATION) {
 			System.out.println("Invalid type. Node not added");
 			return;
 		}
