@@ -55,11 +55,11 @@ public class MainWindow {
 		n4.setPosition(9, 1);
 		Node n5 = new Node(Node.CROSSROAD);
 		n5.setPosition(3, 4);
-		Node n6 = new Node(Node.CROSSROAD);
+		Node n6 = new Node(Node.PETROL_STATION);
 		n6.setPosition(1, 4);
 		Node n7 = new Node(Node.CROSSROAD);
 		n7.setPosition(1, 8);
-		Node n8 = new Node(Node.CROSSROAD);
+		Node n8 = new Node(Node.DUMP);
 		n8.setPosition(8, 8);
 		Node n9 = new Node(Node.CROSSROAD);
 		n9.setPosition(3, 6);
@@ -67,7 +67,7 @@ public class MainWindow {
 		n10.setPosition(6, 6);
 		Node n11 = new Node(Node.CROSSROAD);
 		n11.setPosition(6, 4);
-		Node n12 = new Node(Node.CROSSROAD);
+		Node n12 = new Node(Node.GARBAGE_CONTAINER);
 		n12.setPosition(9, 4);
 		
 		

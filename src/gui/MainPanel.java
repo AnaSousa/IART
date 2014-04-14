@@ -24,6 +24,11 @@ public class MainPanel extends JPanel {
 	private BufferedImage roadV;
 	private BufferedImage roadH;
 	private BufferedImage roadX;
+	private BufferedImage bin;
+	private BufferedImage bin2;
+	private BufferedImage gas;
+	private BufferedImage dump;
+	private BufferedImage grass;
 
 	private final int X = 5;
 	private final int Y = 5;
@@ -38,6 +43,11 @@ public class MainPanel extends JPanel {
 			roadV = ImageIO.read(new File("resources/roadV.png"));
 			roadH = ImageIO.read(new File("resources/roadH.png"));
 			roadX = ImageIO.read(new File("resources/roadX.png"));
+			bin = ImageIO.read(new File("resources/bin.png"));
+			bin2 = ImageIO.read(new File("resources/bin2.png"));
+			gas = ImageIO.read(new File("resources/gas.png"));
+			dump = ImageIO.read(new File("resources/dump.png"));
+			grass = ImageIO.read(new File("resources/grass.jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -75,8 +85,16 @@ public class MainPanel extends JPanel {
 
 		for(int x = 0; x < nodes.length; x++) {
 			for(int y = 0; y< nodes[x].length; y++) {
-				if(nodes[x][y] != null)
+				g.drawImage(grass, X + x * L, Y + y * L, L, L, null);
+				if(nodes[x][y] != null) {
 					g.drawImage(roadX, X + x * L, Y + y * L, L, L, null);
+					if(nodes[x][y].getType() == Node.GARBAGE_CONTAINER) 
+						g.drawImage(bin, X + x * L, Y + y * L, L, L, null);
+					else if(nodes[x][y].getType() == Node.PETROL_STATION) 
+						g.drawImage(gas, X + x * L, Y + y * L, L, L, null);
+					else if(nodes[x][y].getType() == Node.DUMP) 
+						g.drawImage(dump, X + x * L, Y + y * L, L, L, null);
+				}
 			}	
 		}
 
@@ -119,10 +137,6 @@ public class MainPanel extends JPanel {
 				System.out.println("NSADUIDKASJ");
 
 		}
-
-
-
-
 
 
 	}
