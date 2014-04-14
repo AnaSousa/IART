@@ -1,13 +1,13 @@
 package graph;
 
-public class Node {
+public class Node implements Comparable<Node> {
 
-	final int SIMPLE_NODE = 0;
-	final int CROSSROAD = 1;
-	final int GARBAGE_CONTAINER = 2;
-	final int DUMP = 3;
-	final int PETROL_STATION = 4;
-	final int MAX_INT = Integer.MAX_VALUE;
+	public static final int SIMPLE_NODE = 0;
+	public static final int CROSSROAD = 1;
+	public static final int GARBAGE_CONTAINER = 2;
+	public static final int DUMP = 3;
+	public static final int PETROL_STATION = 4;
+	public static final int MAX_INT = Integer.MAX_VALUE;
 	
 	private static int currentId=0;
 	private int id;
@@ -37,7 +37,7 @@ public class Node {
 	
 	public Node(int type) {
 		
-		if(type!=SIMPLE_NODE || type!=CROSSROAD || type!=GARBAGE_CONTAINER || type!=DUMP || type!=PETROL_STATION) {
+		if(type!=SIMPLE_NODE && type!=CROSSROAD && type!=GARBAGE_CONTAINER && type!=DUMP && type!=PETROL_STATION) {
 			System.out.println("Invalid type. Node not added");
 			return;
 		}
@@ -64,8 +64,8 @@ public class Node {
 		return id;
 	}
 	
-	public String getId() {
-		return new Integer(id).toString();
+	public int getId() {
+		return id;
 	}
 	
 	public int getType() {
@@ -99,5 +99,19 @@ public class Node {
 	
 	public void setDistanceToStation(int newDistance) {
 		distanceToPetrolStation=newDistance;
+	}
+
+	@Override
+	public boolean equals(Object arg0) {
+		Node x = (Node) arg0;
+		if(x.getId() == id)
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public int compareTo(Node arg0) {
+		return Integer.compare(id, arg0.getId());
 	}
 }

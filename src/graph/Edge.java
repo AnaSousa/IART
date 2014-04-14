@@ -34,11 +34,11 @@ public class Edge extends DefaultEdge {
 		return target;
 	}
 	
-	public String getSourceId() {
+	public int getSourceId() {
 		return source.getId();
 	}
 	
-	public String getTargetId() {
+	public int getTargetId() {
 		return target.getId();
 	}
 	
