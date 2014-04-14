@@ -1,5 +1,9 @@
 package jgrapht_demo;
 
+import graph.Edge;
+import graph.Graph;
+import graph.Node;
+
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedPseudograph;
@@ -24,5 +28,24 @@ public class demo {
 		
 		
 		System.out.println(o.getPathEdgeList());
+		
+		
+		//com adaptaçoes de acordo com a implementação feita
+		Class<? extends Edge> edgeClass1 = null;
+		Graph b = new Graph((Class<? extends Edge>) edgeClass1);
+		
+		Node n=new Node();
+		Node n1=new Node();
+		Node n2=new Node();
+		b.addVertex(n.getId());
+		b.addVertex(n1.getId());
+		b.addVertex(n2.getId());
+		b.addEdge(n, n1);
+		b.addEdge(n1, n2);
+		b.addEdge(n2, n);
+		System.out.println(b.toString()); //TODO: porque imprime de forma diferente? :s
+		
+		DijkstraShortestPath<String, Edge> c = new DijkstraShortestPath<String, Edge>(b, n.getId(), n2.getId());
+		System.out.println(c.getPathEdgeList());
 	}
 }

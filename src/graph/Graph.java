@@ -16,16 +16,16 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 
 	public boolean addVertex() {
 		Node n=new Node();
-		return addVertex(n.getStringId());
+		return addVertex(n.getId());
 	}
 	
 	public boolean addVertex(int type) {
 		Node n=new Node(type);
-		return addVertex(n.getStringId());
+		return addVertex(n.getId());
 	}
 	
 	public boolean addVertex(Node node) {
-		return addVertex(node.getStringId());
+		return addVertex(node.getId());
 	}
 	
 	public boolean addEdge(String from, String to, int weight) {
@@ -34,12 +34,12 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 	}
 	
 	public boolean addEdge(Node n1, Node n2) {
-		Edge e=new Edge(n1.getStringId(), n2.getStringId());
+		Edge e=new Edge(n1.getId(), n2.getId());
 		return addEdge(e.getSource(), e.getTarget(), e);
 	}
 	
 	public boolean addEdge(Node n1, Node n2, int weight) {
-		Edge e=new Edge(n1.getStringId(), n2.getStringId(), weight);
+		Edge e=new Edge(n1.getId(), n2.getId(), weight);
 		return addEdge(e.getSource(), e.getTarget(), e);
 	}
 	

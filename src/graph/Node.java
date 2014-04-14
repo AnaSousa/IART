@@ -41,11 +41,11 @@ public class Node {
 		setPosition(x, y);
 	}
 	
-	public int getId() {
+	public int getIntegerId() {
 		return id;
 	}
 	
-	public String getStringId() {
+	public String getId() {
 		return new Integer(id).toString();
 	}
 	
