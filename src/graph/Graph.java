@@ -7,7 +7,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 
 @SuppressWarnings("serial")
-public class Graph extends DirectedWeightedPseudograph<String, Edge>{
+public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 	
 	@SuppressWarnings("unchecked")
 	public Graph(Class<? extends DefaultEdge> edgeClass) {
@@ -16,19 +16,20 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 
 	public boolean addVertex() {
 		Node n=new Node();
-		return addVertex(n.getId());
+		return addVertex(n);
 	}
 	
 	public boolean addVertex(int type) {
 		Node n=new Node(type);
-		return addVertex(n.getId());
+		return addVertex(n);
 	}
 	
 	public boolean addVertex(Node node) {
-		return addVertex(node.getId());
+		return addVertex(node);
 	}
 	
-	public Edge addEdge(String from, String to, int weight) {
+	
+	/*public Edge addEdge(String from, String to, int weight) {
 		
 		if(containsVertex(from) && containsVertex(to)) {
 			Edge e=new Edge(from, to, weight);
@@ -38,13 +39,13 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 				return null;
 		}
 		return null;
-	}
+	}*/
 	
 	public Edge addEdge(Node n1, Node n2) {
 		
-		if(containsVertex(n1.getId()) && containsVertex(n2.getId())) {
-			Edge e=new Edge(n1.getId(), n2.getId());
-			if(addEdge(e.getSource(), e.getTarget(), e))
+		if(containsVertex(n1) && containsVertex(n2)) {
+			Edge e=new Edge(n1, n2);
+			if(addEdge(n1, n2, e))
 				return e;
 			else 
 				return null;
@@ -54,9 +55,9 @@ public class Graph extends DirectedWeightedPseudograph<String, Edge>{
 	
 	public Edge addEdge(Node n1, Node n2, int weight) {
 		
-		if(containsVertex(n1.getId()) && containsVertex(n2.getId())) {
-			Edge e=new Edge(n1.getId(), n2.getId(), weight);
-			if(addEdge(e.getSource(), e.getTarget(), e))
+		if(containsVertex(n1) && containsVertex(n2)) {
+			Edge e=new Edge(n1, n2, weight);
+			if(addEdge(n1, n2, e))
 				return e;
 			else 
 				return null;

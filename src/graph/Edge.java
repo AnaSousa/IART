@@ -5,16 +5,16 @@ import org.jgrapht.graph.DefaultEdge;
 @SuppressWarnings("serial")
 public class Edge extends DefaultEdge {
 
-	private String source;
-	private String target;
+	private Node source;
+	private Node target;
 	private int weight=0;
 	
-	public Edge(String from, String to) {
+	public Edge(Node from, Node to) {
 		this.source=from;
 		this.target=to;
 	}
 
-	public Edge(String from, String to, int weight) {
+	public Edge(Node from, Node to, int weight) {
 		
 		if(weight<0) {
 			System.out.println("Invalid weigth. Edge from " + from + " to " + to + " not added");
@@ -26,12 +26,20 @@ public class Edge extends DefaultEdge {
 		this.weight=weight;
 	}
 	
-	public String getSource() {
+	public Node getSource() {
 		return source;
 	}
 	
-	public String getTarget() {
+	public Node getTarget() {
 		return target;
+	}
+	
+	public String getSourceId() {
+		return source.getId();
+	}
+	
+	public String getTargetId() {
+		return target.getId();
 	}
 	
     public String toString() {
