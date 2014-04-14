@@ -15,6 +15,12 @@ public class Edge extends DefaultEdge {
 	}
 
 	public Edge(String from, String to, int weight) {
+		
+		if(weight<0) {
+			System.out.println("Invalid weigth. Edge from " + from + " to " + to + " not added");
+			return;
+		}
+		
 		this.source=from;
 		this.target=to;
 		this.weight=weight;
