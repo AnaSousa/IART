@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
@@ -25,6 +27,7 @@ public class MainPanel extends JPanel {
 	Graph graph;
 	Node [][] nodes;
 	ArrayList<Edge> edges;
+	Queue<Edge> path;
 
 	private BufferedImage roadV;
 	private BufferedImage roadH;
@@ -96,6 +99,9 @@ public class MainPanel extends JPanel {
 			nodes[i.getX()][i.getY()] = i;
 
 		graph.calculateDistances();
+		
+		path = new LinkedList<Edge>();
+		
 	}
 
 	@Override
@@ -172,6 +178,8 @@ public class MainPanel extends JPanel {
 	
 	Action paintTimer = new AbstractAction() { // functionality of our timer:
 		public void actionPerformed(ActionEvent e) {
+		
+			
 			truckX += 0.1;
 			repaint();
 

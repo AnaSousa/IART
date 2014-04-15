@@ -91,19 +91,19 @@ public class MainWindow {
 		graph.addVertex(n11);
 		graph.addVertex(n12);
 
-		graph.addEdge(n1,n2,false);
-		graph.addEdge(n3,n2,true);
-		graph.addEdge(n3,n4,false);
-		graph.addEdge(n2,n5,false);
-		graph.addEdge(n2,n5,false);
-		graph.addEdge(n3,n11,false);
-		graph.addEdge(n11,n12,false);
-		graph.addEdge(n11,n10,false);
-		graph.addEdge(n5,n9,false);
-		graph.addEdge(n5,n6,false);
-		graph.addEdge(n6,n7,false);
-		graph.addEdge(n8,n7,false);
-		graph.addEdge(n9,n10,false);
+		graph.addEdge(n1,n2,2,false);
+		graph.addEdge(n3,n2,3,true);
+		graph.addEdge(n3,n4,3,false);
+		graph.addEdge(n2,n5,3,false);
+		//graph.addEdge(n2,n5,false);
+		graph.addEdge(n3,n11,3,false);
+		graph.addEdge(n11,n12,3,false);
+		graph.addEdge(n11,n10,2,false);
+		graph.addEdge(n5,n9,2,false);
+		graph.addEdge(n5,n6,2,false);
+		graph.addEdge(n6,n7,4,false);
+		graph.addEdge(n8,n7,7,false);
+		graph.addEdge(n9,n10,3,false);
 		
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
 		System.out.println(b.getPath());

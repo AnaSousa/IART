@@ -1,9 +1,9 @@
 package graph;
 
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 @SuppressWarnings("serial")
-public class Edge extends DefaultEdge {
+public class Edge extends DefaultWeightedEdge {
 
 	private Node source;
 	private Node target;
@@ -46,7 +46,7 @@ public class Edge extends DefaultEdge {
         return "(" + source + " : " + target + ")";
     }
     
-    public int getWeight() {
+    public double getWeight() {
     	return weight;
     }
 }

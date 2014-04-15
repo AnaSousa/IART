@@ -56,16 +56,20 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 	}
 
 	public Edge addEdge(Node n1, Node n2, boolean directed) {
+		return addEdge(n1,n2,0,directed);
+	}
+	
+	public Edge addEdge(Node n1, Node n2, int weight, boolean directed) {
 
 		if(containsVertex(n1) && containsVertex(n2)) {
-			Edge e=new Edge(n1, n2);
-
+			Edge e=new Edge(n1, n2, weight);
+			
 			if(directed) {
 				if(addEdge(n1, n2, e)) 
 					return e;
 			}
 			else {
-				Edge e1 = new Edge(n2, n1);
+				Edge e1 = new Edge(n2, n1, weight);
 				if(addEdge(n1, n2, e) && addEdge(n2, n1, e1))
 					return e;
 			}
