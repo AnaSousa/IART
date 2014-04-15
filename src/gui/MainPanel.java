@@ -4,6 +4,8 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -42,11 +44,15 @@ public class MainPanel extends JPanel {
 	private BufferedImage truckR;
 	private BufferedImage truck;
 
+	
+	private BufferedImage gasLevel;
+	private BufferedImage garbageLevel;
+
 	private float truckX = 0;
 	private float truckY = 0;
 	private int truckSpeed = 100;
-	private final int X = 15;
-	private final int Y = 5;
+	private final int X = 40;
+	private final int Y = 75;
 	private final int L = 50;
 
 	public MainPanel(Graph graph) {
@@ -67,6 +73,9 @@ public class MainPanel extends JPanel {
 			truckT = ImageIO.read(new File("resources/truckT.png"));
 			truckR = ImageIO.read(new File("resources/truckR.png"));
 			truckL = ImageIO.read(new File("resources/truckL.png"));
+			
+			gasLevel = ImageIO.read(new File("resources/gasLevel.png"));
+			garbageLevel = ImageIO.read(new File("resources/garbageLevel.png"));
 			truck = truckR;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -111,10 +120,17 @@ public class MainPanel extends JPanel {
 		
 	}
 
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		//g.drawImage(roadH, 70, 70,75,75,null);
+		g.drawImage(garbageLevel, 100, 5,50,50,null);
+		g.drawImage(gasLevel, 300, 5,50,50,null);
+		//g.drawChars("1", 0, 1, 50, 50);
+		g.setFont(new Font("Arial", 0, 35));
+		g.setColor(Color.BLUE);
+		g.drawString("100", 160, 50);
+		g.drawString("100", 360, 50);
 
 		for(int x = 0; x < nodes.length; x++) {
 			for(int y = 0; y< nodes[x].length; y++) {

@@ -125,7 +125,7 @@ public class MainWindow {
 	private void initialize() {
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 702, 534);
+		frame.setBounds(100, 100, 600, 610);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new MainPanel(graph);
 		frame.getContentPane().add(panel);
