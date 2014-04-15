@@ -4,17 +4,19 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Queue;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class MainWindow {
 	private MainPanel panel;
@@ -105,6 +107,14 @@ public class MainWindow {
 		graph.addEdge(n9,n10,3,false);
 		
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
+		
+		Queue<Edge> s = new LinkedList<Edge>();
+		
+		for(Edge i: b.getPathEdgeList())
+			s.add(i);
+		
+		graph.setTruckPath(s);
+		
 		System.out.println(b.getPath());
 		System.out.println(b.getPathLength());
 	}

@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,6 +11,8 @@ import org.jgrapht.graph.DirectedWeightedPseudograph;
 
 @SuppressWarnings("serial")
 public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
+	Queue<Edge> truckPath;
+	
 
 	@SuppressWarnings("unchecked")
 	public Graph(Class<? extends DefaultEdge> edgeClass) {
@@ -30,18 +33,6 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 		return super.addVertex(node);
 	}
 
-
-	/*public Edge addEdge(String from, String to, int weight) {
-
-		if(containsVertex(from) && containsVertex(to)) {
-			Edge e=new Edge(from, to, weight);
-			if(addEdge(e.getSource(), e.getTarget(), e))
-				return e;
-			else 
-				return null;
-		}
-		return null;
-	}*/
 
 	public Edge addEdge(Node n1, Node n2) {
 
@@ -165,5 +156,19 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 		}
 
 		return nodes;
+	}
+
+	/**
+	 * @return the truckPath
+	 */
+	public Queue<Edge> getTruckPath() {
+		return truckPath;
+	}
+
+	/**
+	 * @param truckPath the truckPath to set
+	 */
+	public void setTruckPath(Queue<Edge> truckPath) {
+		this.truckPath = truckPath;
 	}
 }

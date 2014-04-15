@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeSet;
 
@@ -45,7 +44,7 @@ public class MainPanel extends JPanel {
 
 	private float truckX = 0;
 	private float truckY = 0;
-	private int truckSpeed = 75;
+	private int truckSpeed = 100;
 	private final int X = 15;
 	private final int Y = 5;
 	private final int L = 50;
@@ -100,7 +99,15 @@ public class MainPanel extends JPanel {
 
 		graph.calculateDistances();
 		
-		path = new LinkedList<Edge>();
+		
+		path = graph.getTruckPath();
+		
+		if(path != null) {
+			truckX = path.peek().getSource().getX();
+			truckY = path.peek().getSource().getY();
+			
+			System.out.println(truckX + " : " + truckY);
+		}
 		
 	}
 
@@ -166,7 +173,7 @@ public class MainPanel extends JPanel {
 
 		}
 		
-		g.drawImage(truck,(int) (X + truckX * L), (int)(Y+L + truckY * L),L,L, null);
+		g.drawImage(truck,(int) (X + truckX * L), (int)(Y + truckY * L),L,L, null);
 		
 		Toolkit.getDefaultToolkit().sync(); // necessary for linux users to draw  and animate image correctly
 		g.dispose();
@@ -179,10 +186,47 @@ public class MainPanel extends JPanel {
 	}
 	
 	Action paintTimer = new AbstractAction() { // functionality of our timer:
-		public void actionPerformed(ActionEvent e) {
-		
+		public void actionPerformed(ActionEvent event) {
+			Edge e = path.peek();
 			
-			truckX += 0.1;
+			if(e == null)
+				return;
+			
+			int x1,x2,y1,y2, deltax, deltay;
+
+			x1 = e.getSource().getX();
+			x2 = e.getTarget().getX();
+			y1 = e.getSource().getY();
+			y2 = e.getTarget().getY();
+
+			deltax = x1 - x2;
+			deltay = y1 - y2;
+			
+			
+			
+			if(deltay == 0) {
+				float inc = (float) (deltax < 0 ? 0.1 : -0.1);
+				truck = inc < 0 ? truckL : truckR;
+				
+				truckX += inc;
+				
+				if((x2 > x1 && truckX >= x2) || (x2 < x1 && truckX <= x2)) {
+					truckX = path.peek().getTarget().getX();
+					path.remove();
+				}
+			}
+			else if (deltax == 0) {
+				float inc = (float) (deltay < 0 ? 0.1 : -0.1);
+				truck = inc < 0 ? truckT : truckB;
+				
+				truckY += inc;
+				
+				if((y2 > y1 && truckY >= y2) || (y2 < y1 && truckY <= y2)) {
+					truckY = path.peek().getTarget().getY();
+					path.remove();
+				}
+			}
+			
 			repaint();
 
 		}
