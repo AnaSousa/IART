@@ -102,7 +102,7 @@ public class MainWindow {
 		graph.addEdge(n11,n10,2,false);
 		graph.addEdge(n5,n9,2,false);
 		graph.addEdge(n5,n6,2,false);
-		graph.addEdge(n6,n7,4,false);
+		graph.addEdge(n6,n7,4,true);
 		graph.addEdge(n8,n7,7,false);
 		graph.addEdge(n9,n10,3,false);
 		

@@ -29,9 +29,17 @@ public class MainPanel extends JPanel {
 	Node [][] nodes;
 	ArrayList<Edge> edges;
 	Queue<Edge> path;
+	
+	private final int X = 40;
+	private final int Y = 75;
+	private final int L = 50;
 
 	private BufferedImage roadV;
 	private BufferedImage roadH;
+	private BufferedImage roadL;
+	private BufferedImage roadR;
+	private BufferedImage roadT;
+	private BufferedImage roadB;
 	private BufferedImage roadX;
 	private BufferedImage bin;
 	private BufferedImage bin2;
@@ -43,6 +51,7 @@ public class MainPanel extends JPanel {
 	private BufferedImage truckL;
 	private BufferedImage truckR;
 	private BufferedImage truck;
+	private BufferedImage footPrints;
 
 	
 	private BufferedImage gasLevel;
@@ -51,9 +60,13 @@ public class MainPanel extends JPanel {
 	private float truckX = 0;
 	private float truckY = 0;
 	private int truckSpeed = 100;
-	private final int X = 40;
-	private final int Y = 75;
-	private final int L = 50;
+	private float distance = 0;
+	
+	private int gasL = 500;
+	
+	
+	
+	
 
 	public MainPanel(Graph graph) {
 
@@ -63,6 +76,10 @@ public class MainPanel extends JPanel {
 		try {
 			roadV = ImageIO.read(new File("resources/roadV.png"));
 			roadH = ImageIO.read(new File("resources/roadH.png"));
+			roadR = ImageIO.read(new File("resources/roadR.png"));
+			roadL = ImageIO.read(new File("resources/roadL.png"));
+			roadT = ImageIO.read(new File("resources/roadT.png"));
+			roadB = ImageIO.read(new File("resources/roadB.png"));
 			roadX = ImageIO.read(new File("resources/roadX.png"));
 			bin = ImageIO.read(new File("resources/bin.png"));
 			bin2 = ImageIO.read(new File("resources/bin2.png"));
@@ -76,6 +93,7 @@ public class MainPanel extends JPanel {
 			
 			gasLevel = ImageIO.read(new File("resources/gasLevel.png"));
 			garbageLevel = ImageIO.read(new File("resources/garbageLevel.png"));
+			footPrints = ImageIO.read(new File("resources/distance.png"));
 			truck = truckR;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -124,13 +142,17 @@ public class MainPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(garbageLevel, 100, 5,50,50,null);
-		g.drawImage(gasLevel, 300, 5,50,50,null);
+		g.drawImage(garbageLevel, 80, 5,50,50,null);
+		g.drawImage(gasLevel, 220, 5,50,50,null);
+		g.drawImage(footPrints, 380, 5,50,50,null);
 		//g.drawChars("1", 0, 1, 50, 50);
-		g.setFont(new Font("Arial", 0, 35));
-		g.setColor(Color.BLUE);
-		g.drawString("100", 160, 50);
-		g.drawString("100", 360, 50);
+		g.setFont(new Font("Arial", 0, 30));
+		g.setColor(Color.RED);
+		//load
+		g.drawString("0", 140, 50);
+		//GAS
+		g.drawString(Integer.toString(gasL - (int)Math.floor(distance)), 280, 50);
+		g.drawString(Integer.toString((int)Math.floor(distance)), 440, 50);
 
 		for(int x = 0; x < nodes.length; x++) {
 			for(int y = 0; y< nodes[x].length; y++) {
@@ -162,7 +184,7 @@ public class MainPanel extends JPanel {
 
 			//System.out.printf("V1(%d,%d) V2(%d,%d) Dx=%d Dy=%d",x1,y1,x2,y2,deltax,deltay);
 			if(deltax == 0) {
-				BufferedImage image = i.isDirected() ? roadX : roadV;
+				BufferedImage image = i.isDirected() ? (deltay < 0 ? roadB : roadT) : roadV;
 				//System.out.printf("  X\n");
 				int inc = deltay < 0 ? 1 : -1;
 
@@ -173,7 +195,7 @@ public class MainPanel extends JPanel {
 				}
 			}
 			else if(deltay == 0) {
-				BufferedImage image = i.isDirected() ? roadX : roadH;
+				BufferedImage image = i.isDirected() ? (deltax < 0 ? roadR : roadL) : roadH;
 				//System.out.printf("  Y\n");
 				int inc = deltax < 0 ? 1 : -1;
 
@@ -242,6 +264,8 @@ public class MainPanel extends JPanel {
 					path.remove();
 				}
 			}
+			
+			distance += 0.1;
 			
 			repaint();
 
