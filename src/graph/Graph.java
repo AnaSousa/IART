@@ -2,7 +2,9 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 
@@ -103,7 +105,61 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 	}
 
 	public void calculateDistances() { //TODO
-		//calcultateDistanceDump();
-		//calculateDistanceStation();
+		TreeSet<Node> nodes = getNodes();
+
+
+		calcultateDistanceDump(nodes);
+		calculateDistanceStation(nodes);
+
+		for(Node i : nodes) {
+			System.out.printf("Dump: %d  Station: %d\n", i.getDistanceToDump(), i.getDistanceToPetrolStation());
+		}
+	}
+
+	private void calculateDistanceStation(TreeSet<Node> nodes) {
+		ArrayList<Node> n = new ArrayList<Node>();
+
+		for(Node i: nodes)
+			if(i.getType() == Node.PETROL_STATION)
+				n.add(i);
+
+		for(Node i: n) {
+			BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(this, i);
+			for(Node j : nodes)
+				if(!j.equals(i))
+					j.setDistanceToStation((int) shortestPath.getCost(j));
+				else
+					j.setDistanceToStation(0);
+		}
+
+	}
+
+	private void calcultateDistanceDump(TreeSet<Node> nodes) {
+		ArrayList<Node> n = new ArrayList<Node>();
+
+		for(Node i: nodes)
+			if(i.getType() == Node.DUMP)
+				n.add(i);
+
+		for(Node i: n) {
+			BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(this, i);
+			for(Node j : nodes)
+				if(!j.equals(i))
+					j.setDistanceToDump((int) shortestPath.getCost(j));
+				else
+					j.setDistanceToDump(0);
+		}
+	}
+
+	public TreeSet<Node> getNodes() {
+		ArrayList<Edge> edges = getEdges();
+		TreeSet<Node> nodes = new TreeSet<Node>();
+
+		for(Edge i : edges) {
+			nodes.add(i.getSource());
+			nodes.add(i.getTarget());
+		}
+
+		return nodes;
 	}
 }

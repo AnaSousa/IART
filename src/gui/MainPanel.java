@@ -30,7 +30,7 @@ public class MainPanel extends JPanel {
 	private BufferedImage dump;
 	private BufferedImage grass;
 
-	private final int X = 5;
+	private final int X = 15;
 	private final int Y = 5;
 	private final int L = 50;
 
@@ -77,6 +77,7 @@ public class MainPanel extends JPanel {
 		for(Node i : tmp_nodes)
 			nodes[i.getX()][i.getY()] = i;
 
+		graph.calculateDistances();
 	}
 
 	@Override

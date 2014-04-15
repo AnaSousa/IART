@@ -94,11 +94,11 @@ public class Node implements Comparable<Node> {
 	}
 	
 	public void setDistanceToDump(int newDistance) {
-		distanceToDump=newDistance;
+		distanceToDump = newDistance < distanceToDump ? newDistance : distanceToDump;
 	}
 	
 	public void setDistanceToStation(int newDistance) {
-		distanceToPetrolStation=newDistance;
+		distanceToPetrolStation = newDistance < distanceToPetrolStation ? newDistance : distanceToPetrolStation;
 	}
 
 	@Override
