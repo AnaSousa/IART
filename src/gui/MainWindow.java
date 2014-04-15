@@ -10,6 +10,11 @@ import javax.swing.JFrame;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainWindow {
 	private MainPanel panel;
@@ -110,10 +115,21 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 702, 500);
+		frame.setBounds(100, 100, 702, 534);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new MainPanel(graph);
 		frame.getContentPane().add(panel);
+		
+		JPanel panel_1 = new JPanel();
+		frame.getContentPane().add(panel_1, BorderLayout.SOUTH);
+		
+		JButton btnStartSimulation = new JButton("Start simulation");
+		btnStartSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				panel.startSimulation();
+			}
+		});
+		panel_1.add(btnStartSimulation);
 	}
 
 }

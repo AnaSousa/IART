@@ -5,6 +5,8 @@ import graph.Graph;
 import graph.Node;
 
 import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,10 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
@@ -29,7 +34,15 @@ public class MainPanel extends JPanel {
 	private BufferedImage gas;
 	private BufferedImage dump;
 	private BufferedImage grass;
+	private BufferedImage truckB;
+	private BufferedImage truckT;
+	private BufferedImage truckL;
+	private BufferedImage truckR;
+	private BufferedImage truck;
 
+	private float truckX = 0;
+	private float truckY = 0;
+	private int truckSpeed = 75;
 	private final int X = 15;
 	private final int Y = 5;
 	private final int L = 50;
@@ -48,6 +61,11 @@ public class MainPanel extends JPanel {
 			gas = ImageIO.read(new File("resources/gas.png"));
 			dump = ImageIO.read(new File("resources/dump.png"));
 			grass = ImageIO.read(new File("resources/grass.jpg"));
+			truckB = ImageIO.read(new File("resources/truckB.png"));
+			truckT = ImageIO.read(new File("resources/truckT.png"));
+			truckR = ImageIO.read(new File("resources/truckR.png"));
+			truckL = ImageIO.read(new File("resources/truckL.png"));
+			truck = truckR;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,6 +100,7 @@ public class MainPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		//g.drawImage(roadH, 70, 70,75,75,null);
 
 		for(int x = 0; x < nodes.length; x++) {
@@ -138,8 +157,25 @@ public class MainPanel extends JPanel {
 				System.out.println("NSADUIDKASJ");
 
 		}
-
-
+		
+		g.drawImage(truck,(int) (X + truckX * L), (int)(Y+L + truckY * L),L,L, null);
+		
+		Toolkit.getDefaultToolkit().sync(); // necessary for linux users to draw  and animate image correctly
+		g.dispose();
+		
 	}
+
+	public void startSimulation() {
+		new Timer(truckSpeed,paintTimer).start();
+		setDoubleBuffered(true);
+	}
+	
+	Action paintTimer = new AbstractAction() { // functionality of our timer:
+		public void actionPerformed(ActionEvent e) {
+			truckX += 0.1;
+			repaint();
+
+		}
+	};
 
 }

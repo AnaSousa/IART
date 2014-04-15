@@ -112,7 +112,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge>{
 		calculateDistanceStation(nodes);
 
 		for(Node i : nodes) {
-			System.out.printf("Dump: %d  Station: %d\n", i.getDistanceToDump(), i.getDistanceToPetrolStation());
+			System.out.printf("%d  Dump: %d  Station: %d\n", i.getId(), i.getDistanceToDump(), i.getDistanceToPetrolStation());
 		}
 	}
 
