@@ -17,12 +17,13 @@ import javax.swing.JPanel;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
+import java.awt.Toolkit;
 
 public class MainWindow {
 	private MainPanel panel;
 	private Graph graph;
 
-	private JFrame frame;
+	private JFrame frmAAlgorithmWaste;
 
 	/**
 	 * Launch the application.
@@ -32,7 +33,7 @@ public class MainWindow {
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
-					window.frame.setVisible(true);
+					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -130,14 +131,16 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		
-		frame = new JFrame();
-		frame.setBounds(100, 100, 600, 610);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmAAlgorithmWaste = new JFrame();
+		frmAAlgorithmWaste.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Development\\Workspace Java\\IART\\IART\\resources\\truckIcon.png"));
+		frmAAlgorithmWaste.setTitle("A* Algorithm: Waste collection problem");
+		frmAAlgorithmWaste.setBounds(100, 100, 600, 610);
+		frmAAlgorithmWaste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new MainPanel(graph);
-		frame.getContentPane().add(panel);
+		frmAAlgorithmWaste.getContentPane().add(panel);
 		
 		JPanel panel_1 = new JPanel();
-		frame.getContentPane().add(panel_1, BorderLayout.SOUTH);
+		frmAAlgorithmWaste.getContentPane().add(panel_1, BorderLayout.SOUTH);
 		
 		JButton btnStartSimulation = new JButton("Start simulation");
 		btnStartSimulation.addActionListener(new ActionListener() {
