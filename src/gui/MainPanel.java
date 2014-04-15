@@ -29,7 +29,7 @@ public class MainPanel extends JPanel {
 	Node [][] nodes;
 	ArrayList<Edge> edges;
 	Queue<Edge> path;
-	
+
 	private final int X = 40;
 	private final int Y = 75;
 	private final int L = 50;
@@ -42,7 +42,7 @@ public class MainPanel extends JPanel {
 	private BufferedImage roadB;
 	private BufferedImage roadX;
 	private BufferedImage bin;
-	private BufferedImage bin2;
+//	private BufferedImage bin2;
 	private BufferedImage gas;
 	private BufferedImage dump;
 	private BufferedImage grass;
@@ -53,20 +53,20 @@ public class MainPanel extends JPanel {
 	private BufferedImage truck;
 	private BufferedImage footPrints;
 
-	
+
 	private BufferedImage gasLevel;
 	private BufferedImage garbageLevel;
 
 	private float truckX = 0;
 	private float truckY = 0;
 	private int truckSpeed = 100;
-	private float distance = 0;
-	
+	private double distance = 0;
+
 	private int gasL = 500;
-	
-	
-	
-	
+
+
+
+
 
 	public MainPanel(Graph graph) {
 
@@ -82,7 +82,7 @@ public class MainPanel extends JPanel {
 			roadB = ImageIO.read(new File("resources/roadB.png"));
 			roadX = ImageIO.read(new File("resources/roadX.png"));
 			bin = ImageIO.read(new File("resources/bin.png"));
-			bin2 = ImageIO.read(new File("resources/bin2.png"));
+		//	bin2 = ImageIO.read(new File("resources/bin2.png"));
 			gas = ImageIO.read(new File("resources/gas.png"));
 			dump = ImageIO.read(new File("resources/dump.png"));
 			grass = ImageIO.read(new File("resources/grass.jpg"));
@@ -90,8 +90,8 @@ public class MainPanel extends JPanel {
 			truckT = ImageIO.read(new File("resources/truckT.png"));
 			truckR = ImageIO.read(new File("resources/truckR.png"));
 			truckL = ImageIO.read(new File("resources/truckL.png"));
-			
-			gasLevel = ImageIO.read(new File("resources/gasLevel.png"));
+
+			gasLevel = ImageIO.read(new File("resources/gasLevel2.png"));
 			garbageLevel = ImageIO.read(new File("resources/garbageLevel.png"));
 			footPrints = ImageIO.read(new File("resources/distance.png"));
 			truck = truckR;
@@ -125,17 +125,17 @@ public class MainPanel extends JPanel {
 			nodes[i.getX()][i.getY()] = i;
 
 		graph.calculateDistances();
-		
-		
+
+
 		path = graph.getTruckPath();
-		
+
 		if(path != null) {
 			truckX = path.peek().getSource().getX();
 			truckY = path.peek().getSource().getY();
-			
+
 			System.out.println(truckX + " : " + truckY);
 		}
-		
+
 	}
 
 
@@ -145,7 +145,14 @@ public class MainPanel extends JPanel {
 		g.drawImage(garbageLevel, 80, 5,50,50,null);
 		g.drawImage(gasLevel, 220, 5,50,50,null);
 		g.drawImage(footPrints, 380, 5,50,50,null);
-		//g.drawChars("1", 0, 1, 50, 50);
+
+		g.setFont(new Font("Arial", 0, 12));
+		g.setColor(Color.WHITE);
+
+		g.drawString("500", 93, 45);
+		//g.drawString("500", 240, 38);
+
+
 		g.setFont(new Font("Arial", 0, 30));
 		g.setColor(Color.RED);
 		//load
@@ -170,7 +177,7 @@ public class MainPanel extends JPanel {
 		}
 
 		for(Edge i : edges) {
-			
+
 
 			int x1,x2,y1,y2, deltax, deltay;
 
@@ -210,26 +217,26 @@ public class MainPanel extends JPanel {
 				System.out.println("NSADUIDKASJ");
 
 		}
-		
+
 		g.drawImage(truck,(int) (X + truckX * L), (int)(Y + truckY * L),L,L, null);
-		
+
 		Toolkit.getDefaultToolkit().sync(); // necessary for linux users to draw  and animate image correctly
 		g.dispose();
-		
+
 	}
 
 	public void startSimulation() {
 		new Timer(truckSpeed,paintTimer).start();
 		setDoubleBuffered(true);
 	}
-	
+
 	Action paintTimer = new AbstractAction() { // functionality of our timer:
 		public void actionPerformed(ActionEvent event) {
 			Edge e = path.peek();
-			
+
 			if(e == null)
 				return;
-			
+
 			int x1,x2,y1,y2, deltax, deltay;
 
 			x1 = e.getSource().getX();
@@ -239,15 +246,15 @@ public class MainPanel extends JPanel {
 
 			deltax = x1 - x2;
 			deltay = y1 - y2;
-			
-			
-			
+
+
+
 			if(deltay == 0) {
 				float inc = (float) (deltax < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckL : truckR;
-				
+
 				truckX += inc;
-				
+
 				if((x2 > x1 && truckX >= x2) || (x2 < x1 && truckX <= x2)) {
 					truckX = path.peek().getTarget().getX();
 					path.remove();
@@ -256,17 +263,19 @@ public class MainPanel extends JPanel {
 			else if (deltax == 0) {
 				float inc = (float) (deltay < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckT : truckB;
-				
+
 				truckY += inc;
-				
+
 				if((y2 > y1 && truckY >= y2) || (y2 < y1 && truckY <= y2)) {
 					truckY = path.peek().getTarget().getY();
 					path.remove();
 				}
 			}
-			
+
 			distance += 0.1;
-			
+			/*distance = Math.floor(distance * 100) / 100;
+			System.out.println(distance);*/
+
 			repaint();
 
 		}

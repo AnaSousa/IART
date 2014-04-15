@@ -107,16 +107,22 @@ public class MainWindow {
 		graph.addEdge(n9,n10,3,false);
 		
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
+		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
 		
 		Queue<Edge> s = new LinkedList<Edge>();
 		
 		for(Edge i: b.getPathEdgeList())
+			s.add(i);
+		for(Edge i: c.getPathEdgeList())
 			s.add(i);
 		
 		graph.setTruckPath(s);
 		
 		System.out.println(b.getPath());
 		System.out.println(b.getPathLength());
+		System.out.println();
+		System.out.println(c.getPath());
+		System.out.println(c.getPathLength());
 	}
 
 	/**
