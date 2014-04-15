@@ -125,7 +125,7 @@ public class MainPanel extends JPanel {
 		}
 
 		for(Edge i : edges) {
-
+			
 
 			int x1,x2,y1,y2, deltax, deltay;
 
@@ -139,23 +139,25 @@ public class MainPanel extends JPanel {
 
 			//System.out.printf("V1(%d,%d) V2(%d,%d) Dx=%d Dy=%d",x1,y1,x2,y2,deltax,deltay);
 			if(deltax == 0) {
+				BufferedImage image = i.isDirected() ? roadX : roadV;
 				//System.out.printf("  X\n");
 				int inc = deltay < 0 ? 1 : -1;
 
 				int y = y1 + inc;
 				while(y != y2) {
-					g.drawImage(roadV, X + x1 * L, Y + y * L, L, L, null);
+					g.drawImage(image, X + x1 * L, Y + y * L, L, L, null);
 					y += inc;
 				}
 			}
 			else if(deltay == 0) {
+				BufferedImage image = i.isDirected() ? roadX : roadH;
 				//System.out.printf("  Y\n");
 				int inc = deltax < 0 ? 1 : -1;
 
 				int x = x1 + inc;
 
 				while(x != x2) {
-					g.drawImage(roadH, X + x * L, Y + y1 * L, L, L, null);
+					g.drawImage(image, X + x * L, Y + y1 * L, L, L, null);
 					x += inc;
 				}
 			}

@@ -95,7 +95,6 @@ public class MainWindow {
 		graph.addEdge(n3,n2,3,true);
 		graph.addEdge(n3,n4,3,false);
 		graph.addEdge(n2,n5,3,false);
-		//graph.addEdge(n2,n5,false);
 		graph.addEdge(n3,n11,3,false);
 		graph.addEdge(n11,n12,3,false);
 		graph.addEdge(n11,n10,2,false);
@@ -114,6 +113,7 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 702, 534);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
