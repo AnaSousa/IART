@@ -16,7 +16,7 @@ public class Node implements Comparable<Node> {
 	
 	private static int currentId=0;
 	private int id;
-    private Queue<Edge> pathToPetrolStation;
+    private Queue<Node> pathToPetrolStation;
 	private ArrayList<Node> adjacents;
 	/*
 	 * 0 - nao tem nada; 1 - cruzamento;
@@ -49,7 +49,7 @@ public class Node implements Comparable<Node> {
 		id=currentId;
 		currentId++;
 		this.type=type;
-        this.pathToPetrolStation = new LinkedList<Edge>();
+        this.pathToPetrolStation = new LinkedList<Node>();
         adjacents=new ArrayList<Node>(0);	}
 	
 	public Node(int type, int x, int y) {
@@ -63,7 +63,7 @@ public class Node implements Comparable<Node> {
 		currentId++;
 		this.type=type;
 		setPosition(x, y);
-        this.pathToPetrolStation = new LinkedList<Edge>();
+        this.pathToPetrolStation = new LinkedList<Node>();
         adjacents=new ArrayList<Node>(0);
 	}
 
@@ -109,12 +109,21 @@ public class Node implements Comparable<Node> {
         {
             this.distanceToPetrolStation=newDistance;
             if(newPath!=null)
-            this.pathToPetrolStation=new LinkedList<Edge>(newPath);
+            {
+            	LinkedList<Node> l = new LinkedList<Node>();
+            	for(int i = 0;i<newPath.size();i++)
+            	{
+            		if(i==0)
+            		l.add(newPath.get(i).getSource());
+            		l.add(newPath.get(i).getTarget());
+            	}
+                this.pathToPetrolStation=l;
+            }
             else this.pathToPetrolStation=null;
         }
 	}
 
-    public Queue<Edge> getPathToPetrolStation() {
+    public Queue<Node> getPathToPetrolStation() {
         return pathToPetrolStation;
     }
 

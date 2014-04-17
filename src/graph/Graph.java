@@ -3,13 +3,8 @@ package graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
-
-import logic.AStarNode;
-import logic.AStarNodeComparator;
 
 import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;

@@ -9,8 +9,8 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class AStarAlgorithm {
-	
-	public ArrayList<Node> searchAStar(Graph g,Node origin, Node destination) {
+	public ArrayList<Node> searchAStar(Graph g, Node origin, Node destination) {
+		double fuelSpent = 500;
 		HashMap<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
 				20, new AStarNodeComparator());
@@ -41,21 +41,31 @@ public class AStarAlgorithm {
 
 						if (n == null) {
 							// not in the open set
-							n = new AStarNode(
-									neighbor,
-									distSource,
-									g.calcManhattanDistance(neighbor, destination));
+							n = new AStarNode(neighbor, distSource,
+									g.calcManhattanDistance(neighbor,
+											destination));
 							n.setCameFrom(x);
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
-						} else if (distSource < n.getDistanceSource()) {
-							// Have a better route to the current node, change
-							// its parent
-							n.setCameFrom(x);
-							n.setDistanceSource(distSource);
-							n.setDistanceTarget(g.calcManhattanDistance(neighbor,
-									destination));
-						}
+						} else if ((int) distSource
+								+ neighbor.getDistanceToPetrolStation() <= fuelSpent)
+							if (distSource < n.getDistanceSource()) {
+								// Have a better route to the current node,
+								// change
+								// its parent
+								n.setCameFrom(x);
+								fuelSpent -= g.calcManhattanDistance(
+										x.getNode(), neighbor);
+								n.setDistanceSource(distSource);
+
+								n.setDistanceTarget(g.calcManhattanDistance(
+										neighbor, destination));
+							} else {
+								for(Node petrol : x.getNode().getPathToPetrolStation())
+								{
+								//TODO rethink how to do this part	
+								}
+							}
 					}
 				}
 			}
@@ -81,5 +91,4 @@ public class AStarAlgorithm {
 
 		return null;
 	}
-
 }
