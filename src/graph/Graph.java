@@ -120,7 +120,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 			if (entry.getValue().getType() == Node.PETROL_STATION)
 				n.add(entry.getValue());
 
-		for (Node i : n) {
+		/*for (Node i : n) {
 			for (Map.Entry<Integer, Node> entry : nodes.entrySet())
 				if (!entry.getValue().equals(i)) {
 					DijkstraShortestPath<Node, Edge> shortestPath = new DijkstraShortestPath<Node, Edge>(
@@ -139,6 +139,18 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 					entry.setValue(tmp);
 
 				}
+		}*/
+		
+		for (Node i : n) {
+			BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(
+					this, i);
+			for (Map.Entry<Integer, Node> entry : nodes.entrySet())
+				if (!entry.getValue().equals(i))
+					entry.getValue().setDistanceToStation(
+							(int) shortestPath.getCost(entry.getValue()),
+									shortestPath.getPathEdgeList(entry.getValue()));
+				else
+					entry.getValue().setDistanceToStation(0, null);
 		}
 
 	}
@@ -196,5 +208,5 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		return this.getNodes().get(id).getAdjacents();
 	}
 
-	
+
 }

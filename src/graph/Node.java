@@ -107,7 +107,8 @@ public class Node implements Comparable<Node> {
 	public void setDistanceToStation(int newDistance,List<Edge> newPath) {
         if(newDistance<distanceToPetrolStation)
         {
-            this.distanceToPetrolStation=newDistance;
+        	System.out.println(this.id + " : " + newDistance);
+            this.distanceToPetrolStation= newDistance < distanceToPetrolStation ? newDistance : distanceToPetrolStation;
             if(newPath!=null)
             {
             	LinkedList<Node> l = new LinkedList<Node>();
