@@ -7,7 +7,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.jgrapht.alg.BellmanFordShortestPath;
-import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 
@@ -107,7 +106,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		calculateDistanceStation(nodes);
 
 		for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
-			System.out.printf("%d  Dump: %d  Station: %d\n", entry.getValue()
+			System.out.printf("%d  Dump: %d  Station: %d\n",entry.getValue()
 					.getId(), entry.getValue().getDistanceToDump(), entry
 					.getValue().getDistanceToPetrolStation());
 		}
@@ -122,14 +121,15 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 
 		for (Node i : n) {
 			for (Map.Entry<Integer, Node> entry : nodes.entrySet())
+				
 				if (!entry.getValue().equals(i)) {
-					DijkstraShortestPath<Node, Edge> shortestPath = new DijkstraShortestPath<Node, Edge>(
-							this, entry.getValue(), i);
+					BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(
+							this, entry.getValue());
 
 					Node tmp = entry.getValue();
 					tmp.setDistanceToStation(
-							(int) shortestPath.getPathLength(),
-							shortestPath.getPathEdgeList());
+							(int) shortestPath.getCost(i),
+							shortestPath.getPathEdgeList(i));
 					entry.setValue(tmp);
 
 				} else {
@@ -151,14 +151,22 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 				n.add(entry.getValue());
 
 		for (Node i : n) {
-			BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(
-					this, i);
-			for (Map.Entry<Integer, Node> entry : nodes.entrySet())
-				if (!entry.getValue().equals(i))
-					entry.getValue().setDistanceToDump(
-							(int) shortestPath.getCost(entry.getValue()));
+			for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+				Node tmp = entry.getValue();
+				if (!entry.getValue().equals(i)) {
+					BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(this,entry.getValue());
+					tmp.setDistanceToDump(
+							(int) shortestPath.getCost(i));
+					entry.setValue(tmp);
+				}
+
 				else
-					entry.getValue().setDistanceToDump(0);
+					{
+					tmp.setDistanceToDump(0);
+					entry.setValue(tmp);
+					}
+			}
+
 		}
 	}
 
@@ -196,5 +204,4 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		return this.getNodes().get(id).getAdjacents();
 	}
 
-	
 }
