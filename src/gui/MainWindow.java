@@ -32,7 +32,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow();
+					MainWindow window = new MainWindow(1);
 					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,12 +45,27 @@ public class MainWindow {
 	 * Create the application.
 	 */
 	public MainWindow() {
-		initGraph();
+		test1();
 		initialize();
 		
 	}
+	
+	/**
+	 * Create the application.
+	 */
+	public MainWindow(int test) {
+		
+		switch(test) {
+		case 1:
+			test1();
+			break;
+		}
+	
+		initialize();
+	}
 
-	private void initGraph() {
+
+	private void test1() {
 		Class<? extends DefaultEdge> edgeClass = null;
 		graph = new Graph(edgeClass);
 		Node n1 = new Node(Node.CROSSROAD);
@@ -77,10 +92,10 @@ public class MainWindow {
 		n11.setPosition(6, 4);
 		Node n12 = new Node(Node.GARBAGE_CONTAINER);
 		n12.setPosition(9, 4);
-		
-		
-		
-		
+
+
+
+
 		graph.addVertex(n1);
 		graph.addVertex(n2);
 		graph.addVertex(n3);
@@ -106,9 +121,9 @@ public class MainWindow {
 		graph.addEdge(n6,n7,4,true);
 		graph.addEdge(n8,n7,7,false);
 		graph.addEdge(n9,n10,3,false);
-		
-		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
-		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n12, n8);
+
+		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
+		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
 
 		Queue<Edge> s = new LinkedList<Edge>();
 
@@ -116,9 +131,9 @@ public class MainWindow {
 			s.add(i);
 		for(Edge i: c.getPathEdgeList())
 			s.add(i);
-		
+
 		graph.setTruckPath(s);
-		
+
 		System.out.println(b.getPath());
 		System.out.println(b.getPathLength());
 		System.out.println();
@@ -130,7 +145,7 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		frmAAlgorithmWaste = new JFrame();
 		frmAAlgorithmWaste.setIconImage(Toolkit.getDefaultToolkit().getImage("resources\\truckIcon.png"));
 		frmAAlgorithmWaste.setTitle("A* Algorithm: Waste collection problem");
@@ -138,10 +153,10 @@ public class MainWindow {
 		frmAAlgorithmWaste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new MainPanel(graph);
 		frmAAlgorithmWaste.getContentPane().add(panel);
-		
+
 		JPanel panel_1 = new JPanel();
 		frmAAlgorithmWaste.getContentPane().add(panel_1, BorderLayout.SOUTH);
-		
+
 		JButton btnStartSimulation = new JButton("Start simulation");
 		btnStartSimulation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,6 +164,27 @@ public class MainWindow {
 			}
 		});
 		panel_1.add(btnStartSimulation);
+	}
+
+	/**
+	 * @return the frmAAlgorithmWaste
+	 */
+	public JFrame getFrmAAlgorithmWaste() {
+		return frmAAlgorithmWaste;
+	}
+
+	/**
+	 * @return the graph
+	 */
+	public Graph getGraph() {
+		return graph;
+	}
+
+	/**
+	 * @param graph the graph to set
+	 */
+	public void setGraph(Graph graph) {
+		this.graph = graph;
 	}
 
 }
