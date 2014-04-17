@@ -1,4 +1,6 @@
-package graph;
+package logic;
+
+import graph.Node;
 
 /**
  * Created by João Nadais on 17/04/2014.

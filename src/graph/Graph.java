@@ -8,6 +8,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+import logic.AStarNode;
+import logic.AStarNodeComparator;
+
 import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
@@ -198,75 +201,5 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		return this.getNodes().get(id).getAdjacents();
 	}
 
-	public ArrayList<Node> searchAStar(Node origin, Node destination) {
-		Map<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
-		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
-				20, new AStarNodeComparator());
-		Map<Integer, AStarNode> closeSet = new HashMap<Integer, AStarNode>();
-		AStarNode start = new AStarNode(origin, 0, Integer.MAX_VALUE);
-		openSet.put(origin.getId(), start);
-		priorityQueue.add(start);
-
-		AStarNode goal = null;
-		while (openSet.size() > 0) {
-			AStarNode x = priorityQueue.poll();
-			openSet.remove(x.getId());
-			if (x.getId() == destination.getId()) {
-				// found
-				System.out.println("Found target Node " + x.getId());
-				goal = x;
-				break;
-			} else {
-				closeSet.put(x.getId(), x);
-				ArrayList<Node> neighbors = getAdjacentNodes(x.getId());
-				for (Node neighbor : neighbors) {
-					AStarNode visited = closeSet.get(neighbor.getId());
-					if (visited == null) {
-						double g = x.getDistanceSource()
-								+ calcManhattanDistance(x.getNode(), neighbor);
-
-						AStarNode n = openSet.get(neighbor.getId());
-
-						if (n == null) {
-							// not in the open set
-							n = new AStarNode(
-									neighbor,
-									g,
-									calcManhattanDistance(neighbor, destination));
-							n.setCameFrom(x);
-							openSet.put(neighbor.getId(), n);
-							priorityQueue.add(n);
-						} else if (g < n.getDistanceSource()) {
-							// Have a better route to the current node, change
-							// its parent
-							n.setCameFrom(x);
-							n.setDistanceSource(g);
-							n.setDistanceTarget(calcManhattanDistance(neighbor,
-									destination));
-						}
-					}
-				}
-			}
-		}
-
-		// after found the target, start to construct the path
-		if (goal != null) {
-			Stack<Node> stack = new Stack<Node>();
-			ArrayList<Node> list = new ArrayList<Node>();
-			stack.push(goal.getNode());
-			AStarNode parent = goal.getCameFrom();
-			while (parent != null) {
-				stack.push(parent.getNode());
-				parent = parent.getCameFrom();
-			}
-
-			while (stack.size() > 0) {
-
-				list.add(stack.pop());
-			}
-			return list;
-		}
-
-		return null;
-	}
+	
 }
