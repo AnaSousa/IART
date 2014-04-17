@@ -107,11 +107,11 @@ public class MainWindow {
 		graph.addEdge(n8,n7,7,false);
 		graph.addEdge(n9,n10,3,false);
 		
-		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
-		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
-		
+		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
+		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n12, n8);
+
 		Queue<Edge> s = new LinkedList<Edge>();
-		
+
 		for(Edge i: b.getPathEdgeList())
 			s.add(i);
 		for(Edge i: c.getPathEdgeList())
@@ -132,7 +132,7 @@ public class MainWindow {
 	private void initialize() {
 		
 		frmAAlgorithmWaste = new JFrame();
-		frmAAlgorithmWaste.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Development\\Workspace Java\\IART\\IART\\resources\\truckIcon.png"));
+		frmAAlgorithmWaste.setIconImage(Toolkit.getDefaultToolkit().getImage("resources\\truckIcon.png"));
 		frmAAlgorithmWaste.setTitle("A* Algorithm: Waste collection problem");
 		frmAAlgorithmWaste.setBounds(100, 100, 600, 610);
 		frmAAlgorithmWaste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
