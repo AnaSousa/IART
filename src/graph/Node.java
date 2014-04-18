@@ -17,7 +17,7 @@ public class Node implements Comparable<Node> {
 	private static int currentId=0;
 	private int id;
     private Queue<Node> pathToPetrolStation;
-	private ArrayList<Node> adjacents;
+	private ArrayList<Edge> adjacents;
 	/*
 	 * 0 - nao tem nada; 1 - cruzamento;
 	 * 2 - contentor; 3 - lixeira; 4 - bomba gasolina
@@ -35,7 +35,7 @@ public class Node implements Comparable<Node> {
 		currentId++;
 	}
 
-    public ArrayList<Node> getAdjacents() {
+    public ArrayList<Edge> getAdjacents() {
         return adjacents;
     }
 
@@ -50,7 +50,7 @@ public class Node implements Comparable<Node> {
 		currentId++;
 		this.type=type;
         this.pathToPetrolStation = new LinkedList<Node>();
-        adjacents=new ArrayList<Node>(0);	}
+        adjacents=new ArrayList<Edge>(0);	}
 	
 	public Node(int type, int x, int y) {
 		
@@ -64,7 +64,7 @@ public class Node implements Comparable<Node> {
 		this.type=type;
 		setPosition(x, y);
         this.pathToPetrolStation = new LinkedList<Node>();
-        adjacents=new ArrayList<Node>(0);
+        adjacents=new ArrayList<Edge>(0);
 	}
 
 	public int getIntegerId() {
@@ -152,8 +152,9 @@ public class Node implements Comparable<Node> {
 		return  id + "";
 	}
 
-    public void addAdjacent(Node n)
+    public void addAdjacent(Edge e)
     {
-        this.adjacents.add(n);
+    	if(!adjacents.contains(e))
+        this.adjacents.add(e);
     }
 }

@@ -10,8 +10,11 @@ import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 
-@SuppressWarnings("serial")
 public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7380596101842362848L;
 	Queue<Edge> truckPath;
 
 	@SuppressWarnings("unchecked")
@@ -38,7 +41,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		if (containsVertex(n1) && containsVertex(n2)) {
 			Edge e = new Edge(n1, n2);
 			if (addEdge(n1, n2, e)) {
-				n1.addAdjacent(n2);
+				n1.addAdjacent(e);
 				return e;
 			} else
 				return null;
@@ -57,11 +60,18 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 
 			if (directed) {
 				if (addEdge(n1, n2, e))
+				{
+					n1.addAdjacent(e);
 					return e;
+				}
 			} else {
 				Edge e1 = new Edge(n2, n1, weight, directed);
 				if (addEdge(n1, n2, e) && addEdge(n2, n1, e1))
+				{
+					n1.addAdjacent(e);
+					n2.addAdjacent(e1);
 					return e;
+				}
 			}
 		}
 		return null;
@@ -72,7 +82,10 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		if (containsVertex(n1) && containsVertex(n2)) {
 			Edge e = new Edge(n1, n2, weight);
 			if (addEdge(n1, n2, e))
+			{
+				n1.addAdjacent(e);
 				return e;
+			}
 			else
 				return null;
 		}
@@ -84,7 +97,12 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		if (containsVertex(edge.getSource())
 				&& containsVertex(edge.getTarget())) {
 			if (addEdge(edge.getSource(), edge.getTarget(), edge))
+			{
+				Node n = edge.getSource();
+				n.addAdjacent(edge);
+				edge.setSource(n);
 				return edge;
+			}
 			else
 				return null;
 		}
@@ -200,7 +218,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
 	}
 
-	public ArrayList<Node> getAdjacentNodes(int id) {
+	public ArrayList<Edge> getAdjacentEdges(int id) {
 		return this.getNodes().get(id).getAdjacents();
 	}
 

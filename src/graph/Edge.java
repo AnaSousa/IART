@@ -79,4 +79,24 @@ public class Edge extends DefaultWeightedEdge {
 	public void setDirected(boolean directed) {
 		this.directed = directed;
 	}
+
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(Node source) {
+		this.source = source;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Edge)
+		{
+			Edge e = (Edge) obj;
+			return e.source==source && e.target==target;
+		}
+		return super.equals(obj);
+	}
 }

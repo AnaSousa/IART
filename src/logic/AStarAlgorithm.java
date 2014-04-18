@@ -1,5 +1,6 @@
 package logic;
 
+import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
@@ -30,8 +31,9 @@ public class AStarAlgorithm {
 				break;
 			} else {
 				closeSet.put(x.getId(), x);
-				ArrayList<Node> neighbors = g.getAdjacentNodes(x.getId());
-				for (Node neighbor : neighbors) {
+				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
+				for (Edge neighborEdge : neighbors) {
+					Node neighbor=neighborEdge.getTarget();
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
 						double distSource = x.getDistanceSource()
