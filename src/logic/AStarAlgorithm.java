@@ -30,6 +30,7 @@ public class AStarAlgorithm {
 				goal = x;
 				break;
 			} else {
+				
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
@@ -37,7 +38,7 @@ public class AStarAlgorithm {
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
 						double distSource = x.getDistanceSource()
-								+ g.calcManhattanDistance(x.getNode(), neighbor);
+								+ neighborEdge.getWeight();
 
 						AStarNode n = openSet.get(neighbor.getId());
 
@@ -49,7 +50,7 @@ public class AStarAlgorithm {
 							n.setCameFrom(x);
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
-						} else if ((int) distSource
+						} else if ( distSource
 								+ neighbor.getDistanceToPetrolStation() <= fuelSpent)
 							if (distSource < n.getDistanceSource()) {
 								// Have a better route to the current node,
