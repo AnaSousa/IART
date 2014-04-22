@@ -158,6 +158,18 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 
 				}
 		}
+		/*
+		for (Node i : n) {
+			BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(
+					this, i);
+			for (Map.Entry<Integer, Node> entry : nodes.entrySet())
+				if (!entry.getValue().equals(i))
+					entry.getValue().setDistanceToStation(
+							(int) shortestPath.getCost(entry.getValue()),
+									shortestPath.getPathEdgeList(entry.getValue()));
+				else
+					entry.getValue().setDistanceToStation(0, null);
+		}*/
 
 	}
 
@@ -221,5 +233,6 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	public ArrayList<Edge> getAdjacentEdges(int id) {
 		return this.getNodes().get(id).getAdjacents();
 	}
+
 
 }
