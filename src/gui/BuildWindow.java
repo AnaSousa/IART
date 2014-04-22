@@ -76,12 +76,6 @@ public class BuildWindow extends JFrame {
 		contentPane.setLayout(null);
 
 		panel = new BuildPanel();
-		panel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				panel.mouseHandler(e.getX(), e.getY());
-			}
-		});
 		panel.setBounds(135, 11, 439, 550);
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);

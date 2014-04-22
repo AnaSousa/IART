@@ -4,15 +4,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 @SuppressWarnings("serial")
 public class BuildPanel extends JPanel {
@@ -21,6 +20,15 @@ public class BuildPanel extends JPanel {
 	public static final  int GARBAGE_BIN = 2;
 	public static final  int GAS_STATION = 3;
 	public static final  int GARBAGE_DEPOSIT = 4;
+	public static final  int STREET_UP = 5;
+	public static final  int STREET_DOWN = 6;
+	public static final  int STREET_RIGHT = 7;
+	public static final  int STREET_LEFT = 8;
+
+
+	public static final  int MOUSE_BTN1 = 0;
+	public static final  int MOUSE_BTN2 = 1;
+	public static final  int MOUSE_BTN3 = 2;
 
 	//images needed
 	private BufferedImage cell;
@@ -51,9 +59,93 @@ public class BuildPanel extends JPanel {
 	private int[][] board = null;
 	private int current;
 
+	private boolean isAllowed(int x, int y) {
+		int p[] = {EMPTY, EMPTY, EMPTY, EMPTY};
+		int d[] = {EMPTY, EMPTY, EMPTY, EMPTY};
 
-	public void mouseHandler(int x, int y) {
-		System.out.printf("(%d,%d)\n", x, y);
+		/*
+		 * 5 2 6
+		 * 1   3
+		 * 7 4 8
+		 */
+		int x1 = x - 1;
+		int y1 = y;
+		int x2 = x;
+		int y2 = y - 1;
+		int x3 = x + 1;
+		int y3 = y;
+		int x4 = x;
+		int y4 = y + 1;
+		int x5 = x - 1;
+		int y5 = y - 1;
+		int x6 = x + 1;
+		int y6 = y - 1;
+		int x7 = x - 1;
+		int y7 = y + 1;
+		int x8 = x + 1;
+		int y8 = y + 1;
+
+		if(0 <= x1 && x1 < mapSizeH && 0 <= y1 && y1 < mapSizeV)
+			p[0] = board[x1][y1];
+		if(0 <= x2 && x2 < mapSizeH && 0 <= y2 && y2 < mapSizeV)
+			p[1] = board[x2][y2];
+		if(0 <= x3 && x3 < mapSizeH && 0 <= y3 && y3 < mapSizeV)
+			p[2] = board[x3][y3];
+		if(0 <= x4 && x4 < mapSizeH && 0 <= y4 && y4 < mapSizeV)
+			p[3] = board[x4][y4];
+
+		if(0 <= x5 && x5 < mapSizeH && 0 <= y5 && y5 < mapSizeV)
+			d[0] = board[x5][y5];
+		if(0 <= x6 && x6 < mapSizeH && 0 <= y6 && y6 < mapSizeV)
+			d[1] = board[x6][y6];
+		if(0 <= x6 && x6 < mapSizeH && 0 <= y6 && y6 < mapSizeV)
+			d[2] = board[x6][y6];
+		if(0 <= x6 && x6 < mapSizeH && 0 <= y6 && y6 < mapSizeV)
+			d[3] = board[x6][y6];
+
+
+		if(current != STREET)
+			for(int i : p) 
+				if (i == GARBAGE_BIN || i == GARBAGE_DEPOSIT || i == GAS_STATION) 
+					return false;
+
+
+		/*switch (current)
+		{
+		case GARBAGE_BIN || GARBAGE_DEPOSIT:
+			for(int i : p) 
+				if (i == GARBAGE_BIN || i == GARBAGE_DEPOSIT || i == GAS_STATION) 
+					return false;
+			break;
+		case STREET:
+			int cont = 0;
+			for(int i : p) 
+				if (i == STREET) 
+					cont++;
+			for(int i : d) 
+				if (i == STREET) 
+					cont++;
+
+			if(cont > 4)
+				return false;
+
+			//if(p[0] == STREET && p[1] == STREET)
+			break;
+		case GARBAGE_DEPOSIT:
+			for(int i : p) 
+				if (i == GARBAGE_BIN || i == GARBAGE_DEPOSIT || i == GAS_STATION) 
+					return false;
+			break;
+
+
+		}*/
+
+		return true;
+	}
+
+	public void mouseHandler(int x, int y, int btn) {
+		//System.out.printf("(%d,%d)\n", x, y);
+
 
 		int x1 = X;
 		int x2 = X + width * mapSizeH;
@@ -65,10 +157,19 @@ public class BuildPanel extends JPanel {
 			int i = ((x - x1)/ width ) % mapSizeH;
 			int j = ((y - y1 )/ width ) % mapSizeV;
 
-
-			board[i][j] = current;
-
-
+			switch(btn) {
+			case MOUSE_BTN1:
+				if(isAllowed(i, j))
+					board[i][j] = current;
+				break;
+			case MOUSE_BTN2:
+				board[i][j] = EMPTY;
+				break;
+			case MOUSE_BTN3:
+				setDirection(i,j);
+				break;
+			}
+			
 		}
 		repaint();
 	}
@@ -81,9 +182,12 @@ public class BuildPanel extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg) {
-				if (arg.getButton() == MouseEvent.BUTTON1) {
-					mouseHandler(arg.getX(), arg.getY());
-				}
+				if (arg.getButton() == MouseEvent.BUTTON1)
+					mouseHandler(arg.getX(), arg.getY(), MOUSE_BTN1);
+				else if (arg.getButton() == MouseEvent.BUTTON2)
+					mouseHandler(arg.getX(), arg.getY(), MOUSE_BTN2);
+				else if (arg.getButton() == MouseEvent.BUTTON3)
+					mouseHandler(arg.getX(), arg.getY(), MOUSE_BTN3);
 			}
 
 
@@ -135,12 +239,18 @@ public class BuildPanel extends JPanel {
 			roadT = ImageIO.read(new File("resources/roadT.png"));
 			roadB = ImageIO.read(new File("resources/roadB.png"));
 
-			icons = new BufferedImage[5];
+			icons = new BufferedImage[9];
+
 			icons[STREET] = ImageIO.read(new File("resources/roadX.png"));
 			icons[GARBAGE_BIN] = ImageIO.read(new File("resources/bin.png"));
 			icons[GARBAGE_DEPOSIT] = ImageIO.read(new File("resources/dump.png"));
 			icons[GAS_STATION] = ImageIO.read(new File("resources/gas.png"));
 			icons[EMPTY] = cell;
+			icons[STREET_DOWN] = roadB;
+			icons[STREET_UP] = roadT;
+			icons[STREET_LEFT] = roadL;
+			icons[STREET_RIGHT] = roadR;
+			
 
 
 
@@ -164,8 +274,10 @@ public class BuildPanel extends JPanel {
 		}*/
 
 		for(int i = 0; i < mapSizeH; i++) {
-			for(int j = 0; j < mapSizeV; j++)
+			for(int j = 0; j < mapSizeV; j++) {
+				g.drawImage(icons[board[i][j] != EMPTY ? STREET : EMPTY], X + i * width, Y + j * width, width, width, null);
 				g.drawImage(icons[board[i][j]], X + i * width, Y + j * width, width, width, null);
+			}
 		}
 
 
@@ -202,6 +314,49 @@ public class BuildPanel extends JPanel {
 
 		initBoard();
 		repaint();
+	}
+	
+	void setDirection(int x, int y) {
+		int p[] = {EMPTY, EMPTY, EMPTY, EMPTY};
+
+		/*
+		 * 5 2 6
+		 * 1   3
+		 * 7 4 8
+		 */
+		int x1 = x - 1;
+		int y1 = y;
+		int x2 = x;
+		int y2 = y - 1;
+		int x3 = x + 1;
+		int y3 = y;
+		int x4 = x;
+		int y4 = y + 1;
+
+		if(0 <= x1 && x1 < mapSizeH && 0 <= y1 && y1 < mapSizeV)
+			p[0] = board[x1][y1];
+		if(0 <= x2 && x2 < mapSizeH && 0 <= y2 && y2 < mapSizeV)
+			p[1] = board[x2][y2];
+		if(0 <= x3 && x3 < mapSizeH && 0 <= y3 && y3 < mapSizeV)
+			p[2] = board[x3][y3];
+		if(0 <= x4 && x4 < mapSizeH && 0 <= y4 && y4 < mapSizeV)
+			p[3] = board[x4][y4];
+		
+		int cont = 0;
+		
+		for(int i : p) 
+			if(i == STREET || (STREET_UP <= i && i  <= STREET_LEFT)) 
+				cont++;
+		
+		if(cont == 2) {
+			int i = x;
+			while(i < mapSizeH) {
+				if (board[i][y] != STREET)
+					board[i][y] = STREET_RIGHT;
+			}
+		}
+			
+		
 	}
 
 	public void setIcon(int modo) {
