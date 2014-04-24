@@ -6,11 +6,13 @@ import graph.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Stack;
 
 public class AStarAlgorithm {
-	public ArrayList<Node> searchAStar(Graph g, Node origin, Node destination) {
+	public static Queue<Edge> searchAStar(Graph g, Node origin, Node destination) {
 		double fuelSpent = 500;
 		HashMap<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
@@ -78,6 +80,7 @@ public class AStarAlgorithm {
 		if (goal != null) {
 			Stack<Node> stack = new Stack<Node>();
 			ArrayList<Node> list = new ArrayList<Node>();
+			Queue<Edge> edges = new LinkedList<Edge>();
 			stack.push(goal.getNode());
 			AStarNode parent = goal.getCameFrom();
 			while (parent != null) {
@@ -89,7 +92,21 @@ public class AStarAlgorithm {
 
 				list.add(stack.pop());
 			}
-			return list;
+			
+			while(list.size()>1)
+			{
+				Node n = list.get(0);
+				for(Edge e : n.getAdjacents())
+				{
+					if(e.getTarget()==list.get(1))
+					{
+						edges.add(e);
+						list.remove(0);
+						break;
+					}
+				}
+			}
+			return edges;
 		}
 
 		return null;

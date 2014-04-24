@@ -6,23 +6,24 @@ import graph.Node;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import java.util.Queue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import logic.Truck;
+
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
-import java.awt.Toolkit;
 
 public class MainWindow {
 	private MainPanel panel;
 	private Graph graph;
-
+	private Truck truck;
 	private JFrame frmAAlgorithmWaste;
 
 	/**
@@ -124,13 +125,8 @@ public class MainWindow {
 
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
-
-		Queue<Edge> s = new LinkedList<Edge>();
-
-		for(Edge i: b.getPathEdgeList())
-			s.add(i);
-		for(Edge i: c.getPathEdgeList())
-			s.add(i);
+		truck = new Truck(500,200);
+		Queue<Edge> s = truck.searchPath(graph, n1, n4);
 
 		graph.setTruckPath(s);
 

@@ -26,6 +26,8 @@ public class AStarNode {
 
 	public AStarNode(Node node, double distanceSource, double distanceTarget) {
 		this.node = node;
+		this.cameFrom = new ArrayList<AStarNode>(0);
+		cameFromIndex = -1;
 		this.distanceSource = distanceSource;
 		this.distanceTarget = distanceTarget;
 	}
@@ -53,9 +55,10 @@ public class AStarNode {
 	 * @return the cameFrom
 	 */
 	public AStarNode getCameFrom() {
+		cameFromIndex++;
 		if(cameFrom.size()==0)
 			return null;
-		else return cameFrom.get(cameFromIndex++);
+		else return cameFrom.get(cameFromIndex);
 	}
 
 	/**
