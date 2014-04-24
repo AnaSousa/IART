@@ -12,8 +12,8 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class AStarAlgorithm {
-	public static Queue<Edge> searchAStar(Graph g, Node origin, Node destination) {
-		double fuelSpent = 500;
+	public static Queue<Edge> searchAStar(Graph g, Node origin, Node destination, Truck t) {
+		double fuelSpent = t.getFuel();
 		HashMap<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
 				20, new AStarNodeComparator());
@@ -59,8 +59,8 @@ public class AStarAlgorithm {
 								// change
 								// its parent
 								n.setCameFrom(x);
-								fuelSpent -= g.calcManhattanDistance(
-										x.getNode(), neighbor);
+								t.setFuel(t.getFuel() - g.calcManhattanDistance(
+										x.getNode(), neighbor));
 								n.setDistanceSource(distSource);
 
 								n.setDistanceTarget(g.calcManhattanDistance(

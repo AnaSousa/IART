@@ -22,6 +22,8 @@ import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import logic.ProgramData;
+
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
 
@@ -62,15 +64,14 @@ public class MainPanel extends JPanel {
 	private int truckSpeed = 100;
 	private double distance = 0;
 
-	private int gasL = 500;
 
 
 
 
 
-	public MainPanel(Graph graph) {
+	public MainPanel() {
 
-		this.graph = graph;
+		this.graph = ProgramData.getInstance().getGraph();
 		initGraphInfo();
 
 		try {
@@ -158,7 +159,7 @@ public class MainPanel extends JPanel {
 		//load
 		g.drawString("0", 140, 50);
 		//GAS
-		g.drawString(Integer.toString(gasL - (int)Math.floor(distance)), 280, 50);
+		g.drawString(Integer.toString((int)ProgramData.getInstance().getTruck().getFuel()-(int)Math.floor(distance)), 280, 50);
 		g.drawString(Integer.toString((int)Math.floor(distance)), 440, 50);
 
 		for(int x = 0; x < nodes.length; x++) {

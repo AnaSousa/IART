@@ -59,7 +59,7 @@ public class Truck {
 	}
 	public Queue<Edge> searchPath(Graph g,Node origin, Node destination)
 	{
-		return AStarAlgorithm.searchAStar(g, origin, destination);
+		return AStarAlgorithm.searchAStar(g, origin, destination,this);
 	}
 
 }

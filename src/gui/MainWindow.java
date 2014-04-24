@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import logic.ProgramData;
 import logic.Truck;
 
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -22,8 +23,6 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class MainWindow {
 	private MainPanel panel;
-	private Graph graph;
-	private Truck truck;
 	private JFrame frmAAlgorithmWaste;
 
 	/**
@@ -68,7 +67,8 @@ public class MainWindow {
 
 	private void test1() {
 		Class<? extends DefaultEdge> edgeClass = null;
-		graph = new Graph(edgeClass);
+		ProgramData data = ProgramData.getInstance();
+		Graph graph = new Graph(edgeClass);
 		Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(1, 1);
 		Node n2 = new Node(Node.CROSSROAD);
@@ -125,11 +125,12 @@ public class MainWindow {
 
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
-		truck = new Truck(500,200);
-		Queue<Edge> s = truck.searchPath(graph, n1, n4);
-
-		graph.setTruckPath(s);
-
+		Truck truck = new Truck(500,200);
+		data.setTruck(truck);
+		data.setGraph(graph);
+		
+		Queue<Edge> s = data.getTruck().searchPath(graph, n1, n4);
+		data.getGraph().setTruckPath(s);
 		System.out.println(b.getPath());
 		System.out.println(b.getPathLength());
 		System.out.println();
@@ -147,7 +148,7 @@ public class MainWindow {
 		frmAAlgorithmWaste.setTitle("A* Algorithm: Waste collection problem");
 		frmAAlgorithmWaste.setBounds(100, 100, 600, 610);
 		frmAAlgorithmWaste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		panel = new MainPanel(graph);
+		panel = new MainPanel();
 		frmAAlgorithmWaste.getContentPane().add(panel);
 
 		JPanel panel_1 = new JPanel();
@@ -169,18 +170,5 @@ public class MainWindow {
 		return frmAAlgorithmWaste;
 	}
 
-	/**
-	 * @return the graph
-	 */
-	public Graph getGraph() {
-		return graph;
-	}
-
-	/**
-	 * @param graph the graph to set
-	 */
-	public void setGraph(Graph graph) {
-		this.graph = graph;
-	}
 
 }
