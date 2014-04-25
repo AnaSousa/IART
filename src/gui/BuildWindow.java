@@ -142,6 +142,7 @@ public class BuildWindow extends JFrame {
 		toolsPanel.add(lblObjects);
 
 		rdbtnStreet = new JRadioButton("Street");
+		rdbtnStreet.setSelected(true);
 		rdbtnStreet.setBounds(6, 205, 109, 23);
 		rdbtnStreet.addItemListener(new HandlerIcon(BuildPanel.STREET));
 		toolsPanel.add(rdbtnStreet);
