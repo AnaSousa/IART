@@ -36,6 +36,7 @@ public class AStarAlgorithm {
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
+					
 					Node neighbor = neighborEdge.getTarget();
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
