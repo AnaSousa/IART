@@ -4,13 +4,15 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Queue;
 
 public class Truck {
-	double weightCarried;
+	int weightCarried;
 	double fuel;
 	double capacity;
-	
+	ArrayList<Node> garbagesPassed;
 	/**
 	 * @param weightCarried
 	 * @param fuel
@@ -19,17 +21,18 @@ public class Truck {
 		this.weightCarried = 0;
 		this.fuel = fuel;
 		this.capacity=capacity;
+		this.garbagesPassed=new ArrayList<Node>();
 	}
 	/**
 	 * @return the weightCarried
 	 */
-	public double getWeightCarried() {
+	public int getWeightCarried() {
 		return weightCarried;
 	}
 	/**
 	 * @param weightCarried the weightCarried to set
 	 */
-	public void setWeightCarried(double weightCarried) {
+	public void setWeightCarried(int weightCarried) {
 		this.weightCarried = weightCarried;
 	}
 	/**
@@ -59,7 +62,25 @@ public class Truck {
 	}
 	public Queue<Edge> searchPath(Graph g,Node origin, Node destination)
 	{
+		
+		for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
+			Node tmp = entry.getValue();
+			if(tmp.getId()==Node.GARBAGE_CONTAINER)
+				this.garbagesPassed.add(tmp);
+		}
 		return AStarAlgorithm.searchAStar(g, origin, destination,this);
+	}
+	/**
+	 * @return the garbagesPassed
+	 */
+	public ArrayList<Node> getGarbagesPassed() {
+		return garbagesPassed;
+	}
+	/**
+	 * @param garbagesPassed the garbagesPassed to set
+	 */
+	public void setGarbagesPassed(ArrayList<Node> garbagesPassed) {
+		this.garbagesPassed = garbagesPassed;
 	}
 
 }

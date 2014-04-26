@@ -12,8 +12,8 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class AStarAlgorithm {
-	public static Queue<Edge> searchAStar(Graph g, Node origin, Node destination, Truck t) {
-		double fuelSpent = t.getFuel();
+	public static Queue<Edge> searchAStar(Graph g, Node origin,
+			Node destination, Truck t) {
 		HashMap<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
 				20, new AStarNodeComparator());
@@ -32,45 +32,45 @@ public class AStarAlgorithm {
 				goal = x;
 				break;
 			} else {
-				
+
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
-					Node neighbor=neighborEdge.getTarget();
+					Node neighbor = neighborEdge.getTarget();
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
-						double distSource = x.getDistanceSource()
-								+ neighborEdge.getWeight();
+						int trucksLeft = 0;
+						for (Node garbage : t.getGarbagesPassed()) {
+							if (closeSet.containsKey(garbage.getId())) {
+								trucksLeft++;
+							}
+						}
+						t.setWeightCarried(trucksLeft * 100);
+
+						int passed = t.getWeightCarried()
+								/ (x.getG() + (int) neighborEdge.getWeight());
 
 						AStarNode n = openSet.get(neighbor.getId());
 
 						if (n == null) {
 							// not in the open set
-							n = new AStarNode(neighbor, distSource,
-									g.calcManhattanDistance(neighbor,
-											destination));
+							//TODO tem bugs, commit temporario para trocar porque pc passou se
+							n = new AStarNode(neighbor, passed,
+									(t.getGarbagesPassed().size() * 100 - t
+											.getWeightCarried())
+											/ (((int) ==0? 1 : ));
 							n.setCameFrom(x);
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
-						} else if ( distSource
-								+ neighbor.getDistanceToPetrolStation() <= fuelSpent)
-							if (distSource < n.getDistanceSource()) {
-								// Have a better route to the current node,
-								// change
-								// its parent
-								n.setCameFrom(x);
-								t.setFuel(t.getFuel() - g.calcManhattanDistance(
-										x.getNode(), neighbor));
-								n.setDistanceSource(distSource);
+						} else if (passed < n.getG()) {
+							// Have a better route to the current node,
+							// change
+							// its parent
+							n.setCameFrom(x);
+							t.setFuel(t.getFuel() - neighborEdge.getWeight());
+							n.setG(passed);
 
-								n.setDistanceTarget(g.calcManhattanDistance(
-										neighbor, destination));
-							} else {
-								for(Node petrol : x.getNode().getPathToPetrolStation())
-								{
-								//TODO rethink how to do this part	
-								}
-							}
+						}
 					}
 				}
 			}
@@ -92,14 +92,11 @@ public class AStarAlgorithm {
 
 				list.add(stack.pop());
 			}
-			
-			while(list.size()>1)
-			{
+
+			while (list.size() > 1) {
 				Node n = list.get(0);
-				for(Edge e : n.getAdjacents())
-				{
-					if(e.getTarget()==list.get(1))
-					{
+				for (Edge e : n.getAdjacents()) {
+					if (e.getTarget() == list.get(1)) {
 						edges.add(e);
 						list.remove(0);
 						break;

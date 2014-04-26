@@ -5,31 +5,31 @@ import graph.Node;
 import java.util.ArrayList;
 
 /**
- * Created by João Nadais on 17/04/2014.
+ * Created by Joao Nadais on 17/04/2014.
  */
 public class AStarNode {
 	private Node node;
 	private ArrayList<AStarNode> cameFrom;
-	private double distanceSource;
-	private double distanceTarget;
+	private int g;
+	private int h;
 	private int cameFromIndex;
 
-	public AStarNode(Node node, AStarNode cameFrom, double distanceSource,
-			double distanceTarget) {
+	public AStarNode(Node node, AStarNode cameFrom, int g,
+			int h) {
 		this.node = node;
 		this.cameFrom = new ArrayList<AStarNode>(0);
 		cameFromIndex = -1;
 		this.cameFrom.add(cameFrom);
-		this.distanceSource = distanceSource;
-		this.distanceTarget = distanceTarget;
+		this.g = g;
+		this.h = h;
 	}
 
-	public AStarNode(Node node, double distanceSource, double distanceTarget) {
+	public AStarNode(Node node, int g, int h) {
 		this.node = node;
 		this.cameFrom = new ArrayList<AStarNode>(0);
 		cameFromIndex = -1;
-		this.distanceSource = distanceSource;
-		this.distanceTarget = distanceTarget;
+		this.g = g;
+		this.h = h;
 	}
 
 	public int getId() {
@@ -72,30 +72,30 @@ public class AStarNode {
 	/**
 	 * @return the distanceSource
 	 */
-	public double getDistanceSource() {
-		return distanceSource;
+	public int getG() {
+		return g;
 	}
 
 	/**
-	 * @param distanceSource
-	 *            the distanceSource to set
+	 * @param g
+	 *            the g to set
 	 */
-	public void setDistanceSource(double distanceSource) {
-		this.distanceSource = distanceSource;
+	public void setG(int g) {
+		this.g = g;
 	}
 
 	/**
-	 * @return the distanceTarget
+	 * @return the trucks left in iteration
 	 */
-	public double getDistanceTarget() {
-		return distanceTarget;
+	public int getH() {
+		return h;
 	}
 
-	/**
-	 * @param distanceTarget
-	 *            the distanceTarget to set
-	 */
-	public void setDistanceTarget(double distanceTarget) {
-		this.distanceTarget = distanceTarget;
+	public void setH(int h) {
+		this.h = h;
+	}
+	public int compareTo(AStarNode obj)
+	{
+		return Integer.compare(this.getG()+this.getH(),obj.getG()+obj.getH());
 	}
 }
