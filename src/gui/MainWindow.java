@@ -77,22 +77,22 @@ public class MainWindow {
 		n3.setPosition(6, 1);
 		Node n4 = new Node(Node.CROSSROAD);
 		n4.setPosition(9, 1);
-		Node n5 = new Node(Node.CROSSROAD);
-		n5.setPosition(3, 4);
-		Node n6 = new Node(Node.PETROL_STATION);
-		n6.setPosition(1, 4);
-		Node n7 = new Node(Node.CROSSROAD);
-		n7.setPosition(1, 8);
-		Node n8 = new Node(Node.DUMP);
-		n8.setPosition(8, 8);
+		Node n6 = new Node(Node.CROSSROAD);
+		n6.setPosition(3, 4);
+		Node n5 = new Node(Node.PETROL_STATION);
+		n5.setPosition(1, 4);
+		Node n7 = new Node(Node.GARBAGE_CONTAINER);
+		n7.setPosition(6, 4);
+		Node n8 = new Node(Node.GARBAGE_CONTAINER);
+		n8.setPosition(9, 4);
 		Node n9 = new Node(Node.CROSSROAD);
 		n9.setPosition(3, 6);
 		Node n10 = new Node(Node.CROSSROAD);
 		n10.setPosition(6, 6);
 		Node n11 = new Node(Node.CROSSROAD);
-		n11.setPosition(6, 4);
-		Node n12 = new Node(Node.GARBAGE_CONTAINER);
-		n12.setPosition(9, 4);
+		n11.setPosition(1, 8);
+		Node n12 = new Node(Node.DUMP);
+		n12.setPosition(9, 8);
 
 
 
@@ -113,23 +113,28 @@ public class MainWindow {
 		graph.addEdge(n1,n2,2,false);
 		graph.addEdge(n3,n2,3,true);
 		graph.addEdge(n3,n4,3,false);
-		graph.addEdge(n2,n5,3,false);
-		graph.addEdge(n3,n11,3,false);
-		graph.addEdge(n11,n12,3,false);
-		graph.addEdge(n11,n10,2,false);
-		graph.addEdge(n5,n9,2,false);
-		graph.addEdge(n5,n6,2,false);
-		graph.addEdge(n6,n7,4,false);
-		graph.addEdge(n8,n7,7,false);
+		graph.addEdge(n3,n7,3,false);
+		graph.addEdge(n5,n6,3,false);
+		graph.addEdge(n7,n8,3,false);
+		graph.addEdge(n7,n10,3,false);
 		graph.addEdge(n9,n10,3,false);
-
+		graph.addEdge(n6,n9,30,false);
+		graph.addEdge(n5,n11,20,false);
+		graph.addEdge(n11,n12,20,false);
+		graph.addEdge(n8,n12,3,false);
+		
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n4);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
 		Truck truck = new Truck(500,200);
 		data.setTruck(truck);
 		data.setGraph(graph);
 		
-		Queue<Edge> s = data.getTruck().searchPath(graph, n1, n4);
+		Queue<Edge> s = data.searchPath(graph, n1, n8);
+		for(Edge e : s)
+		{
+			System.out.print(e.getSourceId()+"->"+e.getTargetId());
+		}
+		System.out.println();
 		data.getGraph().setTruckPath(s);
 		System.out.println(b.getPath());
 		System.out.println(b.getPathLength());

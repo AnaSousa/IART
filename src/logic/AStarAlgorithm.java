@@ -18,12 +18,14 @@ public class AStarAlgorithm {
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
 				20, new AStarNodeComparator());
 		HashMap<Integer, AStarNode> closeSet = new HashMap<Integer, AStarNode>();
-		AStarNode start = new AStarNode(origin, 0, Integer.MAX_VALUE);
+		AStarNode start = new AStarNode(origin, 1,0, Integer.MAX_VALUE);
 		openSet.put(origin.getId(), start);
 		priorityQueue.add(start);
 
 		AStarNode goal = null;
 		while (openSet.size() > 0) {
+			System.out.println("Testing");
+
 			AStarNode x = priorityQueue.poll();
 			openSet.remove(x.getId());
 			if (x.getId() == destination.getId()) {
@@ -36,7 +38,6 @@ public class AStarAlgorithm {
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
-					
 					Node neighbor = neighborEdge.getTarget();
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
@@ -46,24 +47,28 @@ public class AStarAlgorithm {
 								trucksLeft++;
 							}
 						}
-						t.setWeightCarried(trucksLeft * 100);
-
-						int passed = t.getWeightCarried()
-								/ (x.getG() + (int) neighborEdge.getWeight());
-
+						int weight = (trucksLeft==0? 1 : trucksLeft * 100);
+						double passed = (x.getDistance() + neighborEdge
+								.getWeight()) / weight;
 						AStarNode n = openSet.get(neighbor.getId());
-
 						if (n == null) {
+
 							// not in the open set
-							//TODO tem bugs, commit temporario para trocar porque pc passou se
-							n = new AStarNode(neighbor, passed,
-									(t.getGarbagesPassed().size() * 100 - t
-											.getWeightCarried())
-											/ (((int) ==0? 1 : ));
+							n = new AStarNode(
+									neighbor,
+									weight,
+									(x.getDistance() + (int) neighborEdge
+											.getWeight()),
+									(x.getDistance() + neighborEdge.getWeight() + g
+											.calcManhattanDistance(neighbor,
+													destination))
+											/ (t.getGarbagesPassed().size() * 100));
 							n.setCameFrom(x);
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
 						} else if (passed < n.getG()) {
+							System.out.println("Passed=" + passed);
+							System.out.println("N G=" + n.getG());
 							// Have a better route to the current node,
 							// change
 							// its parent

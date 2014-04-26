@@ -10,6 +10,7 @@ import java.util.Queue;
 
 public class Truck {
 	int weightCarried;
+	int distancePassed;
 	double fuel;
 	double capacity;
 	ArrayList<Node> garbagesPassed;
@@ -19,6 +20,7 @@ public class Truck {
 	 */
 	public Truck(double fuel, double capacity) {
 		this.weightCarried = 0;
+		this.distancePassed=0;
 		this.fuel = fuel;
 		this.capacity=capacity;
 		this.garbagesPassed=new ArrayList<Node>();
@@ -60,16 +62,7 @@ public class Truck {
 	public void setCapacity(double capacity) {
 		this.capacity = capacity;
 	}
-	public Queue<Edge> searchPath(Graph g,Node origin, Node destination)
-	{
-		
-		for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
-			Node tmp = entry.getValue();
-			if(tmp.getId()==Node.GARBAGE_CONTAINER)
-				this.garbagesPassed.add(tmp);
-		}
-		return AStarAlgorithm.searchAStar(g, origin, destination,this);
-	}
+
 	/**
 	 * @return the garbagesPassed
 	 */
@@ -81,6 +74,18 @@ public class Truck {
 	 */
 	public void setGarbagesPassed(ArrayList<Node> garbagesPassed) {
 		this.garbagesPassed = garbagesPassed;
+	}
+	/**
+	 * @return the distancePassed
+	 */
+	public int getDistancePassed() {
+		return distancePassed;
+	}
+	/**
+	 * @param distancePassed the distancePassed to set
+	 */
+	public void setDistancePassed(int distancePassed) {
+		this.distancePassed = distancePassed;
 	}
 
 }
