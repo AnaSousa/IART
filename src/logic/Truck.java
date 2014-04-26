@@ -1,12 +1,8 @@
 package logic;
 
-import graph.Edge;
-import graph.Graph;
 import graph.Node;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Queue;
 
 public class Truck {
 	int weightCarried;
