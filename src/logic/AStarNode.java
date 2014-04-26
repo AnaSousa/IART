@@ -62,6 +62,7 @@ public class AStarNode {
 	 */
 	public AStarNode getCameFrom() {
 		cameFromIndex++;
+		System.out.println("Came From Size=" + cameFrom.size());
 		if(cameFrom.size()==0)
 			return null;
 		else return cameFrom.get(cameFromIndex);

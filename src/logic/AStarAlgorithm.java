@@ -33,13 +33,10 @@ public class AStarAlgorithm {
 				goal = x;
 				break;
 			} else {
-				System.out.println("Testing");
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
 					Node neighbor = neighborEdge.getTarget();
-					System.out.println(neighbor.getX());
-					System.out.println(neighbor.getY());
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
 						int trucksLeft = 0;
