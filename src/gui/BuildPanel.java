@@ -22,6 +22,7 @@ public class BuildPanel extends JPanel {
 	public static final  int GARBAGE_DEPOSIT = 4;
 	public static final  int STREET_UP = 5;
 	public static final  int STREET_DOWN = 6;
+	public static final  int STREET_HORIZONTAL_BASE = 7;
 	public static final  int STREET_RIGHT = 7;
 	public static final  int STREET_LEFT = 8;
 
@@ -58,6 +59,12 @@ public class BuildPanel extends JPanel {
 
 	private int[][] board = null;
 	private int current;
+
+	//for direction purpose
+	private int horizontal_index = 0;
+	private int vertical_index = 0;
+	final private int[] HORIZONTAL_DIRECTIONS = {STREET_RIGHT, STREET_LEFT, STREET};
+	final private int[] VERTICAL_DIRECTIONS = {STREET_UP, STREET_DOWN, STREET};
 
 	private boolean isAllowed(int x, int y) {
 		int p[] = {EMPTY, EMPTY, EMPTY, EMPTY};
@@ -169,7 +176,7 @@ public class BuildPanel extends JPanel {
 				setDirection(i,j);
 				break;
 			}
-			
+
 		}
 		repaint();
 	}
@@ -250,7 +257,7 @@ public class BuildPanel extends JPanel {
 			icons[STREET_UP] = roadT;
 			icons[STREET_LEFT] = roadL;
 			icons[STREET_RIGHT] = roadR;
-			
+
 
 
 
@@ -315,8 +322,12 @@ public class BuildPanel extends JPanel {
 		initBoard();
 		repaint();
 	}
-	
+
 	void setDirection(int x, int y) {
+
+		if (!(board[x][y] == STREET || (STREET_UP <= board[x][y] && board[x][y]  <= STREET_LEFT)))
+			return;
+
 		int p[] = {EMPTY, EMPTY, EMPTY, EMPTY};
 
 		/*
@@ -341,23 +352,70 @@ public class BuildPanel extends JPanel {
 			p[2] = board[x3][y3];
 		if(0 <= x4 && x4 < mapSizeH && 0 <= y4 && y4 < mapSizeV)
 			p[3] = board[x4][y4];
-		
+
+
+
 		int cont = 0;
-		
+
 		for(int i : p) 
 			if(i == STREET || (STREET_UP <= i && i  <= STREET_LEFT)) 
 				cont++;
-		
-		if(cont == 2) {
+
+
+		if(isEmpty(p[1]) && isEmpty(p[3])) {
 			int i = x;
 			while(i < mapSizeH) {
-				if (board[i][y] != STREET)
-					board[i][y] = STREET_RIGHT;
+				if (!isStreet(board[i][y]))
+					break;
+				board[i][y] = HORIZONTAL_DIRECTIONS[horizontal_index];
+				i++;
 			}
+
+			i = x - 1;
+			while(i >= 0) {
+				System.out.println(i);
+				if (!isStreet(board[i][y]))
+					break;
+				board[i][y] = HORIZONTAL_DIRECTIONS[horizontal_index];
+				i--;
+			}
+
+
+			horizontal_index = (horizontal_index + 1) % 3;
+		} 
+		else if (isEmpty(p[0]) && isEmpty(p[2])) {
+			int j = y;
+			while(j < mapSizeH) {
+				if (!isStreet(board[x][j]))
+					break;
+				board[x][j] = VERTICAL_DIRECTIONS[vertical_index];
+				j++;
+			}
+
+			j = y - 1;
+			while(j >= 0) {
+				System.out.println(j);
+				if (!isStreet(board[x][j]))
+					break;
+				board[x][j] = VERTICAL_DIRECTIONS[vertical_index];
+				j--;
+			}
+
+
+			vertical_index = (vertical_index + 1) % 3;
 		}
-			
-		
 	}
+
+	public boolean isStreet(int x) {
+		if(x == STREET || (STREET_UP <= x && x <= STREET_LEFT))
+			return true;
+		return false;
+	}
+	
+	public boolean isEmpty(int x) {
+		return x == EMPTY;
+	}
+	
 
 	public void setIcon(int modo) {
 		current = modo;
