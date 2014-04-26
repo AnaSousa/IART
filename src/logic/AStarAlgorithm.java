@@ -24,7 +24,6 @@ public class AStarAlgorithm {
 
 		AStarNode goal = null;
 		while (openSet.size() > 0) {
-			System.out.println("Testing");
 
 			AStarNode x = priorityQueue.poll();
 			openSet.remove(x.getId());
@@ -34,11 +33,13 @@ public class AStarAlgorithm {
 				goal = x;
 				break;
 			} else {
-
+				System.out.println("Testing");
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
 					Node neighbor = neighborEdge.getTarget();
+					System.out.println(neighbor.getX());
+					System.out.println(neighbor.getY());
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
 						int trucksLeft = 0;
@@ -47,7 +48,7 @@ public class AStarAlgorithm {
 								trucksLeft++;
 							}
 						}
-						int weight = (trucksLeft==0? 1 : trucksLeft * 100);
+						int weight = (trucksLeft==0? 1 : (int)Math.pow(100,(trucksLeft +1)));
 						double passed = (x.getDistance() + neighborEdge
 								.getWeight()) / weight;
 						AStarNode n = openSet.get(neighbor.getId());
@@ -62,7 +63,7 @@ public class AStarAlgorithm {
 									(x.getDistance() + neighborEdge.getWeight() + g
 											.calcManhattanDistance(neighbor,
 													destination))
-											/ (t.getGarbagesPassed().size() * 100));
+											/ (weight));
 							n.setCameFrom(x);
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
