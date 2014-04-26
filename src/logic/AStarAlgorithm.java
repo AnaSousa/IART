@@ -54,7 +54,7 @@ public class AStarAlgorithm {
 						if (n == null) {
 
 							// not in the open set
-							n = new AStarNode(
+							n = new AStarNode( 
 									neighbor,
 									weight,
 									(x.getDistance() + (int) neighborEdge
