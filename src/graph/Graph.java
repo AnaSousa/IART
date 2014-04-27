@@ -227,7 +227,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	}
 
 	public double calcManhattanDistance(Node a, Node b) {
-		return 1000*(Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()));
+		return (Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()));
 	}
 
 	public ArrayList<Edge> getAdjacentEdges(int id) {

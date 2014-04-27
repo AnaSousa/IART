@@ -15,13 +15,14 @@ public class AStarAlgorithm {
 	public static Queue<Edge> searchAStar(Graph g, Node origin,
 			Node destination, Truck t) {
 		HashMap<Integer, AStarNode> openSet = new HashMap<Integer, AStarNode>();
+
 		PriorityQueue<AStarNode> priorityQueue = new PriorityQueue<AStarNode>(
 				20, new AStarNodeComparator());
 		HashMap<Integer, AStarNode> closeSet = new HashMap<Integer, AStarNode>();
-		AStarNode start = new AStarNode(origin, 1,0, Integer.MAX_VALUE);
+		AStarNode start = new AStarNode(origin, 1, 0, Integer.MAX_VALUE);
 		openSet.put(origin.getId(), start);
 		priorityQueue.add(start);
-
+		int trucksLeft = 0;
 		AStarNode goal = null;
 		while (openSet.size() > 0) {
 
@@ -31,7 +32,8 @@ public class AStarAlgorithm {
 				// found
 				System.out.println("Found target Node " + x.getId());
 				goal = x;
-				break;
+				if (t.getGarbagesPassed().size() == trucksLeft)
+					break;
 			} else {
 				closeSet.put(x.getId(), x);
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
@@ -39,20 +41,21 @@ public class AStarAlgorithm {
 					Node neighbor = neighborEdge.getTarget();
 					AStarNode visited = closeSet.get(neighbor.getId());
 					if (visited == null) {
-						int trucksLeft = 0;
+						trucksLeft = 0;
 						for (Node garbage : t.getGarbagesPassed()) {
 							if (closeSet.containsKey(garbage.getId())) {
 								trucksLeft++;
 							}
 						}
-						int weight = (trucksLeft==0? 1 : (int)Math.pow(100,(trucksLeft +1)));
+						int weight = (trucksLeft == 0 ? 1 : (int) Math.pow(100,
+								(trucksLeft + 1)));
 						double passed = (x.getDistance() + neighborEdge
 								.getWeight()) / weight;
 						AStarNode n = openSet.get(neighbor.getId());
 						if (n == null) {
 
 							// not in the open set
-							n = new AStarNode( 
+							n = new AStarNode(
 									neighbor,
 									weight,
 									(x.getDistance() + (int) neighborEdge
@@ -71,7 +74,6 @@ public class AStarAlgorithm {
 							// change
 							// its parent
 							n.setCameFrom(x);
-							t.setFuel(t.getFuel() - neighborEdge.getWeight());
 							n.setG(passed);
 
 						}

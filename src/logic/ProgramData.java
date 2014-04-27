@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
@@ -55,7 +56,7 @@ public static ProgramData getInstance() {
 	return data;
 }
 
-public Queue<Edge> searchPath(Graph g,Node origin, Node destination)
+public Queue<Edge> searchPath(Node origin, Node destination)
 {
 	
 	for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
@@ -64,6 +65,21 @@ public Queue<Edge> searchPath(Graph g,Node origin, Node destination)
 			t.garbagesPassed.add(tmp);
 	}
 	return AStarAlgorithm.searchAStar(g, origin, destination,t);
+}
+
+public Queue<Edge> gasAnalyze(Queue<Edge> edges)
+{
+	this.t.setFuel(500);
+	double fuel=this.t.getFuel();
+	Queue<Edge> result = new LinkedList<Edge>();
+	for(Edge e : edges)
+	{
+		if(fuel-e.getWeight()<=e.getSource().getDistanceToPetrolStation())
+		{
+			
+		}
+	}
+	return null;
 }
 
 }

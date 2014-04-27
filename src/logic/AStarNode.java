@@ -34,7 +34,7 @@ public class AStarNode {
 		cameFromIndex = -1;
 		this.weight=weightOrigin;
 		this.distance=distanceOrigin;
-		this.g = (double) distance/weight;
+		this.g = (double) distance-weight;
 		this.h = h;
 	}
 
@@ -62,7 +62,6 @@ public class AStarNode {
 	 */
 	public AStarNode getCameFrom() {
 		cameFromIndex++;
-		System.out.println("Came From Size=" + cameFrom.size());
 		if(cameFrom.size()==0)
 			return null;
 		else return cameFrom.get(cameFromIndex);

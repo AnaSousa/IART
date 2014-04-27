@@ -9,6 +9,7 @@ public class Truck {
 	int distancePassed;
 	double fuel;
 	double capacity;
+	int factor;
 	ArrayList<Node> garbagesPassed;
 	/**
 	 * @param weightCarried
@@ -20,6 +21,7 @@ public class Truck {
 		this.fuel = fuel;
 		this.capacity=capacity;
 		this.garbagesPassed=new ArrayList<Node>();
+		factor=100000;
 	}
 	/**
 	 * @return the weightCarried
@@ -82,6 +84,18 @@ public class Truck {
 	 */
 	public void setDistancePassed(int distancePassed) {
 		this.distancePassed = distancePassed;
+	}
+	/**
+	 * @return the factor
+	 */
+	public int getFactor() {
+		return factor;
+	}
+	/**
+	 * @param factor the factor to set
+	 */
+	public void setFactor(int factor) {
+		this.factor = factor;
 	}
 
 }
