@@ -47,20 +47,26 @@ public class MainWindow {
 	public MainWindow() {
 		test1();
 		initialize();
-		
+
 	}
-	
+
 	/**
 	 * Create the application.
 	 */
 	public MainWindow(int test) {
-		
+
 		switch(test) {
 		case 1:
+			test1();
+			break;
+		case 2:
+			test2();
+			break;
+		case 3:
 			test3();
 			break;
 		}
-	
+
 		initialize();
 	}
 
@@ -95,13 +101,13 @@ public class MainWindow {
 	public JFrame getFrmAAlgorithmWaste() {
 		return frmAAlgorithmWaste;
 	}
-	
+
 	private void test3() {
-		
+
 		Class<? extends DefaultEdge> edgeClass = null;
 		ProgramData data = ProgramData.getInstance();
 		Graph graph = new Graph(edgeClass);
-		
+
 		Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(1, 0);
 		Node n2 = new Node(Node.PETROL_STATION);
@@ -112,34 +118,34 @@ public class MainWindow {
 		n4.setPosition(9, 0);
 		Node n5 = new Node(Node.PETROL_STATION);
 		n5.setPosition(10, 0);
-		
+
 		Node n6 = new Node(Node.GARBAGE_CONTAINER);
 		n6.setPosition(4, 2);
-		
+
 		Node n7 = new Node(Node.CROSSROAD);
 		n7.setPosition(4, 3);
 		Node n8 = new Node(Node.GARBAGE_CONTAINER);
 		n8.setPosition(5, 3);
 		Node n9 = new Node(Node.CROSSROAD);
 		n9.setPosition(7, 3);
-		
+
 		Node n10 = new Node(Node.GARBAGE_CONTAINER);
 		n10.setPosition(1, 5);
 		Node n11 = new Node(Node.CROSSROAD);
 		n11.setPosition(4, 5);
 		Node n12 = new Node(Node.GARBAGE_CONTAINER);
 		n12.setPosition(9, 5);
-		
+
 		Node n13 = new Node(Node.GARBAGE_CONTAINER);
 		n13.setPosition(6, 7);
 		Node n14 = new Node(Node.CROSSROAD);
 		n14.setPosition(9, 7);
 		Node n15 = new Node(Node.CROSSROAD);
 		n15.setPosition(4, 7);
-		
+
 		Node n16 = new Node(Node.DUMP);
 		n16.setPosition(4, 8);
-		
+
 		graph.addVertex(n1); graph.addVertex(n2);
 		graph.addVertex(n3); graph.addVertex(n4);
 		graph.addVertex(n5); graph.addVertex(n6);
@@ -148,7 +154,7 @@ public class MainWindow {
 		graph.addVertex(n11); graph.addVertex(n12);
 		graph.addVertex(n13); graph.addVertex(n14);
 		graph.addVertex(n15); graph.addVertex(n16); 
-		
+
 		graph.addEdge(n1,n2,2000,false);
 		graph.addEdge(n1,n10,2000,true);
 		graph.addEdge(n2,n6,1500,false);
@@ -166,22 +172,20 @@ public class MainWindow {
 		graph.addEdge(n4,n12,2000,false);
 		graph.addEdge(n12,n14,2000,false);
 		graph.addEdge(n7,n11,1000,false);
-		
-		/*DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
-		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);*/ //TODO:
-		
+
 		Truck truck = new Truck(400,10);
 		data.setTruck(truck);
 		data.setGraph(graph);
 		Queue<Edge> s = data.searchPath( n1, n16);
+		data.getGraph().setTruckPath(s);
 	}
-	
+
 	private void test2() {
-		
+
 		Class<? extends DefaultEdge> edgeClass = null;
 		ProgramData data = ProgramData.getInstance();
 		Graph graph = new Graph(edgeClass);
-		
+
 		Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
 		Node n2 = new Node(Node.GARBAGE_CONTAINER);
@@ -194,7 +198,7 @@ public class MainWindow {
 		n5.setPosition(8, 0);
 		Node n6 = new Node(Node.PETROL_STATION);
 		n6.setPosition(10, 0);
-		
+
 		Node n7 = new Node(Node.PETROL_STATION);
 		n7.setPosition(0, 4);
 		Node n8 = new Node(Node.GARBAGE_CONTAINER);
@@ -207,7 +211,7 @@ public class MainWindow {
 		n11.setPosition(8, 4);
 		Node n12 = new Node(Node.PETROL_STATION);
 		n12.setPosition(10, 4);
-		
+
 		Node n13 = new Node(Node.PETROL_STATION);
 		n13.setPosition(0, 8);
 		Node n14 = new Node(Node.GARBAGE_CONTAINER);
@@ -225,7 +229,7 @@ public class MainWindow {
 		n19.setPosition(0, 6);
 		Node n20 = new Node(Node.GARBAGE_CONTAINER);
 		n20.setPosition(8, 2);
-		
+
 		graph.addVertex(n1); graph.addVertex(n2);
 		graph.addVertex(n3); graph.addVertex(n4);
 		graph.addVertex(n5); graph.addVertex(n6);
@@ -236,26 +240,26 @@ public class MainWindow {
 		graph.addVertex(n15); graph.addVertex(n16);
 		graph.addVertex(n17); graph.addVertex(n18);
 		graph.addVertex(n19); graph.addVertex(n20);
-		
+
 		graph.addEdge(n1,n2,1000,false);
 		graph.addEdge(n2,n3,1000,false);
 		graph.addEdge(n3,n4,1000,false);
 		graph.addEdge(n3,n4,1000,false);
 		graph.addEdge(n4,n5,1000,false);
 		graph.addEdge(n5,n6,1000,false);
-		
+
 		graph.addEdge(n7,n8,1000,false);
 		graph.addEdge(n8,n9,1000,false);
 		graph.addEdge(n9,n10,1000,false);
 		graph.addEdge(n10,n11,1000,false);
 		graph.addEdge(n11,n12,1000,false);
-		
+
 		graph.addEdge(n13,n14,1000,false);
 		graph.addEdge(n14,n15,1000,false);
 		graph.addEdge(n15,n16,1000,false);
 		graph.addEdge(n16,n17,1000,false);
 		graph.addEdge(n17,n18,1000,false);
-		
+
 		graph.addEdge(n1,n7,2000,false);
 		graph.addEdge(n7,n19,1000,false);
 		graph.addEdge(n19,n13,1000,false);
@@ -264,14 +268,12 @@ public class MainWindow {
 		graph.addEdge(n5,n20,1000,false);
 		graph.addEdge(n20,n11,1000,false);
 		graph.addEdge(n11,n17,2000,false);
-		
-		/*DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
-		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);*/ //TODO:
-		
+
 		Truck truck = new Truck(200,100);
 		data.setTruck(truck);
 		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath( n1, n20);
+		Queue<Edge> s = data.searchPath( n1, n18);
+		data.getGraph().setTruckPath(s);
 	}
 
 	private void test1() {
@@ -318,7 +320,7 @@ public class MainWindow {
 		graph.addVertex(n11);
 		graph.addVertex(n12);
 		graph.addVertex(n13);
-		
+
 		graph.addEdge(n1,n2,2000,false);
 		graph.addEdge(n2,n6,2000,false);
 		graph.addEdge(n3,n2,3000,true);
@@ -334,15 +336,15 @@ public class MainWindow {
 		graph.addEdge(n11,n12,3000,false);
 		graph.addEdge(n12,n13,3000,false);
 		graph.addEdge(n8,n13,3000,false);
-		
+
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
 		Truck truck = new Truck(500,200);
 		data.setTruck(truck);
 		data.setGraph(graph);
-		
+
 		Queue<Edge> s = data.searchPath( n1, n13);
-		
+
 		for(Edge e : s)
 		{
 			System.out.print(e.getSourceId()+"->"+e.getTargetId());
