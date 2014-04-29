@@ -170,7 +170,7 @@ public class MainWindow {
 		/*DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);*/ //TODO:
 		
-		Truck truck = new Truck(400,150);
+		Truck truck = new Truck(400,10);
 		data.setTruck(truck);
 		data.setGraph(graph);
 		Queue<Edge> s = data.searchPath( n1, n16);
