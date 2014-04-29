@@ -131,14 +131,14 @@ public class MainWindow {
 		n12.setPosition(9, 5);
 		
 		Node n13 = new Node(Node.GARBAGE_CONTAINER);
-		n13.setPosition(5, 7);
+		n13.setPosition(6, 7);
 		Node n14 = new Node(Node.CROSSROAD);
 		n14.setPosition(9, 7);
 		Node n15 = new Node(Node.CROSSROAD);
-		n13.setPosition(4, 7);
+		n15.setPosition(4, 7);
 		
 		Node n16 = new Node(Node.DUMP);
-		n15.setPosition(4, 8);
+		n16.setPosition(4, 8);
 		
 		graph.addVertex(n1); graph.addVertex(n2);
 		graph.addVertex(n3); graph.addVertex(n4);
@@ -151,28 +151,29 @@ public class MainWindow {
 		
 		graph.addEdge(n1,n2,2000,false);
 		graph.addEdge(n1,n10,2000,true);
-		graph.addEdge(n2,n6,2000,false);
-		graph.addEdge(n6,n7,2000,false);
+		graph.addEdge(n2,n6,1500,false);
+		graph.addEdge(n6,n7,500,false);
 		graph.addEdge(n10,n11,2000,true);
-		graph.addEdge(n11,n15,2000,false);
-		graph.addEdge(n15,n16,2000,false);
+		graph.addEdge(n11,n15,1000,false);
+		graph.addEdge(n15,n16,500,false);
 		graph.addEdge(n15,n13,2000,false);
-		graph.addEdge(n13,n14,2000,false);
+		graph.addEdge(n13,n14,3000,false);
 		graph.addEdge(n7,n8,2000,false);
-		graph.addEdge(n8,n9,2000,false);
+		graph.addEdge(n8,n9,1000,false);
 		graph.addEdge(n9,n3,2000,false);
 		graph.addEdge(n3,n4,2000,false);
-		graph.addEdge(n4,n5,2000,false);
+		graph.addEdge(n4,n5,1000,false);
 		graph.addEdge(n4,n12,2000,false);
 		graph.addEdge(n12,n14,2000,false);
+		graph.addEdge(n7,n11,1000,false);
 		
 		/*DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);*/ //TODO:
 		
-		Truck truck = new Truck(500,200);
+		Truck truck = new Truck(400,150);
 		data.setTruck(truck);
 		data.setGraph(graph);
-		//Queue<Edge> s = data.searchPath( n1, n16);
+		Queue<Edge> s = data.searchPath( n1, n16);
 	}
 	
 	private void test2() {
@@ -236,44 +237,38 @@ public class MainWindow {
 		graph.addVertex(n17); graph.addVertex(n18);
 		graph.addVertex(n19); graph.addVertex(n20);
 		
-		graph.addEdge(n1,n2,2000,false);
-		graph.addEdge(n2,n3,2000,false);
-		graph.addEdge(n3,n4,2000,false);
-		graph.addEdge(n3,n4,2000,false);
-		graph.addEdge(n4,n5,2000,false);
-		graph.addEdge(n5,n6,2000,false);
+		graph.addEdge(n1,n2,1000,false);
+		graph.addEdge(n2,n3,1000,false);
+		graph.addEdge(n3,n4,1000,false);
+		graph.addEdge(n3,n4,1000,false);
+		graph.addEdge(n4,n5,1000,false);
+		graph.addEdge(n5,n6,1000,false);
 		
-		graph.addEdge(n7,n8,2000,false);
-		graph.addEdge(n8,n9,2000,false);
-		graph.addEdge(n9,n10,2000,false);
-		graph.addEdge(n10,n11,2000,false);
-		graph.addEdge(n11,n12,2000,false);
+		graph.addEdge(n7,n8,1000,false);
+		graph.addEdge(n8,n9,1000,false);
+		graph.addEdge(n9,n10,1000,false);
+		graph.addEdge(n10,n11,1000,false);
+		graph.addEdge(n11,n12,1000,false);
 		
-		graph.addEdge(n13,n14,2000,false);
-		graph.addEdge(n14,n15,2000,false);
-		graph.addEdge(n15,n16,2000,false);
-		graph.addEdge(n16,n17,2000,false);
-		graph.addEdge(n17,n18,2000,false);
-		
-		graph.addEdge(n13,n14,2000,false);
-		graph.addEdge(n14,n15,2000,false);
-		graph.addEdge(n15,n16,2000,false);
-		graph.addEdge(n16,n17,2000,false);
-		graph.addEdge(n17,n18,2000,false);
+		graph.addEdge(n13,n14,1000,false);
+		graph.addEdge(n14,n15,1000,false);
+		graph.addEdge(n15,n16,1000,false);
+		graph.addEdge(n16,n17,1000,false);
+		graph.addEdge(n17,n18,1000,false);
 		
 		graph.addEdge(n1,n7,2000,false);
-		graph.addEdge(n7,n19,2000,false);
-		graph.addEdge(n19,n13,2000,false);
+		graph.addEdge(n7,n19,1000,false);
+		graph.addEdge(n19,n13,1000,false);
 		graph.addEdge(n3,n9,2000,false);
 		graph.addEdge(n9,n15,2000,false);
-		graph.addEdge(n5,n20,2000,false);
-		graph.addEdge(n20,n11,2000,false);
+		graph.addEdge(n5,n20,1000,false);
+		graph.addEdge(n20,n11,1000,false);
 		graph.addEdge(n11,n17,2000,false);
 		
 		/*DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);*/ //TODO:
 		
-		Truck truck = new Truck(500,200);
+		Truck truck = new Truck(200,100);
 		data.setTruck(truck);
 		data.setGraph(graph);
 		Queue<Edge> s = data.searchPath( n1, n20);
