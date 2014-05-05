@@ -231,6 +231,8 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	}
 
 	public ArrayList<Edge> getAdjacentEdges(int id) {
+		if(id==13)
+			System.out.println(this.getNodes().get(id).getId());
 		return this.getNodes().get(id).getAdjacents();
 	}
 

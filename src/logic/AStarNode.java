@@ -3,43 +3,35 @@ package logic;
 import graph.Node;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Joao Nadais on 17/04/2014.
  */
 public class AStarNode {
+	private int id;
 	private Node node;
-	private ArrayList<AStarNode> cameFrom;
+	private AStarNode cameFrom;
+	private HashSet<Integer> garbagesPassed;
 	private int weight;
 	private int distance;
 	private double g;
 	private double h;
-	private int cameFromIndex;
 
-	public AStarNode(Node node, AStarNode cameFrom, double g,
+	public AStarNode(int id,Node node, AStarNode cameFrom, double g,
 			double h) {
+		this.id=id;
 		this.node = node;
-		this.cameFrom = new ArrayList<AStarNode>(0);
-		cameFromIndex = -1;
-		this.cameFrom.add(cameFrom);
-		this.weight=1;
+		this.cameFrom = cameFrom;
+		garbagesPassed= new HashSet<Integer>();
 		this.distance=0;
+		this.weight=0;
 		this.g = g;
 		this.h = h;
 	}
 
-	public AStarNode(Node node, int weightOrigin, int distanceOrigin,double h) {
-		this.node = node;
-		this.cameFrom = new ArrayList<AStarNode>(0);
-		cameFromIndex = -1;
-		this.weight=weightOrigin;
-		this.distance=distanceOrigin;
-		this.g = (double) distance-weight;
-		this.h = h;
-	}
-
 	public int getId() {
-		return this.node.getId();
+		return id;
 	}
 
 	/**
@@ -61,10 +53,8 @@ public class AStarNode {
 	 * @return the cameFrom
 	 */
 	public AStarNode getCameFrom() {
-		cameFromIndex++;
-		if(cameFrom.size()==0)
-			return null;
-		else return cameFrom.get(cameFromIndex);
+		
+		return cameFrom;
 	}
 
 	/**
@@ -72,7 +62,7 @@ public class AStarNode {
 	 *            the cameFrom to set
 	 */
 	public void setCameFrom(AStarNode cameFrom) {
-		this.cameFrom.add(cameFrom);
+		this.cameFrom=cameFrom;
 	}
 
 	/**
@@ -131,5 +121,39 @@ public class AStarNode {
 	public int compareTo(AStarNode obj)
 	{
 		return Double.compare(this.getG()+this.getH(),obj.getG()+obj.getH());
+	}
+
+	/**
+	 * @return the garbagesPassed
+	 */
+	public HashSet<Integer> getGarbagesPassed() {
+		return garbagesPassed;
+	}
+
+	/**
+	 * @param garbagesPassed the garbagesPassed to set
+	 */
+	public void setGarbagesPassed(HashSet<Integer> garbagesPassed) {
+		this.garbagesPassed = garbagesPassed;
+	}
+	
+	public void addGarbage(int garbage)
+	{
+		this.garbagesPassed.add(garbage);
+	}
+	public double calculateManhattanLeft()
+	{
+		ArrayList<Node> nodesLeft=ProgramData.getInstance().getTruck().getGarbagesPassed();
+		for(Node n:nodesLeft)
+		{
+			if(this.garbagesPassed.contains(n.getId()))
+				nodesLeft.remove(n);
+		}
+		double result=0.0;
+		for(Node n:nodesLeft)
+		{
+			result+=ProgramData.getInstance().getGraph().calcManhattanDistance(this.getNode(), n);
+		}
+		return result;
 	}
 }

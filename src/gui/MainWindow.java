@@ -134,9 +134,8 @@ public class MainWindow {
 		Truck truck = new Truck(500,200);
 		data.setTruck(truck);
 		data.setGraph(graph);
-		
+	
 		Queue<Edge> s = data.searchPath( n1, n13);
-		
 		for(Edge e : s)
 		{
 			System.out.print(e.getSourceId()+"->"+e.getTargetId());
@@ -181,6 +180,8 @@ public class MainWindow {
 	public JFrame getFrmAAlgorithmWaste() {
 		return frmAAlgorithmWaste;
 	}
+	
+	
 
 
 }
