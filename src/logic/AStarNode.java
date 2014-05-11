@@ -44,6 +44,13 @@ public class AStarNode {
 		this.garbagesPassed=new HashSet<Integer>();
 	}
 
+	public AStarNode(Node neighbor, int weight, int distance) 
+	{
+		this.node=neighbor;
+		this.cameFrom=null;
+		this.weight=weight;
+		this.distance=distance;
+	}
 	public int getId() {
 		return this.node.getId();
 	}
@@ -148,7 +155,7 @@ public class AStarNode {
 		this.garbagesPassed = garbagesPassed;
 	}
 	
-	public final void recalculateGarbagesPassed()
+	public final void recalculateGarbagesPassed(int total)
 	{
 		ArrayList<Node> path = new ArrayList<Node>();
 		AStarNode test = this;
@@ -163,6 +170,8 @@ public class AStarNode {
 			if(n.getType()==Node.GARBAGE_CONTAINER)
 				garbagesPassed.add(n.getId());
 		}
+		g=garbagesPassed.size()*100;
+		this.h=total-garbagesPassed.size()*1000;
 	}
 }
 

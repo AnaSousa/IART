@@ -50,32 +50,22 @@ public class AStarAlgorithm {
 								trucksLeft++;
 							}
 						}
-						int weight = (trucksLeft == 0 ? 1 : (int) Math.pow(100,
-								(trucksLeft + 1)));
-						double passed = (x.getDistance() + neighborEdge
-								.getWeight()) / weight;
+						double passed = trucksLeft*100;
 						AStarNode n = openSet.get(neighbor.getId());
 						if (n == null) {
 
 							// not in the open set
 							n = new AStarNode(
 									neighbor,
-									weight,
+									trucksLeft,
 									(x.getDistance() + (int) neighborEdge
-											.getWeight()),
-									(x.getDistance() + neighborEdge.getWeight() + g
-											.calcManhattanDistance(neighbor,
-													destination))
-											/ (weight));
+											.getWeight()));
 							n.setCameFrom(x);
-							n.recalculateGarbagesPassed();
-							if (t.getGarbagesPassed().contains(n.getNode().getId())
-									&& !n.getGarbagesPassed().contains(
-											n.getNode().getId()))
-								n.addGarbage(n.getId());
+							n.recalculateGarbagesPassed(t.getGarbagesPassed().size());
 							openSet.put(neighbor.getId(), n);
 							priorityQueue.add(n);
 							System.out.println("Teste 1 " + n.getGarbagesPassed());
+							System.out.println("Teste 2 " + t.getGarbagesPassed());
 						} else if (passed < n.getG() ) {
 							System.out.println("Passed=" + passed);
 							System.out.println("N G=" + n.getG());
@@ -84,7 +74,7 @@ public class AStarAlgorithm {
 							// its parent
 							n.setCameFrom(x);
 							n.setG(passed);
-							n.recalculateGarbagesPassed();
+							n.recalculateGarbagesPassed(t.getGarbagesPassed().size());
 							System.out.println(n.getGarbagesPassed());
 
 						}
