@@ -9,7 +9,6 @@ import java.util.HashSet;
  * Created by Joao Nadais on 17/04/2014.
  */
 public class AStarNode {
-	private int id;
 	private Node node;
 	private AStarNode cameFrom;
 	private HashSet<Integer> garbagesPassed;
@@ -18,20 +17,35 @@ public class AStarNode {
 	private double g;
 	private double h;
 
-	public AStarNode(int id,Node node, AStarNode cameFrom, double g,
+	/**
+	 * @return the garbagesPassed
+	 */
+	public HashSet<Integer> getGarbagesPassed() {
+		return garbagesPassed;
+	}
+	public AStarNode(Node node, AStarNode cameFrom, double g,
 			double h) {
-		this.id=id;
 		this.node = node;
 		this.cameFrom = cameFrom;
-		garbagesPassed= new HashSet<Integer>();
+		this.weight=1;
 		this.distance=0;
-		this.weight=0;
 		this.g = g;
 		this.h = h;
+		this.garbagesPassed=new HashSet<Integer>();
+	}
+
+	public AStarNode(Node node, int weightOrigin, int distanceOrigin,double h) {
+		this.node = node;
+		this.cameFrom = null;
+		this.weight=weightOrigin;
+		this.distance=distanceOrigin;
+		this.g = (double) distance-weight;
+		this.h = h;
+		this.garbagesPassed=new HashSet<Integer>();
 	}
 
 	public int getId() {
-		return id;
+		return this.node.getId();
 	}
 
 	/**
@@ -53,7 +67,6 @@ public class AStarNode {
 	 * @return the cameFrom
 	 */
 	public AStarNode getCameFrom() {
-		
 		return cameFrom;
 	}
 
@@ -122,12 +135,10 @@ public class AStarNode {
 	{
 		return Double.compare(this.getG()+this.getH(),obj.getG()+obj.getH());
 	}
-
-	/**
-	 * @return the garbagesPassed
-	 */
-	public HashSet<Integer> getGarbagesPassed() {
-		return garbagesPassed;
+	
+	public void addGarbage(int garbage)
+	{
+		this.garbagesPassed.add(garbage);
 	}
 
 	/**
@@ -137,23 +148,21 @@ public class AStarNode {
 		this.garbagesPassed = garbagesPassed;
 	}
 	
-	public void addGarbage(int garbage)
+	public final void recalculateGarbagesPassed()
 	{
-		this.garbagesPassed.add(garbage);
-	}
-	public double calculateManhattanLeft()
-	{
-		ArrayList<Node> nodesLeft=ProgramData.getInstance().getTruck().getGarbagesPassed();
-		for(Node n:nodesLeft)
+		ArrayList<Node> path = new ArrayList<Node>();
+		AStarNode test = this;
+		while(test!=null)
 		{
-			if(this.garbagesPassed.contains(n.getId()))
-				nodesLeft.remove(n);
+			path.add(test.getNode());
+			test=test.getCameFrom();
 		}
-		double result=0.0;
-		for(Node n:nodesLeft)
+		this.garbagesPassed=new HashSet<Integer>();
+		for(Node n : path)
 		{
-			result+=ProgramData.getInstance().getGraph().calcManhattanDistance(this.getNode(), n);
+			if(n.getType()==Node.GARBAGE_CONTAINER)
+				garbagesPassed.add(n.getId());
 		}
-		return result;
 	}
 }
+

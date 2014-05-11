@@ -62,7 +62,7 @@ public Queue<Edge> searchPath(Node origin, Node destination)
 	for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
 		Node tmp = entry.getValue();
 		if(tmp.getType()==Node.GARBAGE_CONTAINER)
-			t.garbagesPassed.add(tmp);
+			t.garbagesPassed.add(tmp.getId());
 	}
 	return AStarAlgorithm.searchAStar(g, origin, destination,t);
 }
