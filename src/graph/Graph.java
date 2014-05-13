@@ -186,13 +186,13 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 				if (!entry.getValue().equals(i)) {
 					BellmanFordShortestPath<Node, Edge> shortestPath = new BellmanFordShortestPath<Node, Edge>(this,entry.getValue());
 					tmp.setDistanceToDump(
-							(int) shortestPath.getCost(i));
+							(int) shortestPath.getCost(i),shortestPath.getPathEdgeList(i));
 					entry.setValue(tmp);
 				}
 
 				else
 					{
-					tmp.setDistanceToDump(0);
+					tmp.setDistanceToDump(0,null);
 					entry.setValue(tmp);
 					}
 			}

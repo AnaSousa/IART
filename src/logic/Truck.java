@@ -10,7 +10,7 @@ public class Truck {
 	double fuel;
 	double capacity;
 	int factor;
-	ArrayList<Integer> garbagesPassed;
+	ArrayList<Node> garbagesPassed;
 	/**
 	 * @param weightCarried
 	 * @param fuel
@@ -20,7 +20,7 @@ public class Truck {
 		this.distancePassed=0;
 		this.fuel = fuel;
 		this.capacity=capacity;
-		this.garbagesPassed=new ArrayList<Integer>();
+		this.garbagesPassed=new ArrayList<Node>();
 		factor=100000;
 	}
 	/**
@@ -64,13 +64,13 @@ public class Truck {
 	/**
 	 * @return the garbagesPassed
 	 */
-	public ArrayList<Integer> getGarbagesPassed() {
+	public ArrayList<Node> getGarbagesPassed() {
 		return garbagesPassed;
 	}
 	/**
 	 * @param garbagesPassed the garbagesPassed to set
 	 */
-	public void setGarbagesPassed(ArrayList<Integer> garbagesPassed) {
+	public void setGarbagesPassed(ArrayList<Node> garbagesPassed) {
 		this.garbagesPassed = garbagesPassed;
 	}
 	/**

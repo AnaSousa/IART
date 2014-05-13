@@ -155,7 +155,7 @@ public class AStarNode {
 		this.garbagesPassed = garbagesPassed;
 	}
 	
-	public final void recalculateGarbagesPassed(int total)
+	public final void recalculateGarbagesPassed(int total,double manhattanLeft)
 	{
 		ArrayList<Node> path = new ArrayList<Node>();
 		AStarNode test = this;
@@ -170,8 +170,8 @@ public class AStarNode {
 			if(n.getType()==Node.GARBAGE_CONTAINER)
 				garbagesPassed.add(n.getId());
 		}
-		g=garbagesPassed.size()*100;
-		this.h=total-garbagesPassed.size()*1000;
+		g=distance/(garbagesPassed.size()==0 ? 1 : garbagesPassed.size()*100);
+		this.h=(total-garbagesPassed.size()*1000);
 	}
 }
 

@@ -1,9 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Node implements Comparable<Node> {
 
@@ -16,7 +14,8 @@ public class Node implements Comparable<Node> {
 	
 	private static int currentId=0;
 	private int id;
-    private Queue<Node> pathToPetrolStation;
+    private ArrayList<Edge> pathToPetrolStation;
+    private ArrayList<Edge> pathToDump;
 	private ArrayList<Edge> adjacents;
 	/*
 	 * 0 - nao tem nada; 1 - cruzamento;
@@ -49,7 +48,7 @@ public class Node implements Comparable<Node> {
 		id=currentId;
 		currentId++;
 		this.type=type;
-        this.pathToPetrolStation = new LinkedList<Node>();
+        this.pathToPetrolStation = new ArrayList<Edge>();
         adjacents=new ArrayList<Edge>(0);	}
 	
 	public Node(int type, int x, int y) {
@@ -63,7 +62,10 @@ public class Node implements Comparable<Node> {
 		currentId++;
 		this.type=type;
 		setPosition(x, y);
-        this.pathToPetrolStation = new LinkedList<Node>();
+		this.distanceToDump=Integer.MAX_VALUE;
+		this.distanceToPetrolStation=Integer.MAX_VALUE;
+        this.pathToPetrolStation = new ArrayList<Edge>();
+        this.pathToDump=new ArrayList<Edge>();
         adjacents=new ArrayList<Edge>(0);
 	}
 
@@ -100,9 +102,7 @@ public class Node implements Comparable<Node> {
 		return distanceToPetrolStation;
 	}
 
-	public void setDistanceToDump(int newDistance) {
-		distanceToDump = newDistance < distanceToDump ? newDistance : distanceToDump;
-	}
+	
 
 	public void setDistanceToStation(int newDistance,List<Edge> newPath) {
         if(newDistance<distanceToPetrolStation)
@@ -111,20 +111,37 @@ public class Node implements Comparable<Node> {
             this.distanceToPetrolStation= newDistance < distanceToPetrolStation ? newDistance : distanceToPetrolStation;
             if(newPath!=null)
             {
-            	LinkedList<Node> l = new LinkedList<Node>();
+            	ArrayList<Edge> l = new ArrayList<Edge>();
             	for(int i = 0;i<newPath.size();i++)
-            	{
-            		if(i==0)
-            		l.add(newPath.get(i).getSource());
-            		l.add(newPath.get(i).getTarget());
+            	{            		
+            		l.add(newPath.get(i));
             	}
                 this.pathToPetrolStation=l;
             }
             else this.pathToPetrolStation=null;
         }
 	}
+	public void setDistanceToDump(int newDistance,List<Edge> newPath) {
+		ArrayList<Integer> a = null;
+		System.out.println(a.get(0));
+        if(newDistance<distanceToDump)
+        {
+        	System.out.println("Dump: " + newPath);
+        	distanceToDump=newDistance;
+            if(newPath!=null)
+            {
+            	ArrayList<Edge> l = new ArrayList<Edge>();
+            	for(int i = 0;i<newPath.size();i++)
+            	{            		
+            		l.add(newPath.get(i));
+            	}
+                this.pathToDump=l;
+            }
+            else this.pathToDump=null;
+        }
+	}
 
-    public Queue<Node> getPathToPetrolStation() {
+    public ArrayList<Edge> getPathToPetrolStation() {
         return pathToPetrolStation;
     }
 
@@ -158,4 +175,18 @@ public class Node implements Comparable<Node> {
     	if(!adjacents.contains(e))
         this.adjacents.add(e);
     }
+
+	/**
+	 * @return the pathToDump
+	 */
+	public ArrayList<Edge> getPathToDump() {
+		return pathToDump;
+	}
+
+	/**
+	 * @param pathToDump the pathToDump to set
+	 */
+	public void setPathToDump(ArrayList<Edge> pathToDump) {
+		this.pathToDump = pathToDump;
+	}
 }

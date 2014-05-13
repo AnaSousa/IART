@@ -274,8 +274,6 @@ public class MainPanel extends JPanel {
 			}
 
 			distance += 0.1;
-			/*distance = Math.floor(distance * 100) / 100;
-			System.out.println(distance);*/
 
 			repaint();
 

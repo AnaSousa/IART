@@ -62,9 +62,9 @@ public Queue<Edge> searchPath(Node origin, Node destination)
 	for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
 		Node tmp = entry.getValue();
 		if(tmp.getType()==Node.GARBAGE_CONTAINER)
-			t.garbagesPassed.add(tmp.getId());
+			t.garbagesPassed.add(tmp);
 	}
-	return AStarAlgorithm.searchAStar(g, origin, destination,t);
+	return AStarAlgorithm.searchAStar(g, origin,t);
 }
 
 public Queue<Edge> gasAnalyze(Queue<Edge> edges)
