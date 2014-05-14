@@ -167,11 +167,11 @@ public class AStarNode {
 		this.garbagesPassed=new HashSet<Integer>();
 		for(Node n : path)
 		{
-			if(n.getType()==Node.GARBAGE_CONTAINER)
+			if(n.getType()==Node.GARBAGE_CONTAINER && !garbagesPassed.contains(n))
 				garbagesPassed.add(n.getId());
 		}
 		g=distance/(garbagesPassed.size()==0 ? 1 : garbagesPassed.size()*100);
-		this.h=(total-garbagesPassed.size()*1000);
+		this.h=((total-garbagesPassed.size())*1000);
 	}
 }
 

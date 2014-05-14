@@ -122,8 +122,6 @@ public class Node implements Comparable<Node> {
         }
 	}
 	public void setDistanceToDump(int newDistance,List<Edge> newPath) {
-		ArrayList<Integer> a = null;
-		System.out.println(a.get(0));
         if(newDistance<distanceToDump)
         {
         	System.out.println("Dump: " + newPath);
@@ -155,7 +153,6 @@ public class Node implements Comparable<Node> {
 		return false;
 	}
 
-	@Override
 	public int compareTo(Node arg0) {
 		return Integer.compare(id, arg0.getId());
 	}

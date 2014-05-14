@@ -32,7 +32,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow(2);
+					MainWindow window = new MainWindow(3);
 					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -176,6 +176,7 @@ public class MainWindow {
 		graph.addEdge(n7,n11,1000,false);
 
 		Truck truck = new Truck(400,10);
+		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
 		Queue<Edge> s = data.searchPath( n1, n16);
@@ -272,6 +273,7 @@ public class MainWindow {
 		graph.addEdge(n11,n17,2000,false);
 
 		Truck truck = new Truck(200,100);
+		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
 		Queue<Edge> s = data.searchPath( n1, n18);
@@ -342,6 +344,7 @@ public class MainWindow {
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
 		Truck truck = new Truck(500,200);
+		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
 

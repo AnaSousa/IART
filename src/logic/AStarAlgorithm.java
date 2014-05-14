@@ -101,11 +101,6 @@ public class AStarAlgorithm {
 				list.add(stack.pop());
 			}
 			Node finalNode = list.get(list.size() - 1);
-			if (finalNode.getPathToDump() != null)
-				for (int i = finalNode.getPathToDump().size() - 1; i >= 0; i--) {
-					System.out.println("Teste");
-					edges.add(finalNode.getPathToDump().get(i));
-				}
 			while (list.size() > 1) {
 				Node n = list.get(0);
 				for (Edge e : n.getAdjacents()) {
@@ -116,40 +111,31 @@ public class AStarAlgorithm {
 					}
 				}
 			}
+			if (finalNode.getPathToDump() != null)
+				for (int i = 0; i < finalNode.getPathToDump().size(); i++) {
+					edges.add(finalNode.getPathToDump().get(i));
+				}
 			return edges;
 		}
 
 		return null;
 	}
 
-	private static Queue<Edge> refinateAlgorithm(Queue<Edge> edges) {
-		boolean isProcessing = true;
-		Queue<Edge> returned = new LinkedList<Edge>();
-		ArrayList<Edge> path = new ArrayList<Edge>();
-		while (isProcessing) {
-			path.add(edges.poll());
-			if (path.size() >= 4)
-				if (path.get(path.size() - 1).equals(path.get(path.size() - 3))
-						&& path.get(path.size() - 2).equals(
-								path.get(path.size() - 4))) {
-					path.remove(path.size() - 1);
-					path.remove(path.size() - 1);
-					path.remove(path.size() - 1);
-					isProcessing = false;
-				}
-			if (edges.size() == 0)
-				isProcessing = false;
-		}
-
-		while (path.size() > 0) {
-			returned.add(path.get(0));
-			path.remove(0);
-		}
-		System.out.println("Returned= " + returned);
-		return returned;
-
-	}
-
+	/*
+	 * private static Queue<Edge> refinateAlgorithm(Queue<Edge> edges) { boolean
+	 * isProcessing = true; Queue<Edge> returned = new LinkedList<Edge>();
+	 * ArrayList<Edge> path = new ArrayList<Edge>(); while (isProcessing) {
+	 * path.add(edges.poll()); if (path.size() >= 4) if (path.get(path.size() -
+	 * 1).equals(path.get(path.size() - 3)) && path.get(path.size() - 2).equals(
+	 * path.get(path.size() - 4))) { path.remove(path.size() - 1);
+	 * path.remove(path.size() - 1); path.remove(path.size() - 1); isProcessing
+	 * = false; } if (edges.size() == 0) isProcessing = false; }
+	 * 
+	 * while (path.size() > 0) { returned.add(path.get(0)); path.remove(0); }
+	 * System.out.println("Returned= " + returned); return returned;
+	 * 
+	 * }
+	 */
 	/*
 	 * public static Queue<Edge> aStarAlgorithm(Graph g, Node origin, Truck t) {
 	 * Queue<Edge> returned = searchAStar(g, origin, t); Queue<Edge> path = new
@@ -174,6 +160,14 @@ public class AStarAlgorithm {
 			ArrayList<Node> totalGarbages) {
 		HashSet<Integer> nodes = actual.getGarbagesPassed();
 		double returned = 0;
+		Node dump;
+		if (actual.getNode().getType() == Node.DUMP)
+			dump = null;
+		else
+			dump = actual.getNode().getPathToDump()
+					.get(actual.getNode().getPathToDump().size() - 1)
+					.getTarget();
+
 		for (Node n : totalGarbages) {
 			if (!(nodes == null)) {
 				if (!nodes.contains(n.getId()))
@@ -183,6 +177,8 @@ public class AStarAlgorithm {
 				break;
 
 		}
+		if(dump!=null)
+		returned += g.calcManhattanDistance(actual.getNode(), dump);
 		return returned;
 	}
 
