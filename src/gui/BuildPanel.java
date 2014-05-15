@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Queue;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -436,34 +437,26 @@ public class BuildPanel extends JPanel {
 
 	public void startAlgorithm() {
 		
-		Node initial = null, n = null;
-		boolean first=true;
-		
 		Class<? extends DefaultEdge> edgeClass = null;
 		ProgramData data = ProgramData.getInstance();
 		Graph graph = new Graph(edgeClass);
 
+		Vector<Node> nodes = null;
+		Node n=null;
+		
 		for(int x=0; x<board.length; x++) {
 			for(int y=0; y<board[x].length; y++) {
 				
 				if(checkCrossroad(x,y)) {
-					if(first)
-					{
-						initial=new Node(CROSSROAD);
-						first=false;
-					} else 
-						n= new Node(CROSSROAD);
-
+					n=new Node(CROSSROAD);
+			
 				} else {
-					if(first)
-					{
-						initial=new Node(board[x][y]);
-						first=false;
-					} else 
-						n= new Node(board[x][y]);
+					n= new Node(board[x][y]);
 				}
+				
 				n.setPosition(x, y);
 				graph.addVertex(n);
+				nodes.add(n);
 			}
 		}
 		
@@ -476,7 +469,7 @@ public class BuildPanel extends JPanel {
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath(initial, n);
+		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
 		data.getGraph().setTruckPath(s);
 	}
 
@@ -501,6 +494,12 @@ public class BuildPanel extends JPanel {
 		
 		
 		return false;
+	}
+	
+	private int asEdge(int x1, int y1, int x2, int y2) {
+		//TODO
+		return -1;
+		
 	}
 
 }
