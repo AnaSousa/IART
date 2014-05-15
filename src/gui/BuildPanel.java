@@ -460,6 +460,14 @@ public class BuildPanel extends JPanel {
 			}
 		}
 		
+		for(int i=0; i<nodes.size(); i++) {
+			
+			/*
+			 * if(nodes[i].type!=NADA) fazer aresta
+			 */
+			
+		}
+		
 		/*Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
 		graph.addVertex(n1); 
