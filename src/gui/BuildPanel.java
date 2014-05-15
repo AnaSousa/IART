@@ -1,5 +1,9 @@
 package gui;
 
+import graph.Edge;
+import graph.Graph;
+import graph.Node;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -9,12 +13,20 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Queue;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import logic.ProgramData;
+import logic.Truck;
+
+import org.jgrapht.graph.DefaultEdge;
+
 @SuppressWarnings("serial")
 public class BuildPanel extends JPanel {
+	
+	//TODO: mudar valores das constantes de acordo com a classe Node
 	public static final  int EMPTY = 0;
 	public static final  int STREET = 1;
 	public static final  int GARBAGE_BIN = 2;
@@ -25,7 +37,7 @@ public class BuildPanel extends JPanel {
 	public static final  int STREET_HORIZONTAL_BASE = 7;
 	public static final  int STREET_RIGHT = 7;
 	public static final  int STREET_LEFT = 8;
-
+	public static final  int CROSSROAD = 44444;
 
 	public static final  int MOUSE_BTN1 = 0;
 	public static final  int MOUSE_BTN2 = 1;
@@ -420,6 +432,75 @@ public class BuildPanel extends JPanel {
 	public void setIcon(int modo) {
 		current = modo;
 		currentImg = icons[modo];
+	}
+
+	public void startAlgorithm() {
+		
+		Node initial = null, n = null;
+		boolean first=true;
+		
+		Class<? extends DefaultEdge> edgeClass = null;
+		ProgramData data = ProgramData.getInstance();
+		Graph graph = new Graph(edgeClass);
+
+		for(int x=0; x<board.length; x++) {
+			for(int y=0; y<board[x].length; y++) {
+				
+				if(checkCrossroad(x,y)) {
+					if(first)
+					{
+						initial=new Node(CROSSROAD);
+						first=false;
+					} else 
+						n= new Node(CROSSROAD);
+
+				} else {
+					if(first)
+					{
+						initial=new Node(board[x][y]);
+						first=false;
+					} else 
+						n= new Node(board[x][y]);
+				}
+				n.setPosition(x, y);
+				graph.addVertex(n);
+			}
+		}
+		
+		/*Node n1 = new Node(Node.CROSSROAD);
+		n1.setPosition(0, 0);
+		graph.addVertex(n1); 
+		graph.addEdge(n1,n2,1000,false);
+		*/
+		Truck truck = new Truck(200,100);
+		graph.calculateDistances();
+		data.setTruck(truck);
+		data.setGraph(graph);
+		Queue<Edge> s = data.searchPath(initial, n);
+		data.getGraph().setTruckPath(s);
+	}
+
+	private boolean checkCrossroad(int x, int y) {
+		// mapSizeH mapSizeV
+		
+		/*
+		 * 5 2 6
+		 * 1   3
+		 * 7 4 8
+		 */
+		int x1 = x-1, y1 = y,
+				x2 = x, y2 = y-1,
+				x3 = x+1, y3 = y,
+				x4 = x, y4 = y+1,
+				x5 = x-1, y5 = y-1,
+				x6 = x+1, y6 = y-1,
+				x7 = x-1, y7 = y+1,
+				x8 = x+1, y8 = y+1;
+		
+		//TODO
+		
+		
+		return false;
 	}
 
 }
