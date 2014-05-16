@@ -1,5 +1,9 @@
 package gui;
 
+import graph.Edge;
+import graph.Graph;
+import graph.Node;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -9,12 +13,20 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Queue;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import logic.ProgramData;
+import logic.Truck;
+
+import org.jgrapht.graph.DefaultEdge;
+
 @SuppressWarnings("serial")
 public class BuildPanel extends JPanel {
+	
 	public static final  int EMPTY = 0;
 	public static final  int STREET = 1;
 	public static final  int GARBAGE_BIN = 2;
@@ -26,7 +38,9 @@ public class BuildPanel extends JPanel {
 	public static final  int STREET_RIGHT = 7;
 	public static final  int STREET_LEFT = 8;
 
-
+	public int[] mapping=
+		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};
+	
 	public static final  int MOUSE_BTN1 = 0;
 	public static final  int MOUSE_BTN2 = 1;
 	public static final  int MOUSE_BTN3 = 2;
@@ -420,6 +434,145 @@ public class BuildPanel extends JPanel {
 	public void setIcon(int modo) {
 		current = modo;
 		currentImg = icons[modo];
+	}
+	
+	
+/*public static final  int EMPTY = 0;
+	public static final  int STREET = 1;
+	public static final  int GARBAGE_BIN = 2;
+	public static final  int GAS_STATION = 3;
+	public static final  int GARBAGE_DEPOSIT = 4;
+
+	public int[] mapping=
+		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};
+*/
+	
+	@SuppressWarnings("null")
+	public void startAlgorithm() {
+		
+		Class<? extends DefaultEdge> edgeClass = null;
+		ProgramData data = ProgramData.getInstance();
+		Graph graph = new Graph(edgeClass);
+
+		Vector<Node> nodes=new Vector<Node>();
+		Node n=null;
+		
+		for(int x=0; x<board.length; x++) {
+			for(int y=0; y<board[x].length; y++) {
+
+				if(board[x][y]!=EMPTY) {
+					if(checkCrossroad(x,y)) {
+						n=new Node(Node.CROSSROAD);
+
+					} else {
+						n= new Node(mapping[board[x][y]]);
+					}
+
+					n.setPosition(x, y);
+					graph.addVertex(n);
+					nodes.addElement(n);
+				}
+			}
+		}
+		
+		int count=-1;
+		
+		for(int i=0; i<nodes.size(); i++) {
+			for(int j=i; j<nodes.size(); j++) {
+				if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
+					count=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
+					if(count!=-1) {
+						//TODO ruas de 1 sentido
+						graph.addEdge(nodes.get(i),nodes.get(j),count*100,false);
+					}
+			}
+		}
+		//TODO: adicionar arestas do 1º e ultimo nos
+
+		/*Node n1 = new Node(Node.CROSSROAD);
+		n1.setPosition(0, 0);
+		graph.addVertex(n1); 
+		graph.addEdge(n1,n2,1000,false);
+		*/
+		Truck truck = new Truck(200,100);
+		graph.calculateDistances();
+		data.setTruck(truck);
+		data.setGraph(graph);
+		//Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
+		//data.getGraph().setTruckPath(s);
+	}
+ 
+	private boolean checkCrossroad(int x, int y) {
+		
+		if(board[x][y]!=GARBAGE_BIN && board[x][y]!=GAS_STATION && board[x][y]!=GARBAGE_DEPOSIT)
+			return false;
+		
+		/*
+		 * 5 2 6
+		 * 1   3
+		 * 7 4 8
+		 */
+		int x1 = x-1, y1 = y, x2 = x, y2 = y-1,	x3 = x+1, y3 = y, x4 = x, y4 = y+1;
+		
+		if(insideMap(x1,y1) && insideMap(x4, y4)) {
+			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {
+			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x2,y2) && insideMap(x1, y1)) {
+			if(board[x2][y2]!=EMPTY && board[x1][y1]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {
+			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean insideMap(int x1, int y1) {
+		
+		return (x1>=0 && x1<mapSizeH && y1>=0 && y1<mapSizeV);
+	}
+
+	private int hasEdge(int x1, int y1, int x2, int y2) {
+
+		int weight=hasEdgeLeft(x1, y1, x2, y2);
+
+		if(weight==-1) {
+			weight=hasEdgeRight(x1, y1, x2, y2);
+			if(weight==-1) {				
+				weight=hasEdgeUp(x1, y1, x2, y2);
+				if(weight==-1) {				
+					weight=hasEdgeDown(x1, y1, x2, y2);
+				}
+			}
+		}
+		return weight;
+	}
+
+	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	private int hasEdgeRight(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	private int hasEdgeLeft(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return -1;
 	}
 
 }
