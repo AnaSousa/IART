@@ -454,7 +454,7 @@ public class BuildPanel extends JPanel {
 		ProgramData data = ProgramData.getInstance();
 		Graph graph = new Graph(edgeClass);
 
-		Vector<Node> nodes = null;
+		Vector<Node> nodes=new Vector<Node>();
 		Node n=null;
 		
 		for(int x=0; x<board.length; x++) {
@@ -470,7 +470,7 @@ public class BuildPanel extends JPanel {
 
 					n.setPosition(x, y);
 					graph.addVertex(n);
-					nodes.add(n);
+					nodes.addElement(n);
 				}
 			}
 		}
@@ -498,8 +498,8 @@ public class BuildPanel extends JPanel {
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
-		data.getGraph().setTruckPath(s);
+		//Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
+		//data.getGraph().setTruckPath(s);
 	}
  
 	private boolean checkCrossroad(int x, int y) {
