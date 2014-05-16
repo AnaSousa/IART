@@ -487,6 +487,7 @@ public class BuildPanel extends JPanel {
 					}
 			}
 		}
+		//TODO: adicionar arestas do 1º e ultimo nos
 
 		/*Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
