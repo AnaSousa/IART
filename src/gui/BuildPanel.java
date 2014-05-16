@@ -27,7 +27,6 @@ import org.jgrapht.graph.DefaultEdge;
 @SuppressWarnings("serial")
 public class BuildPanel extends JPanel {
 	
-	//TODO: mudar valores das constantes de acordo com a classe Node
 	public static final  int EMPTY = 0;
 	public static final  int STREET = 1;
 	public static final  int GARBAGE_BIN = 2;
@@ -38,8 +37,10 @@ public class BuildPanel extends JPanel {
 	public static final  int STREET_HORIZONTAL_BASE = 7;
 	public static final  int STREET_RIGHT = 7;
 	public static final  int STREET_LEFT = 8;
-	public static final  int CROSSROAD = 44444;
 
+	public int[] mapping=
+		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};
+	
 	public static final  int MOUSE_BTN1 = 0;
 	public static final  int MOUSE_BTN2 = 1;
 	public static final  int MOUSE_BTN3 = 2;
@@ -434,7 +435,19 @@ public class BuildPanel extends JPanel {
 		current = modo;
 		currentImg = icons[modo];
 	}
+	
+	
+/*public static final  int EMPTY = 0;
+	public static final  int STREET = 1;
+	public static final  int GARBAGE_BIN = 2;
+	public static final  int GAS_STATION = 3;
+	public static final  int GARBAGE_DEPOSIT = 4;
 
+	public int[] mapping=
+		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};
+*/
+	
+	@SuppressWarnings("null")
 	public void startAlgorithm() {
 		
 		Class<? extends DefaultEdge> edgeClass = null;
@@ -446,28 +459,30 @@ public class BuildPanel extends JPanel {
 		
 		for(int x=0; x<board.length; x++) {
 			for(int y=0; y<board[x].length; y++) {
-				
-				if(checkCrossroad(x,y)) {
-					n=new Node(CROSSROAD);
-			
-				} else {
-					n= new Node(board[x][y]);
+
+				if(board[x][y]!=EMPTY) {
+					if(checkCrossroad(x,y)) {
+						n=new Node(Node.CROSSROAD);
+
+					} else {
+						n= new Node(mapping[board[x][y]]);
+					}
+
+					n.setPosition(x, y);
+					graph.addVertex(n);
+					nodes.add(n);
 				}
-				
-				n.setPosition(x, y);
-				graph.addVertex(n);
-				nodes.add(n);
 			}
 		}
-		
+
 		for(int i=0; i<nodes.size(); i++) {
-			
-			/*
-			 * if(nodes[i].type!=NADA) fazer aresta
-			 */
-			
+			for(int j=i; j<nodes.size(); j++) {
+				//if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
+					//fazer aresta
+
+			}
 		}
-		
+
 		/*Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
 		graph.addVertex(n1); 
@@ -480,34 +495,77 @@ public class BuildPanel extends JPanel {
 		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
 		data.getGraph().setTruckPath(s);
 	}
-
+ 
 	private boolean checkCrossroad(int x, int y) {
-		// mapSizeH mapSizeV
+		
+		if(board[x][y]!=GARBAGE_BIN && board[x][y]!=GAS_STATION && board[x][y]!=GARBAGE_DEPOSIT)
+			return false;
 		
 		/*
 		 * 5 2 6
 		 * 1   3
 		 * 7 4 8
 		 */
-		int x1 = x-1, y1 = y,
-				x2 = x, y2 = y-1,
-				x3 = x+1, y3 = y,
-				x4 = x, y4 = y+1,
-				x5 = x-1, y5 = y-1,
-				x6 = x+1, y6 = y-1,
-				x7 = x-1, y7 = y+1,
-				x8 = x+1, y8 = y+1;
+		int x1 = x-1, y1 = y, x2 = x, y2 = y-1,	x3 = x+1, y3 = y, x4 = x, y4 = y+1;
 		
-		//TODO
-		
-		
+		if(insideMap(x1,y1) && insideMap(x4, y4)) {
+			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {
+			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x2,y2) && insideMap(x1, y1)) {
+			if(board[x2][y2]!=EMPTY && board[x1][y1]!=EMPTY) {
+				return true;
+			}
+		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {
+			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY) {
+				return true;
+			}
+		}
 		return false;
 	}
 	
-	private int asEdge(int x1, int y1, int x2, int y2) {
-		//TODO
-		return -1;
+	private boolean insideMap(int x1, int y1) {
 		
+		return (x1>=0 && x1<mapSizeH && y1>=0 && y1<mapSizeV);
+	}
+
+	private boolean hasEdge(int x1, int y1, int x2, int y2) {
+
+		if(hasEdgeLeft(x1, y1, x2, y2))
+			return true;
+		else if(hasEdgeRight(x1, y1, x2, y2))
+			return true;
+		else if(hasEdgeUp(x1, y1, x2, y2))
+			return true;
+		else if(hasEdgeDown(x1, y1, x2, y2))
+			return true;
+		
+		return false;
+		
+	}
+
+	private boolean hasEdgeDown(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean hasEdgeUp(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean hasEdgeRight(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean hasEdgeLeft(int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
