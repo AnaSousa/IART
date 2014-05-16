@@ -14,6 +14,7 @@ public class AStarNode {
 	private HashSet<Integer> garbagesPassed;
 	private int weight;
 	private int distance;
+	private double fuelSpent;
 	private double g;
 	private double h;
 
@@ -31,6 +32,7 @@ public class AStarNode {
 		this.distance=0;
 		this.g = g;
 		this.h = h;
+		this.fuelSpent=0;
 		this.garbagesPassed=new HashSet<Integer>();
 	}
 
@@ -41,6 +43,7 @@ public class AStarNode {
 		this.distance=distanceOrigin;
 		this.g = (double) distance-weight;
 		this.h = h;
+		this.fuelSpent=0;
 		this.garbagesPassed=new HashSet<Integer>();
 	}
 
@@ -50,6 +53,7 @@ public class AStarNode {
 		this.cameFrom=null;
 		this.weight=weight;
 		this.distance=distance;
+		this.fuelSpent=0;
 	}
 	public int getId() {
 		return this.node.getId();
@@ -155,6 +159,18 @@ public class AStarNode {
 		this.garbagesPassed = garbagesPassed;
 	}
 	
+	/**
+	 * @return the fuelSpent
+	 */
+	public double getFuelSpent() {
+		return fuelSpent;
+	}
+	/**
+	 * @param d the fuelSpent to set
+	 */
+	public void setFuelSpent(double d) {
+		this.fuelSpent = d;
+	}
 	public final void recalculateGarbagesPassed(int total,double manhattanLeft)
 	{
 		ArrayList<Node> path = new ArrayList<Node>();
@@ -167,11 +183,11 @@ public class AStarNode {
 		this.garbagesPassed=new HashSet<Integer>();
 		for(Node n : path)
 		{
-			if(n.getType()==Node.GARBAGE_CONTAINER)
+			if(n.getType()==Node.GARBAGE_CONTAINER && !garbagesPassed.contains(n))
 				garbagesPassed.add(n.getId());
 		}
 		g=distance/(garbagesPassed.size()==0 ? 1 : garbagesPassed.size()*100);
-		this.h=(total-garbagesPassed.size()*1000);
+		this.h=((total-garbagesPassed.size())*1000);
 	}
 }
 

@@ -10,11 +10,14 @@ public class Edge extends DefaultWeightedEdge {
 	private int weight=0;
 	
 	private boolean directed;
-	
+	private boolean resetFuel;
+	private boolean addedGarbage;
 	public Edge(Node from, Node to) {
 		this.source=from;
 		this.target=to;
 		this.directed = true;
+		this.addedGarbage=true;
+		this.resetFuel=false;
 	}
 
 	public Edge(Node from, Node to, int weight) {
@@ -85,6 +88,35 @@ public class Edge extends DefaultWeightedEdge {
 	 */
 	public void setSource(Node source) {
 		this.source = source;
+	}
+	
+
+	/**
+	 * @return the resetFuel
+	 */
+	public boolean isResetFuel() {
+		return resetFuel;
+	}
+
+	/**
+	 * @param resetFuel the resetFuel to set
+	 */
+	public void setResetFuel(boolean resetFuel) {
+		this.resetFuel = resetFuel;
+	}
+
+	/**
+	 * @return the addedGarbage
+	 */
+	public boolean isAddedGarbage() {
+		return addedGarbage;
+	}
+
+	/**
+	 * @param addedGarbage the addedGarbage to set
+	 */
+	public void setAddedGarbage(boolean addedGarbage) {
+		this.addedGarbage = addedGarbage;
 	}
 
 	/* (non-Javadoc)

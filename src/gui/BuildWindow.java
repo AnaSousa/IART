@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class BuildWindow extends JFrame {
@@ -167,6 +168,15 @@ public class BuildWindow extends JFrame {
 		options.add(rdbtnStreet);
 		options.add(rdbtnGarbageDeposit);
 		options.add(rdbtnPetrolStation);
+		
+		JButton btnCalcular = new JButton("Calcular");
+		btnCalcular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				panel.startAlgorithm();
+			}
+		});
+		btnCalcular.setBounds(10, 388, 89, 23);
+		toolsPanel.add(btnCalcular);
 
 		panel.requestFocus();
 
@@ -182,5 +192,4 @@ public class BuildWindow extends JFrame {
 		}
 
 	}
-
 }
