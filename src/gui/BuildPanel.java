@@ -474,12 +474,17 @@ public class BuildPanel extends JPanel {
 				}
 			}
 		}
-
+		
+		int count=-1;
+		
 		for(int i=0; i<nodes.size(); i++) {
 			for(int j=i; j<nodes.size(); j++) {
-				//if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
-					//fazer aresta
-
+				if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
+					count=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
+					if(count!=-1) {
+						//TODO ruas de 1 sentido
+						graph.addEdge(nodes.get(i),nodes.get(j),count*100,false);
+					}
 			}
 		}
 
@@ -533,39 +538,40 @@ public class BuildPanel extends JPanel {
 		return (x1>=0 && x1<mapSizeH && y1>=0 && y1<mapSizeV);
 	}
 
-	private boolean hasEdge(int x1, int y1, int x2, int y2) {
+	private int hasEdge(int x1, int y1, int x2, int y2) {
 
-		if(hasEdgeLeft(x1, y1, x2, y2))
-			return true;
-		else if(hasEdgeRight(x1, y1, x2, y2))
-			return true;
-		else if(hasEdgeUp(x1, y1, x2, y2))
-			return true;
-		else if(hasEdgeDown(x1, y1, x2, y2))
-			return true;
-		
-		return false;
-		
+		int weight=hasEdgeLeft(x1, y1, x2, y2);
+
+		if(weight==-1) {
+			weight=hasEdgeRight(x1, y1, x2, y2);
+			if(weight==-1) {				
+				weight=hasEdgeUp(x1, y1, x2, y2);
+				if(weight==-1) {				
+					weight=hasEdgeDown(x1, y1, x2, y2);
+				}
+			}
+		}
+		return weight;
 	}
 
-	private boolean hasEdgeDown(int x1, int y1, int x2, int y2) {
+	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 		// TODO Auto-generated method stub
-		return false;
+		return -1;
 	}
 
-	private boolean hasEdgeUp(int x1, int y1, int x2, int y2) {
+	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
 		// TODO Auto-generated method stub
-		return false;
+		return -1;
 	}
 
-	private boolean hasEdgeRight(int x1, int y1, int x2, int y2) {
+	private int hasEdgeRight(int x1, int y1, int x2, int y2) {
 		// TODO Auto-generated method stub
-		return false;
+		return -1;
 	}
 
-	private boolean hasEdgeLeft(int x1, int y1, int x2, int y2) {
+	private int hasEdgeLeft(int x1, int y1, int x2, int y2) {
 		// TODO Auto-generated method stub
-		return false;
+		return -1;
 	}
 
 }
