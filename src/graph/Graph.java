@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import logic.ProgramData;
+
 import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
@@ -56,6 +58,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	public Edge addEdge(Node n1, Node n2, int weight, boolean directed) {
 
 		if (containsVertex(n1) && containsVertex(n2)) {
+			weight=(int)calcManhattanDistance(n1,n2)*ProgramData.getInstance().getMultiple();
 			Edge e = new Edge(n1, n2, weight, directed);
 
 			if (directed) {
@@ -65,6 +68,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 					return e;
 				}
 			} else {
+				
 				Edge e1 = new Edge(n2, n1, weight, directed);
 				if (addEdge(n1, n2, e) && addEdge(n2, n1, e1))
 				{
@@ -233,6 +237,8 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	public ArrayList<Edge> getAdjacentEdges(int id) {
 		return this.getNodes().get(id).getAdjacents();
 	}
+
+	
 
 
 }

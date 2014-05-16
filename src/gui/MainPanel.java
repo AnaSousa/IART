@@ -63,7 +63,8 @@ public class MainPanel extends JPanel {
 	private float truckY = 0;
 	private int truckSpeed = 100;
 	private double distance = 0;
-
+	private double fuel = 0;
+	private double garbage = 0;
 
 
 
@@ -73,7 +74,7 @@ public class MainPanel extends JPanel {
 
 		this.graph = ProgramData.getInstance().getGraph();
 		initGraphInfo();
-
+		this.fuel=ProgramData.getInstance().getTruck().getFuel();
 		try {
 			roadV = ImageIO.read(new File("resources/roadV.png"));
 			roadH = ImageIO.read(new File("resources/roadH.png"));
@@ -159,7 +160,7 @@ public class MainPanel extends JPanel {
 		//load
 		g.drawString("0", 140, 50);
 		//GAS
-		g.drawString(Integer.toString((int)ProgramData.getInstance().getTruck().getFuel()-(int)Math.floor(distance)), 280, 50);
+		g.drawString(Integer.toString((int)fuel), 280, 50);
 		g.drawString(Integer.toString((int)Math.floor(distance)), 440, 50);
 
 		for(int x = 0; x < nodes.length; x++) {
@@ -181,12 +182,10 @@ public class MainPanel extends JPanel {
 
 
 			int x1,x2,y1,y2, deltax, deltay;
-
 			x1 = i.getSource().getX();
 			x2 = i.getTarget().getX();
 			y1 = i.getSource().getY();
 			y2 = i.getTarget().getY();
-
 			deltax = x1 - x2;
 			deltay = y1 - y2;
 
