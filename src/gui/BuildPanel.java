@@ -474,10 +474,10 @@ public class BuildPanel extends JPanel {
 				}
 			}
 		}
-		for(int i=0; i<nodes.size(); i++) {
+		/*for(int i=0; i<nodes.size(); i++) {
 			System.out.println("No: " + nodes.get(i).getIntegerId() + ", tipo: " + nodes.get(i).getType() +
 					", x, y: " + nodes.get(i).getX() + ", " + nodes.get(i).getY());
-		}
+		}*/
 		int count=-1;
 		/*
 		for(int i=0; i<nodes.size(); i++) {
