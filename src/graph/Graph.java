@@ -158,7 +158,6 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 					Node tmp = entry.getValue();
 					tmp.setDistanceToStation(0, null);
 					entry.setValue(tmp);
-					entry.setValue(tmp);
 
 				}
 		}

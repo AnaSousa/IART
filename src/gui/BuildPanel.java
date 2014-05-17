@@ -474,9 +474,12 @@ public class BuildPanel extends JPanel {
 				}
 			}
 		}
-		
+		for(int i=0; i<nodes.size(); i++) {
+			System.out.println("No: " + nodes.get(i).getIntegerId() + ", tipo: " + nodes.get(i).getType() +
+					", x, y: " + nodes.get(i).getX() + ", " + nodes.get(i).getY());
+		}
 		int count=-1;
-		
+		/*
 		for(int i=0; i<nodes.size(); i++) {
 			for(int j=i; j<nodes.size(); j++) {
 				if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
@@ -494,19 +497,18 @@ public class BuildPanel extends JPanel {
 		graph.addVertex(n1); 
 		graph.addEdge(n1,n2,1000,false);
 		*/
-		Truck truck = new Truck(200,100);
+	/*	Truck truck = new Truck(200,100);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
 		//Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
-		//data.getGraph().setTruckPath(s);
+		//data.getGraph().setTruckPath(s);//*/
 	}
  
 	private boolean checkCrossroad(int x, int y) {
 		
-		if(board[x][y]!=GARBAGE_BIN && board[x][y]!=GAS_STATION && board[x][y]!=GARBAGE_DEPOSIT)
+		if(board[x][y]==GARBAGE_BIN || board[x][y]==GAS_STATION || board[x][y]==GARBAGE_DEPOSIT)
 			return false;
-		
 		/*
 		 * 5 2 6
 		 * 1   3
@@ -515,28 +517,27 @@ public class BuildPanel extends JPanel {
 		int x1 = x-1, y1 = y, x2 = x, y2 = y-1,	x3 = x+1, y3 = y, x4 = x, y4 = y+1;
 		
 		if(insideMap(x1,y1) && insideMap(x4, y4)) {
-			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY) {
+			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {
-			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY) {
+		}
+		if(insideMap(x3,y3) && insideMap(x4, y4)) {
+			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x2,y2) && insideMap(x1, y1)) {
-			if(board[x2][y2]!=EMPTY && board[x1][y1]!=EMPTY) {
+		} 
+		if(insideMap(x1, y1) && insideMap(x2,y2)) {
+			if(board[x1][y1]!=EMPTY && board[x2][y2]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {
-			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY) {
+		}
+		if(insideMap(x2,y2) && insideMap(x3, y3)) {
+			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY)
 				return true;
-			}
 		}
 		return false;
 	}
 	
 	private boolean insideMap(int x1, int y1) {
 		
-		return (x1>=0 && x1<mapSizeH && y1>=0 && y1<mapSizeV);
+		return (x1>=0 && x1<mapSizeH) && (y1>=0 && y1<mapSizeV);
 	}
 
 	private int hasEdge(int x1, int y1, int x2, int y2) {

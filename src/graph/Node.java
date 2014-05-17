@@ -107,8 +107,8 @@ public class Node implements Comparable<Node> {
 	public void setDistanceToStation(int newDistance,List<Edge> newPath) {
         if(newDistance<distanceToPetrolStation)
         {
-        	System.out.println(this.id + " : " + newDistance);
-            this.distanceToPetrolStation= newDistance < distanceToPetrolStation ? newDistance : distanceToPetrolStation;
+        	System.out.println("Station: " + newPath);
+            this.distanceToPetrolStation= newDistance;
             if(newPath!=null)
             {
             	ArrayList<Edge> l = new ArrayList<Edge>();
@@ -153,7 +153,6 @@ public class Node implements Comparable<Node> {
 		return false;
 	}
 
-	@Override
 	public int compareTo(Node arg0) {
 		return Integer.compare(id, arg0.getId());
 	}

@@ -4,6 +4,7 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -108,17 +109,18 @@ public class ProgramData {
 					t.addFuelConsumption(e1.getWeight());
 				}
 				garbage = 0;
-				for (int i = e.getSource().getPathToDump().size() - 1; i >= 0; i--) {
-					Edge e1 = e.getSource().getPathToDump().get(i);
-					Edge added = new Edge(e1.getTarget(),e1.getSource());
-					e1.setAddedGarbage(false);
-					e1.setResetFuel(false);
-					result.add(added);
-				}
+					for (int i = e.getSource().getPathToDump().size() - 1; i >= 0; i--) {
+						Edge e1 = e.getSource().getPathToDump().get(i);
+						Edge added = new Edge(e1.getTarget(), e1.getSource());
+						e1.setAddedGarbage(false);
+						e1.setResetFuel(false);
+						result.add(added);
+					}
+				result.add(e);
 			} else {
 				result.add(e);
 				if (e.getTarget().getType() == Node.GARBAGE_CONTAINER)
-					garbage += 100;
+				garbage += 100;
 			}
 		}
 		return result;
@@ -134,7 +136,7 @@ public class ProgramData {
 					.getDistanceToPetrolStation()) {
 				for (int i = 0; i < e.getSource().getPathToPetrolStation()
 						.size(); i++) {
-					
+
 					Edge e1 = e.getSource().getPathToPetrolStation().get(i);
 					e1.setAddedGarbage(false);
 					e1.setResetFuel(true);
@@ -144,12 +146,13 @@ public class ProgramData {
 				fuel = t.getFuel();
 				for (int i = e.getSource().getPathToPetrolStation().size() - 1; i >= 0; i--) {
 					Edge e1 = e.getSource().getPathToPetrolStation().get(i);
-					Edge added = new Edge(e1.getTarget(),e1.getSource());
+					Edge added = new Edge(e1.getTarget(), e1.getSource());
 					added.setAddedGarbage(false);
 					added.setResetFuel(false);
 					result.add(added);
 					t.addFuelConsumption(e1.getWeight());
 				}
+				result.add(e);
 			} else {
 				result.add(e);
 				t.addFuelConsumption(e.getWeight());
