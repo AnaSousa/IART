@@ -519,13 +519,16 @@ public class BuildPanel extends JPanel {
 		if(insideMap(x1,y1) && insideMap(x4, y4)) {
 			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {
+		}
+		if(insideMap(x3,y3) && insideMap(x4, y4)) {
 			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-		} else if(insideMap(x1, y1) && insideMap(x2,y2)) {//TODO
+		} 
+		if(insideMap(x1, y1) && insideMap(x2,y2)) {
 			if(board[x1][y1]!=EMPTY && board[x2][y2]!=EMPTY)
 				return true;
-		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {//TODO
+		}
+		if(insideMap(x2,y2) && insideMap(x3, y3)) {
 			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY)
 				return true;
 		}
