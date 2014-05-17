@@ -507,9 +507,8 @@ public class BuildPanel extends JPanel {
  
 	private boolean checkCrossroad(int x, int y) {
 		
-		if(board[x][y]!=STREET)
+		if(board[x][y]==GARBAGE_BIN || board[x][y]==GAS_STATION || board[x][y]==GARBAGE_DEPOSIT)
 			return false;
-		
 		/*
 		 * 5 2 6
 		 * 1   3
@@ -517,29 +516,25 @@ public class BuildPanel extends JPanel {
 		 */
 		int x1 = x-1, y1 = y, x2 = x, y2 = y-1,	x3 = x+1, y3 = y, x4 = x, y4 = y+1;
 		
-		if(insideMap(x1,y1) && insideMap(x4, y4)) {//da
-			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY) { 
+		if(insideMap(x1,y1) && insideMap(x4, y4)) {
+			if(board[x1][y1]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {//da
-			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY) {
+		} else if(insideMap(x3,y3) && insideMap(x4, y4)) {
+			if(board[x3][y3]!=EMPTY && board[x4][y4]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x2,y2) && insideMap(x1, y1)) {
-			if(board[x2][y2]!=EMPTY && board[x1][y1]!=EMPTY) {
+		} else if(insideMap(x1, y1) && insideMap(x2,y2)) {//TODO
+			if(board[x1][y1]!=EMPTY && board[x2][y2]!=EMPTY)
 				return true;
-			}
-		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {
-			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY) {
+		} else if(insideMap(x2,y2) && insideMap(x3, y3)) {//TODO
+			if(board[x2][y2]!=EMPTY && board[x3][y3]!=EMPTY)
 				return true;
-			}
 		}
 		return false;
 	}
 	
 	private boolean insideMap(int x1, int y1) {
 		
-		return (x1>=0 && x1<mapSizeH && y1>=0 && y1<mapSizeV);
+		return (x1>=0 && x1<mapSizeH) && (y1>=0 && y1<mapSizeV);
 	}
 
 	private int hasEdge(int x1, int y1, int x2, int y2) {
