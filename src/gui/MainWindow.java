@@ -345,7 +345,7 @@ public class MainWindow {
 
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
-		Truck truck = new Truck(4000,100);
+		Truck truck = new Truck(300,100);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);

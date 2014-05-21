@@ -160,7 +160,8 @@ public class MainPanel extends JPanel {
 		//load
 		g.drawString("0", 140, 50);
 		//GAS
-		g.drawString(Integer.toString((int)fuel), 280, 50);
+		//g.drawString(Integer.toString((int)fuel - (int)Math.floor(distance) * ProgramData.getInstance().getMultiple()), 280, 50);
+		g.drawString(Integer.toString((int)fuel),280,50);
 		g.drawString(Integer.toString((int)Math.floor(distance)), 440, 50);
 
 		for(int x = 0; x < nodes.length; x++) {
@@ -273,6 +274,7 @@ public class MainPanel extends JPanel {
 			}
 
 			distance += 0.1;
+			fuel -= 0.1*ProgramData.getInstance().getMultiple();
 
 			repaint();
 
