@@ -23,7 +23,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class MainWindow {
 	private MainPanel panel;
-	private JFrame frmAAlgorithmWaste;
+	JFrame frmAAlgorithmWaste;
 
 	/**
 	 * Launch the application.

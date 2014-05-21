@@ -510,8 +510,11 @@ public class BuildPanel extends JPanel {
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
+		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(3));
 		data.getGraph().setTruckPath(s);
+		MainWindow window=new MainWindow();
+
+		window.frmAAlgorithmWaste.setVisible(true);
 	}
  
 	private boolean checkCrossroad(int x, int y) {
