@@ -474,24 +474,29 @@ public class BuildPanel extends JPanel {
 				}
 			}
 		}
-		/*for(int i=0; i<nodes.size(); i++) {
+		for(int i=0; i<nodes.size(); i++) {
 			System.out.println("No: " + nodes.get(i).getIntegerId() + ", tipo: " + nodes.get(i).getType() +
 					", x, y: " + nodes.get(i).getX() + ", " + nodes.get(i).getY());
-		}*/
+		}
 		int type=-1;
-		
+
 		for(int i=0; i<nodes.size(); i++) {
-			for(int j=i; j<nodes.size(); j++) {
-				if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
+			for(int j=i+1; j<nodes.size(); j++) {
+
+				if(!(nodes.get(i).getType()==Node.SIMPLE_NODE || nodes.get(j).getType()==Node.SIMPLE_NODE)) {
 					type=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
+					
 					if(type!=-1) {
-						if(type==STREET)
+
+						System.out.println("Aresta: "+nodes.get(i).getIntegerId()+", " +nodes.get(j).getIntegerId()); 
+						if(type==STREET) {
 							graph.addEdge(nodes.get(i),nodes.get(j),0,false);
-						else if(type==STREET_DOWN || type==STREET_RIGHT)
+						} else if(type==STREET_DOWN || type==STREET_RIGHT)
 							graph.addEdge(nodes.get(i),nodes.get(j),0,true);
 						else if(type==STREET_UP || type==STREET_LEFT)
 							graph.addEdge(nodes.get(j),nodes.get(i),0,true);
 					}
+				}
 			}
 		}
 		//TODO: adicionar arestas do 1º e ultimo nos
@@ -562,28 +567,32 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 
-		int type=-1, y=y1;
+		int y=y1+1;
+		int firstType=0;
+		
 		
 		if(x1!=x2 || y1>y2)
-			return type;
+			return -1;
 
+		if(y!=y2 && insideMap(x2,y)) {
+			firstType=board[x2][y];
+			y++;
+		}
+		
 		while(y!=y2) {
 
 			if(insideMap(x2, y))
 			{
-				if(board[x2][y]!=EMPTY)
-				{
-					
-						
-
-					y++;
-				}
+				if(board[x2][y]!=firstType) 
+					return -1;
+				
+				y++;
 			}
 			else
 				return -1;
 		}
 		
-		return -1;
+		return firstType;
 	}
 
 	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
