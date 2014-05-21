@@ -89,6 +89,7 @@ public class ProgramData {
 			if (tmp.getType() == Node.GARBAGE_CONTAINER)
 				t.garbagesToPass.add(tmp);
 		}
+		
 		Queue<Edge> e = AStarAlgorithm.searchAStar(g, origin, t);
 		e = garbageAnalyze(e);
 		e = gasAnalyze(e);

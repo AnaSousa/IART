@@ -457,21 +457,23 @@ public class BuildPanel extends JPanel {
 
 		Vector<Node> nodes=new Vector<Node>();
 		Node n=null;
+		int dump_index=0;
 		
 		for(int x=0; x<board.length; x++) {
 			for(int y=0; y<board[x].length; y++) {
 
 				if(board[x][y]!=EMPTY) {
-					if(checkCrossroad(x,y)) {
+					if(checkCrossroad(x,y))
 						n=new Node(Node.CROSSROAD);
-
-					} else {
+					else
 						n= new Node(mapping[board[x][y]]);
-					}
 
 					n.setPosition(x, y);
 					graph.addVertex(n);
 					nodes.addElement(n);
+					
+					if(board[x][y]==GARBAGE_DEPOSIT)
+						dump_index=n.getIntegerId();
 				}
 			}
 		}
@@ -488,7 +490,8 @@ public class BuildPanel extends JPanel {
 					type=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
 					
 					if(type!=-1) {
-						//System.out.println("Aresta: "+ nodes.get(i).getIntegerId()+ ", " +nodes.get(j).getIntegerId()); 
+						System.out.println("Aresta: "+ nodes.get(i).getIntegerId()+ ", " +nodes.get(j).getIntegerId()+","
+								+type); 
 						if(type==STREET) {
 							graph.addEdge(nodes.get(i),nodes.get(j),0,false);
 						} else if(type==STREET_DOWN || type==STREET_RIGHT)
@@ -510,10 +513,11 @@ public class BuildPanel extends JPanel {
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(3));
+		System.out.println("No: " + nodes.get(0).getIntegerId() + ", tipo: " + nodes.get(0).getType() +
+				", x, y: " + nodes.get(0).getX() + ", " + nodes.get(0).getY());
+		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 		MainWindow window=new MainWindow();
-
 		window.frmAAlgorithmWaste.setVisible(true);
 	}
  
@@ -554,7 +558,7 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdge(int x1, int y1, int x2, int y2) {
 
-		int type=hasEdgeLeft(x1, y1, x2, y2);
+		int type = hasEdgeLeft(x1, y1, x2, y2);
 
 		if(type==-1) {
 			type=hasEdgeRight(x1, y1, x2, y2);
@@ -570,7 +574,7 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 
-		int y=y1+1, firstType=0;
+		int y=y1+1, firstType=-1;
 		
 		if(x1!=x2 || y1>y2)
 			return -1;
@@ -598,7 +602,7 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
 		
-		int y=y1-1, firstType=0;
+		int y=y1-1, firstType=-1;
 		
 		if(x1!=x2 || y1<y2)
 			return -1;
@@ -626,22 +630,58 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeRight(int x1, int y1, int x2, int y2) {
 		
-		int type=-1;
+		int x=x1+1, firstType=-1;
 		
 		if(y1!=y2 || x1>x2)
-			return type;
+			return -1;
+
+		if(x!=x2 && insideMap(x,y2)) {
+			firstType=board[x][y2];
+			x++;
+		}
 		
-		return type;
+		while(x!=x2) {
+
+			if(insideMap(x, y2)) {
+				
+				if(board[x][y2]!=firstType) 
+					return -1;
+				
+				x++;
+			}
+			else
+				return -1;
+		}
+		
+		return firstType;
 	}
 
 	private int hasEdgeLeft(int x1, int y1, int x2, int y2) {
-		
-		int type=-1;
-		
+
+		int x=x1-1, firstType=-1;
+
 		if(y1!=y2 || x1<x2)
-			return type;
-		
-		return type;
+			return -1;
+
+		if(x!=x2 && insideMap(x,y2)) {
+			firstType=board[x][y2];
+			x--;
+		}
+
+		while(x!=x2) {
+
+			if(insideMap(x, y2)) {
+
+				if(board[x][y2]!=firstType) 
+					return -1;
+
+				x--;
+			}
+			else
+				return -1;
+		}
+
+		return firstType;
 	}
 
 }
