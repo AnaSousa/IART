@@ -45,7 +45,7 @@ public class MainWindow {
 	 * Create the application.
 	 */
 	public MainWindow() {
-		test1();
+		//test1();
 		initialize();
 
 	}
