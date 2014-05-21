@@ -10,8 +10,8 @@ public class Edge extends DefaultWeightedEdge {
 	private int weight=0;
 	
 	private boolean directed;
-	private boolean resetFuel;
-	private boolean addedGarbage;
+	private boolean resetFuel; //TODO: add fuel
+	private boolean addedGarbage; //IF false not sum
 	public Edge(Node from, Node to) {
 		this.source=from;
 		this.target=to;
