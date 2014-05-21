@@ -478,20 +478,24 @@ public class BuildPanel extends JPanel {
 			System.out.println("No: " + nodes.get(i).getIntegerId() + ", tipo: " + nodes.get(i).getType() +
 					", x, y: " + nodes.get(i).getX() + ", " + nodes.get(i).getY());
 		}*/
-		int count=-1;
-		/*
+		int type=-1;
+		
 		for(int i=0; i<nodes.size(); i++) {
 			for(int j=i; j<nodes.size(); j++) {
 				if(nodes.get(i).getType()!=Node.SIMPLE_NODE)
-					count=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
-					if(count!=-1) {
-						//TODO ruas de 1 sentido
-						graph.addEdge(nodes.get(i),nodes.get(j),count*100,false);
+					type=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
+					if(type!=-1) {
+						if(type==STREET)
+							graph.addEdge(nodes.get(i),nodes.get(j),0,false);
+						else if(type==STREET_DOWN || type==STREET_RIGHT)
+							graph.addEdge(nodes.get(i),nodes.get(j),0,true);
+						else if(type==STREET_UP || type==STREET_LEFT)
+							graph.addEdge(nodes.get(j),nodes.get(i),0,true);
 					}
 			}
 		}
 		//TODO: adicionar arestas do 1º e ultimo nos
-
+/*
 		/*Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
 		graph.addVertex(n1); 
@@ -542,38 +546,74 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdge(int x1, int y1, int x2, int y2) {
 
-		int weight=hasEdgeLeft(x1, y1, x2, y2);
+		int type=hasEdgeLeft(x1, y1, x2, y2);
 
-		if(weight==-1) {
-			weight=hasEdgeRight(x1, y1, x2, y2);
-			if(weight==-1) {				
-				weight=hasEdgeUp(x1, y1, x2, y2);
-				if(weight==-1) {				
-					weight=hasEdgeDown(x1, y1, x2, y2);
+		if(type==-1) {
+			type=hasEdgeRight(x1, y1, x2, y2);
+			if(type==-1) {				
+				type=hasEdgeUp(x1, y1, x2, y2);
+				if(type==-1) {				
+					type=hasEdgeDown(x1, y1, x2, y2);
 				}
 			}
 		}
-		return weight;
+		return type;
 	}
 
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
+
+		int type=-1, y=y1;
+		
+		if(x1!=x2 || y1>y2)
+			return type;
+
+		while(y!=y2) {
+
+			if(insideMap(x2, y))
+			{
+				if(board[x2][y]!=EMPTY)
+				{
+					
+						
+
+					y++;
+				}
+			}
+			else
+				return -1;
+		}
+		
 		return -1;
 	}
 
 	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
-		return -1;
+		
+		int type=-1;
+		
+		if(x1!=x2 || y1<y2)
+			return type;
+		
+		return type;
 	}
 
 	private int hasEdgeRight(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
-		return -1;
+		
+		int type=-1;
+		
+		if(y1!=y2 || x1>x2)
+			return type;
+		
+		return type;
 	}
 
 	private int hasEdgeLeft(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
-		return -1;
+		
+		int type=-1;
+		
+		if(y1!=y2 || x1<x2)
+			return type;
+		
+		return type;
 	}
 
 }
