@@ -452,6 +452,7 @@ public class BuildPanel extends JPanel {
 		
 		Class<? extends DefaultEdge> edgeClass = null;
 		ProgramData data = ProgramData.getInstance();
+		data.setMultiple(100);
 		Graph graph = new Graph(edgeClass);
 
 		Vector<Node> nodes=new Vector<Node>();
@@ -487,8 +488,7 @@ public class BuildPanel extends JPanel {
 					type=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
 					
 					if(type!=-1) {
-
-						System.out.println("Aresta: "+nodes.get(i).getIntegerId()+", " +nodes.get(j).getIntegerId()); 
+						//System.out.println("Aresta: "+ nodes.get(i).getIntegerId()+ ", " +nodes.get(j).getIntegerId()); 
 						if(type==STREET) {
 							graph.addEdge(nodes.get(i),nodes.get(j),0,false);
 						} else if(type==STREET_DOWN || type==STREET_RIGHT)
@@ -506,12 +506,12 @@ public class BuildPanel extends JPanel {
 		graph.addVertex(n1); 
 		graph.addEdge(n1,n2,1000,false);
 		*/
-	/*	Truck truck = new Truck(200,100);
+		Truck truck = new Truck(200,100);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		//Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
-		//data.getGraph().setTruckPath(s);//*/
+		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(nodes.size()-1));
+		data.getGraph().setTruckPath(s);
 	}
  
 	private boolean checkCrossroad(int x, int y) {
@@ -567,9 +567,7 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 
-		int y=y1+1;
-		int firstType=0;
-		
+		int y=y1+1, firstType=0;
 		
 		if(x1!=x2 || y1>y2)
 			return -1;
@@ -581,8 +579,8 @@ public class BuildPanel extends JPanel {
 		
 		while(y!=y2) {
 
-			if(insideMap(x2, y))
-			{
+			if(insideMap(x2, y)) {
+				
 				if(board[x2][y]!=firstType) 
 					return -1;
 				
@@ -597,12 +595,30 @@ public class BuildPanel extends JPanel {
 
 	private int hasEdgeUp(int x1, int y1, int x2, int y2) {
 		
-		int type=-1;
+		int y=y1-1, firstType=0;
 		
 		if(x1!=x2 || y1<y2)
-			return type;
+			return -1;
+
+		if(y!=y2 && insideMap(x2,y)) {
+			firstType=board[x2][y];
+			y--;
+		}
 		
-		return type;
+		while(y!=y2) {
+
+			if(insideMap(x2, y)) {
+				
+				if(board[x2][y]!=firstType) 
+					return -1;
+				
+				y--;
+			}
+			else
+				return -1;
+		}
+		
+		return firstType;
 	}
 
 	private int hasEdgeRight(int x1, int y1, int x2, int y2) {
