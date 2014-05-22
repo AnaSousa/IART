@@ -272,9 +272,6 @@ public class BuildPanel extends JPanel {
 			icons[STREET_LEFT] = roadL;
 			icons[STREET_RIGHT] = roadR;
 
-
-
-
 			roadX = icons[STREET];
 			bin = icons[GARBAGE_BIN];
 			gas = icons[GAS_STATION];
@@ -367,14 +364,11 @@ public class BuildPanel extends JPanel {
 		if(0 <= x4 && x4 < mapSizeH && 0 <= y4 && y4 < mapSizeV)
 			p[3] = board[x4][y4];
 
-
-
 		int cont = 0;
 
 		for(int i : p) 
 			if(i == STREET || (STREET_UP <= i && i  <= STREET_LEFT)) 
 				cont++;
-
 
 		if(isEmpty(p[1]) && isEmpty(p[3])) {
 			int i = x;
@@ -393,7 +387,6 @@ public class BuildPanel extends JPanel {
 				board[i][y] = HORIZONTAL_DIRECTIONS[horizontal_index];
 				i--;
 			}
-
 
 			horizontal_index = (horizontal_index + 1) % 3;
 		} 
@@ -415,7 +408,6 @@ public class BuildPanel extends JPanel {
 				j--;
 			}
 
-
 			vertical_index = (vertical_index + 1) % 3;
 		}
 	}
@@ -436,18 +428,6 @@ public class BuildPanel extends JPanel {
 		currentImg = icons[modo];
 	}
 	
-	
-/*public static final  int EMPTY = 0;
-	public static final  int STREET = 1;
-	public static final  int GARBAGE_BIN = 2;
-	public static final  int GAS_STATION = 3;
-	public static final  int GARBAGE_DEPOSIT = 4;
-
-	public int[] mapping=
-		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};
-*/
-	
-	@SuppressWarnings("null")
 	public void startAlgorithm() {
 		
 		Class<? extends DefaultEdge> edgeClass = null;
@@ -461,10 +441,13 @@ public class BuildPanel extends JPanel {
 		
 		for(int x=0; x<board.length; x++) {
 			for(int y=0; y<board[x].length; y++) {
-
+				
 				if(board[x][y]!=EMPTY) {
 					if(checkCrossroad(x,y))
 						n=new Node(Node.CROSSROAD);
+					else if(board[x][y]==STREET_UP || board[x][y]==STREET_DOWN || board[x][y]==STREET_RIGHT ||
+							board[x][y]==STREET_LEFT)
+						n=new Node(Node.SIMPLE_NODE);
 					else
 						n= new Node(mapping[board[x][y]]);
 
@@ -490,8 +473,9 @@ public class BuildPanel extends JPanel {
 					type=hasEdge(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(j).getX(), nodes.get(j).getY());
 					
 					if(type!=-1) {
-						System.out.println("Aresta: "+ nodes.get(i).getIntegerId()+ ", " +nodes.get(j).getIntegerId()+","
-								+type); 
+						System.out.println("Aresta: "+ nodes.get(i).getIntegerId()+ ", "
+					+nodes.get(j).getIntegerId()+"," + type); 
+						
 						if(type==STREET) {
 							graph.addEdge(nodes.get(i),nodes.get(j),0,false);
 						} else if(type==STREET_DOWN || type==STREET_RIGHT)
@@ -503,7 +487,7 @@ public class BuildPanel extends JPanel {
 			}
 		}
 		//TODO: adicionar arestas do 1º e ultimo nos
-/*
+
 		/*Node n1 = new Node(Node.CROSSROAD);
 		n1.setPosition(0, 0);
 		graph.addVertex(n1); 
@@ -513,8 +497,8 @@ public class BuildPanel extends JPanel {
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		System.out.println("No: " + nodes.get(0).getIntegerId() + ", tipo: " + nodes.get(0).getType() +
-				", x, y: " + nodes.get(0).getX() + ", " + nodes.get(0).getY());
+		/*System.out.println("No: " + nodes.get(0).getIntegerId() + ", tipo: " + nodes.get(0).getType() +
+				", x, y: " + nodes.get(0).getX() + ", " + nodes.get(0).getY());//*/
 		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 		MainWindow window=new MainWindow();
@@ -572,6 +556,20 @@ public class BuildPanel extends JPanel {
 		return type;
 	}
 
+
+	/*public static final  int EMPTY = 0;
+	public static final  int STREET = 1;
+	public static final  int GARBAGE_BIN = 2;
+	public static final  int GAS_STATION = 3;
+	public static final  int GARBAGE_DEPOSIT = 4;
+	public static final  int STREET_UP = 5;
+	public static final  int STREET_DOWN = 6;
+	public static final  int STREET_RIGHT = 7;
+	public static final  int STREET_LEFT = 8;
+
+	public int[] mapping=
+		{0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER, Node.PETROL_STATION, Node.DUMP};*/
+	
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 
 		int y=y1+1, firstType=-1;
@@ -579,12 +577,19 @@ public class BuildPanel extends JPanel {
 		if(x1!=x2 || y1>y2)
 			return -1;
 
+		if(y2==y1+1)
+			return STREET;
+		
 		if(y!=y2 && insideMap(x2,y)) {
 			firstType=board[x2][y];
 			y++;
 		}
 		
-		while(y!=y2) {
+		if(firstType!=STREET && firstType!=STREET_UP && firstType!=STREET_DOWN 
+				&& firstType!=STREET_RIGHT && firstType!=STREET_LEFT)
+			return -1;
+		
+		while(y<y2) {
 
 			if(insideMap(x2, y)) {
 				
@@ -606,13 +611,20 @@ public class BuildPanel extends JPanel {
 		
 		if(x1!=x2 || y1<y2)
 			return -1;
-
+		
+		if(y2==y1-1)
+			return STREET;
+		
 		if(y!=y2 && insideMap(x2,y)) {
 			firstType=board[x2][y];
 			y--;
 		}
+
+		if(firstType!=STREET && firstType!=STREET_UP && firstType!=STREET_DOWN 
+				&& firstType!=STREET_RIGHT && firstType!=STREET_LEFT)
+			return -1;
 		
-		while(y!=y2) {
+		while(y>y2) {
 
 			if(insideMap(x2, y)) {
 				
@@ -634,13 +646,20 @@ public class BuildPanel extends JPanel {
 		
 		if(y1!=y2 || x1>x2)
 			return -1;
-
+		
+		if(x2==x1+1)
+			return STREET;
+		
 		if(x!=x2 && insideMap(x,y2)) {
 			firstType=board[x][y2];
 			x++;
 		}
+
+		if(firstType!=STREET && firstType!=STREET_UP && firstType!=STREET_DOWN 
+				&& firstType!=STREET_RIGHT && firstType!=STREET_LEFT)
+			return -1;
 		
-		while(x!=x2) {
+		while(x<x2) {
 
 			if(insideMap(x, y2)) {
 				
@@ -663,12 +682,19 @@ public class BuildPanel extends JPanel {
 		if(y1!=y2 || x1<x2)
 			return -1;
 
+		if(x2==x1-1)
+			return STREET;
+		
 		if(x!=x2 && insideMap(x,y2)) {
 			firstType=board[x][y2];
 			x--;
 		}
 
-		while(x!=x2) {
+		if(firstType!=STREET && firstType!=STREET_UP && firstType!=STREET_DOWN 
+				&& firstType!=STREET_RIGHT && firstType!=STREET_LEFT)
+			return -1;
+
+		while(x>x2) {
 
 			if(insideMap(x, y2)) {
 
