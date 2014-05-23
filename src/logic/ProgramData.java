@@ -5,6 +5,7 @@ import graph.Graph;
 import graph.Node;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ public class ProgramData {
 	private Truck t;
 	private int multiple;
 	static ProgramData data;
+	private ArrayList<Integer> garbagesOrder;
+	private int actualGarbageIndex;
 
 	/**
 	 * @param g
@@ -27,6 +30,8 @@ public class ProgramData {
 		this.g = new Graph(edgeClass);
 		this.t = new Truck(500, 200);
 		this.multiple = 1;
+		garbagesOrder = new ArrayList<Integer>();
+		this.actualGarbageIndex++;
 	}
 
 	/**
@@ -135,8 +140,12 @@ public class ProgramData {
 					resultArray.add(tempResult.poll());
 
 			} else {
-				if (e.getTarget().getType() == Node.GARBAGE_CONTAINER && t.getGarbagesToPass().contains(e.getTarget())) {
-					t.setActualGarbage(t.getActualGarbage() + ProgramData.getInstance().getMultiple());
+				if (e.getTarget().getType() == Node.GARBAGE_CONTAINER
+						&& t.getGarbagesToPass().contains(e.getTarget())) {
+					this.actualGarbageIndex++;
+					this.garbagesOrder.add(e.getTarget().getId());
+					t.setActualGarbage(t.getActualGarbage()
+							+ ProgramData.getInstance().getMultiple());
 				}
 			}
 		}
@@ -158,42 +167,42 @@ public class ProgramData {
 			resultArray.add(edges.poll());
 		for (int i = 0; i < resultArray.size(); i++) {
 			Edge e = resultArray.get(i);
-				if (fuel -e.getWeight() <= e.getSource()
-						.getDistanceToPetrolStation()) {
-					for (int k = 0; k < e.getSource().getPathToPetrolStation()
-							.size(); k++) {
-						Edge e1 = e.getSource().getPathToPetrolStation().get(k);
-						e1.setAddedGarbage(false);
-						e1.setResetFuel(false);
-						resultArray.add(i + k, e1);
-						t.addFuelConsumption(e1.getWeight());
-					}
+			if ((fuel - this.calculateDistanceToNextGarbage(resultArray, i)) <= e
+					.getSource().getDistanceToPetrolStation()) {
+				for (int k = 0; k < e.getSource().getPathToPetrolStation()
+						.size(); k++) {
+					Edge e1 = e.getSource().getPathToPetrolStation().get(k);
+					e1.setAddedGarbage(false);
+					e1.setResetFuel(false);
+					resultArray.add(i + k, e1);
+					t.addFuelConsumption(e1.getWeight());
+				}
 
-					fuel = t.getFuel();
-					ArrayList<Node> garbages = t.getGarbagesToPass();
+				fuel = t.getFuel();
+				ArrayList<Node> garbages = t.getGarbagesToPass();
 
-					for (int j = 0; j <= i; j++) {
-						if (j == 0) {
-							if (resultArray.get(j).getSource().getType() == Node.GARBAGE_CONTAINER) {
-								garbages.remove(resultArray.get(j).getSource());
-							}
-						}
-						if (resultArray.get(j).getTarget().getType() == Node.GARBAGE_CONTAINER) {
-							garbages.remove(resultArray.get(j).getTarget());
+				for (int j = 0; j <= i; j++) {
+					if (j == 0) {
+						if (resultArray.get(j).getSource().getType() == Node.GARBAGE_CONTAINER) {
+							garbages.remove(resultArray.get(j).getSource());
 						}
 					}
-					System.out.println("Garbages=" + garbages);
-					t.setGarbagesToPass(garbages);
-					i += e.getSource().getPathToPetrolStation().size();
-					List<Edge> resultList = resultArray.subList(0, i);
-					resultArray = new ArrayList<Edge>(resultList);
-					Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
-							resultArray.get(resultArray.size() - 1).getTarget(), t);
-					tempResult=garbageAnalyze(tempResult);
-					System.out.println("Result array fuel=" + tempResult);
-					while (tempResult.size() > 0)
-						resultArray.add(tempResult.poll());
-					
+					if (resultArray.get(j).getTarget().getType() == Node.GARBAGE_CONTAINER) {
+						garbages.remove(resultArray.get(j).getTarget());
+					}
+				}
+				System.out.println("Garbages=" + garbages);
+				t.setGarbagesToPass(garbages);
+				i += e.getSource().getPathToPetrolStation().size();
+				List<Edge> resultList = resultArray.subList(0, i);
+				resultArray = new ArrayList<Edge>(resultList);
+				Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
+						resultArray.get(resultArray.size() - 1).getTarget(), t);
+				tempResult = garbageAnalyze(tempResult);
+				System.out.println("Result array fuel=" + tempResult);
+				while (tempResult.size() > 0)
+					resultArray.add(tempResult.poll());
+
 			} else {
 				t.addFuelConsumption(e.getWeight());
 				fuel -= e.getWeight();
@@ -209,5 +218,22 @@ public class ProgramData {
 		return result;
 	}
 
+	public double calculateDistanceToNextGarbage(ArrayList<Edge> actualGarbage,
+			int actualIndex) {
+
+		double result = 0.0;
+		int actualGarbageOrder = (actualGarbageIndex>garbagesOrder.size() ? -1 :this.garbagesOrder.get(actualGarbageIndex));
+		for (; actualIndex < actualGarbage.size(); actualIndex++) {
+			result += actualGarbage.get(actualIndex).getWeight();
+			if (actualGarbageOrder == -1) {
+				if (actualGarbage.get(actualIndex).getTarget().getType() == Node.DUMP)
+					break;
+			} else if (actualGarbage.get(actualIndex).getTarget().getType() == Node.GARBAGE_CONTAINER
+					&& actualGarbage.get(actualIndex).getTarget().getId() == this.garbagesOrder
+							.get(actualGarbageIndex))
+				break;
+		}
+		return result;
+	}
 
 }
