@@ -29,7 +29,7 @@ public class AStarAlgorithm {
 
 			AStarNode x = priorityQueue.poll();
 			openSet.remove(x.getId());
-			if (x.getGarbagesPassed().size() == t.getGarbagesToPass().size() ) {
+			if (x.getGarbagesPassed().size() == t.getGarbagesToPass().size()) {
 				goal = x;
 				break;
 			} else {
@@ -37,7 +37,7 @@ public class AStarAlgorithm {
 				ArrayList<Edge> neighbors = g.getAdjacentEdges(x.getId());
 				for (Edge neighborEdge : neighbors) {
 					Node neighbor = neighborEdge.getTarget();
-					trucksLeft = neighbor.getType() == Node.GARBAGE_CONTAINER ? 1
+					trucksLeft = (neighbor.getType() == Node.GARBAGE_CONTAINER &&t.getGarbagesToPass().contains(neighbor)) ? 1
 							: 0;
 					trucksLeft = (x.getGarbagesPassed().size() + trucksLeft == 0 ? 1
 							: (x.getGarbagesPassed().size() + trucksLeft) * 100);
@@ -52,23 +52,20 @@ public class AStarAlgorithm {
 						n.setCameFrom(x);
 						double distanceLeft = manhattanLeft(g, n,
 								t.getGarbagesToPass());
-						if(n.getNode().getType()==Node.PETROL_STATION)
+						if (n.getNode().getType() == Node.PETROL_STATION)
 							n.setFuelSpent(0);
 						else
-							n.setFuelSpent(x.getFuelSpent()+neighborEdge.getWeight());
+							n.setFuelSpent(x.getFuelSpent()
+									+ neighborEdge.getWeight());
 						n.recalculateGarbagesPassed(t.getGarbagesToPass()
 								.size(), distanceLeft);
 						openSet.put(neighbor.getId(), n);
 						if (maxTrucks < n.getGarbagesPassed().size())
 							maxTrucks = n.getGarbagesPassed().size();
 						priorityQueue.add(n);
-						System.out.println("Teste 1 " + n.getGarbagesPassed());
-						System.out.println("Teste 2 " + t.getGarbagesToPass());
 					} else {
 						if (passed < n.getG()) {
-							
-								System.out.println("Passed=" + passed);
-							System.out.println("N G=" + n.getG());
+
 							// Have a better route to the current node,
 							// change
 							// its parent
@@ -80,8 +77,7 @@ public class AStarAlgorithm {
 									.size(), distanceLeft);
 							if (maxTrucks < n.getGarbagesPassed().size())
 								maxTrucks = n.getGarbagesPassed().size();
-							System.out.println(n.getGarbagesPassed());
-							
+
 						}
 
 					}
@@ -128,7 +124,7 @@ public class AStarAlgorithm {
 
 	private static double manhattanLeft(Graph g, AStarNode actual,
 			ArrayList<Node> totalGarbages) {
-		HashSet<Integer> nodes = actual.getGarbagesPassed();
+		HashSet<Node> nodes = actual.getGarbagesPassed();
 		double returned = 0;
 		Node dump;
 		if (actual.getNode().getType() == Node.DUMP)

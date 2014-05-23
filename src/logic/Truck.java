@@ -8,6 +8,7 @@ public class Truck {
 	int weightCarried;
 	int distancePassed;
 	double fuel;
+	double actualGarbage;
 	ArrayList<Double> fuelInPath;
 	double capacity;
 	ArrayList<Node> garbagesToPass;
@@ -22,6 +23,7 @@ public class Truck {
 		this.capacity=capacity;
 		this.garbagesToPass=new ArrayList<Node>();
 		fuelInPath=new ArrayList<Double>();
+		this.actualGarbage=0;
 	}
 	/**
 	 * @return the weightCarried
@@ -101,6 +103,18 @@ public class Truck {
 	public void addFuelConsumption(double fuel)
 	{
 		this.fuelInPath.add(fuel);
+	}
+	/**
+	 * @return the actualGarbage
+	 */
+	public double getActualGarbage() {
+		return actualGarbage;
+	}
+	/**
+	 * @param actualGarbage the actualGarbage to set
+	 */
+	public void setActualGarbage(double actualGarbage) {
+		this.actualGarbage = actualGarbage;
 	}
 	
 

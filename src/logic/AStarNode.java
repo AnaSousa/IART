@@ -11,7 +11,7 @@ import java.util.HashSet;
 public class AStarNode {
 	private Node node;
 	private AStarNode cameFrom;
-	private HashSet<Integer> garbagesPassed;
+	private HashSet<Node> garbagesPassed;
 	private int weight;
 	private int distance;
 	private double fuelSpent;
@@ -21,7 +21,7 @@ public class AStarNode {
 	/**
 	 * @return the garbagesPassed
 	 */
-	public HashSet<Integer> getGarbagesPassed() {
+	public HashSet<Node> getGarbagesPassed() {
 		return garbagesPassed;
 	}
 	public AStarNode(Node node, AStarNode cameFrom, double g,
@@ -33,7 +33,7 @@ public class AStarNode {
 		this.g = g;
 		this.h = h;
 		this.fuelSpent=0;
-		this.garbagesPassed=new HashSet<Integer>();
+		this.garbagesPassed=new HashSet<Node>();
 	}
 
 	public AStarNode(Node node, int weightOrigin, int distanceOrigin,double h) {
@@ -44,7 +44,7 @@ public class AStarNode {
 		this.g = (double) distance-weight;
 		this.h = h;
 		this.fuelSpent=0;
-		this.garbagesPassed=new HashSet<Integer>();
+		this.garbagesPassed=new HashSet<Node>();
 	}
 
 	public AStarNode(Node neighbor, int weight, int distance) 
@@ -146,16 +146,12 @@ public class AStarNode {
 	{
 		return Double.compare(this.getG()+this.getH(),obj.getG()+obj.getH());
 	}
-	
-	public void addGarbage(int garbage)
-	{
-		this.garbagesPassed.add(garbage);
-	}
+
 
 	/**
 	 * @param garbagesPassed the garbagesPassed to set
 	 */
-	public void setGarbagesPassed(HashSet<Integer> garbagesPassed) {
+	public void setGarbagesPassed(HashSet<Node> garbagesPassed) {
 		this.garbagesPassed = garbagesPassed;
 	}
 	
@@ -180,13 +176,13 @@ public class AStarNode {
 			path.add(test.getNode());
 			test=test.getCameFrom();
 		}
-		this.garbagesPassed=new HashSet<Integer>();
+		this.garbagesPassed=new HashSet<Node>();
 		for(Node n : path)
 		{
-			if(n.getType()==Node.GARBAGE_CONTAINER && !garbagesPassed.contains(n))
-				garbagesPassed.add(n.getId());
+			if(n.getType()==Node.GARBAGE_CONTAINER && !garbagesPassed.contains(n) && ProgramData.getInstance().getTruck().getGarbagesToPass().contains(n))
+				garbagesPassed.add(n);
 		}
-		g=distance/(garbagesPassed.size()==0 ? 1 : garbagesPassed.size()*100);
+		g=distance;
 		this.h=((total-garbagesPassed.size())*1000);
 	}
 }

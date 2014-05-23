@@ -4,7 +4,9 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -96,67 +98,116 @@ public class ProgramData {
 	}
 
 	public Queue<Edge> garbageAnalyze(Queue<Edge> edges) {
-		double garbage = 0;
+		ArrayList<Node> copyHash = new ArrayList<Node>(t.getGarbagesToPass());
 		Queue<Edge> result = new LinkedList<Edge>();
-		for (Edge e : edges) {
-
-			if (garbage == t.getCapacity()) {
-				for (Edge e1 : e.getSource().getPathToDump()) {
+		ArrayList<Edge> resultArray = new ArrayList<Edge>();
+		while (edges.size() > 0)
+			resultArray.add(edges.poll());
+		for (int i = 0; i < resultArray.size(); i++) {
+			Edge e = resultArray.get(i);
+			if (t.getActualGarbage() >= t.getCapacity()) {
+				for (int k = 0; k < e.getSource().getPathToDump().size(); k++) {
+					Edge e1 = e.getSource().getPathToDump().get(k);
 					e1.setAddedGarbage(false);
 					e1.setResetFuel(false);
-					result.add(e1);
+					resultArray.add(i + k, e1);
 					t.addFuelConsumption(e1.getWeight());
 				}
-				garbage = 0;
-				for (int i = e.getSource().getPathToDump().size() - 1; i >= 0; i--) {
-					Edge e1 = e.getSource().getPathToDump().get(i);
-					Edge added = new Edge(e1.getTarget(),e1.getSource());
-					e1.setAddedGarbage(false);
-					e1.setResetFuel(false);
-					result.add(added);
+				t.setActualGarbage(0);
+				ArrayList<Node> garbages = t.getGarbagesToPass();
+				for (int j = 0; j <= i; j++) {
+					if (j == 0) {
+						if (resultArray.get(j).getSource().getType() == Node.GARBAGE_CONTAINER) {
+							garbages.remove(resultArray.get(j).getSource());
+						}
+					}
+					if (resultArray.get(j).getTarget().getType() == Node.GARBAGE_CONTAINER) {
+						garbages.remove(resultArray.get(j).getTarget());
+					}
 				}
+				t.setGarbagesToPass(garbages);
+				i += e.getSource().getPathToDump().size();
+				List<Edge> resultList = resultArray.subList(0, i);
+				resultArray = new ArrayList<Edge>(resultList);
+				Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
+						resultArray.get(resultArray.size() - 1).getTarget(), t);
+				while (tempResult.size() > 0)
+					resultArray.add(tempResult.poll());
+
 			} else {
-				result.add(e);
-				if (e.getTarget().getType() == Node.GARBAGE_CONTAINER)
-					garbage += 100;
+				if (e.getTarget().getType() == Node.GARBAGE_CONTAINER && t.getGarbagesToPass().contains(e.getTarget())) {
+					t.setActualGarbage(t.getActualGarbage() + ProgramData.getInstance().getMultiple());
+				}
 			}
 		}
+		while (resultArray.size() > 0) {
+			result.add(resultArray.get(0));
+			resultArray.remove(0);
+		}
+		t.setGarbagesToPass(copyHash);
 		return result;
 
 	}
 
 	public Queue<Edge> gasAnalyze(Queue<Edge> edges) {
 		double fuel = this.t.getFuel();
+		ArrayList<Node> copyHash = new ArrayList<Node>(t.getGarbagesToPass());
 		Queue<Edge> result = new LinkedList<Edge>();
-		for (Edge e : edges) {
+		ArrayList<Edge> resultArray = new ArrayList<Edge>();
+		while (edges.size() > 0)
+			resultArray.add(edges.poll());
+		for (int i = 0; i < resultArray.size(); i++) {
+			Edge e = resultArray.get(i);
+				if (fuel -e.getWeight() <= e.getSource()
+						.getDistanceToPetrolStation()) {
+					for (int k = 0; k < e.getSource().getPathToPetrolStation()
+							.size(); k++) {
+						Edge e1 = e.getSource().getPathToPetrolStation().get(k);
+						e1.setAddedGarbage(false);
+						e1.setResetFuel(false);
+						resultArray.add(i + k, e1);
+						t.addFuelConsumption(e1.getWeight());
+					}
 
-			if (fuel - e.getWeight() <= e.getSource()
-					.getDistanceToPetrolStation()) {
-				for (int i = 0; i < e.getSource().getPathToPetrolStation()
-						.size(); i++) {
+					fuel = t.getFuel();
+					ArrayList<Node> garbages = t.getGarbagesToPass();
+
+					for (int j = 0; j <= i; j++) {
+						if (j == 0) {
+							if (resultArray.get(j).getSource().getType() == Node.GARBAGE_CONTAINER) {
+								garbages.remove(resultArray.get(j).getSource());
+							}
+						}
+						if (resultArray.get(j).getTarget().getType() == Node.GARBAGE_CONTAINER) {
+							garbages.remove(resultArray.get(j).getTarget());
+						}
+					}
+					System.out.println("Garbages=" + garbages);
+					t.setGarbagesToPass(garbages);
+					i += e.getSource().getPathToPetrolStation().size();
+					List<Edge> resultList = resultArray.subList(0, i);
+					resultArray = new ArrayList<Edge>(resultList);
+					Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
+							resultArray.get(resultArray.size() - 1).getTarget(), t);
+					tempResult=garbageAnalyze(tempResult);
+					System.out.println("Result array fuel=" + tempResult);
+					while (tempResult.size() > 0)
+						resultArray.add(tempResult.poll());
 					
-					Edge e1 = e.getSource().getPathToPetrolStation().get(i);
-					e1.setAddedGarbage(false);
-					e1.setResetFuel(true);
-					result.add(e1);
-					t.addFuelConsumption(e1.getWeight());
-				}
-				fuel = t.getFuel();
-				for (int i = e.getSource().getPathToPetrolStation().size() - 1; i >= 0; i--) {
-					Edge e1 = e.getSource().getPathToPetrolStation().get(i);
-					Edge added = new Edge(e1.getTarget(),e1.getSource());
-					added.setAddedGarbage(false);
-					added.setResetFuel(false);
-					result.add(added);
-					t.addFuelConsumption(e1.getWeight());
-				}
 			} else {
-				result.add(e);
 				t.addFuelConsumption(e.getWeight());
 				fuel -= e.getWeight();
 			}
 		}
+		while (resultArray.size() > 0) {
+			result.add(resultArray.get(0));
+			resultArray.remove(0);
+		}
+		t.setGarbagesToPass(copyHash);
+		System.out.println("Teste");
+		System.out.println(result);
 		return result;
 	}
+
 
 }
