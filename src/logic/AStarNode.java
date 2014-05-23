@@ -186,4 +186,3 @@ public class AStarNode {
 		this.h=((total-garbagesPassed.size())*1000);
 	}
 }
-

@@ -158,9 +158,10 @@ public class MainPanel extends JPanel {
 		g.setFont(new Font("Arial", 0, 30));
 		g.setColor(Color.RED);
 		//load
-		g.drawString("0", 140, 50);
+		g.drawString(Integer.toString((int)garbage), 140, 50);
 		//GAS
-		g.drawString(Integer.toString((int)fuel), 280, 50);
+		//g.drawString(Integer.toString((int)fuel - (int)Math.floor(distance) * ProgramData.getInstance().getMultiple()), 280, 50);
+		g.drawString(Integer.toString((int)fuel),280,50);
 		g.drawString(Integer.toString((int)Math.floor(distance)), 440, 50);
 
 		for(int x = 0; x < nodes.length; x++) {
@@ -257,6 +258,13 @@ public class MainPanel extends JPanel {
 
 				if((x2 > x1 && truckX >= x2) || (x2 < x1 && truckX <= x2)) {
 					truckX = path.peek().getTarget().getX();
+					
+					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
+						garbage += 100;
+					
+					if(e.isResetFuel())
+						fuel = ProgramData.getInstance().getTruck().getFuel();
+					
 					path.remove();
 				}
 			}
@@ -268,11 +276,19 @@ public class MainPanel extends JPanel {
 
 				if((y2 > y1 && truckY >= y2) || (y2 < y1 && truckY <= y2)) {
 					truckY = path.peek().getTarget().getY();
+					
+					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
+						garbage += 100;
+					
+					if(e.isResetFuel())
+						fuel = ProgramData.getInstance().getTruck().getFuel();
+					
 					path.remove();
 				}
 			}
 
 			distance += 0.1;
+			fuel -= 0.1*ProgramData.getInstance().getMultiple();
 
 			repaint();
 

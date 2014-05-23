@@ -23,7 +23,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class MainWindow {
 	private MainPanel panel;
-	private JFrame frmAAlgorithmWaste;
+	JFrame frmAAlgorithmWaste;
 
 	/**
 	 * Launch the application.
@@ -32,7 +32,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow(1);
+					MainWindow window = new MainWindow(3);
 					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

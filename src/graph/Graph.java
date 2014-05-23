@@ -158,7 +158,6 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 					Node tmp = entry.getValue();
 					tmp.setDistanceToStation(0, null);
 					entry.setValue(tmp);
-					entry.setValue(tmp);
 
 				}
 		}
@@ -235,6 +234,9 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 	}
 
 	public ArrayList<Edge> getAdjacentEdges(int id) {
+		
+		if(this.getNodes().get(id).getAdjacents()==null)
+			System.out.println("!!! NO COM ADJACENTES NULL: "+this.getNodes().get(id).getIntegerId());
 		return this.getNodes().get(id).getAdjacents();
 	}
 
