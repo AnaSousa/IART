@@ -438,7 +438,7 @@ public class BuildPanel extends JPanel {
 
 		Vector<Node> nodes = new Vector<Node>();
 		Node n = null;
-		int dump_index = 0;
+		int dump_index = -1, start_index=-1;
 
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board[x].length; y++) {
@@ -460,9 +460,17 @@ public class BuildPanel extends JPanel {
 
 					if (board[x][y] == GARBAGE_DEPOSIT)
 						dump_index = n.getIntegerId();
+					else if(board[x][y] == GARBAGE_DEPOSIT)
+						start_index=n.getIntegerId();
 				}
 			}
 		}
+		
+		if(start_index==-1 || dump_index==-1) {
+			System.out.println("O mapa tem de ter um nó inicial e uma lixeira!");
+			System.exit(-1);
+		}
+		
 		for (int i = 0; i < nodes.size(); i++) {
 			System.out.println("No: " + nodes.get(i).getIntegerId()
 					+ ", tipo: " + nodes.get(i).getType() + ", x, y: "
@@ -508,7 +516,7 @@ public class BuildPanel extends JPanel {
 		 * + nodes.get(0).getType() + ", x, y: " + nodes.get(0).getX() + ", " +
 		 * nodes.get(0).getY());//
 		 */
-		Queue<Edge> s = data.searchPath(nodes.get(0), nodes.get(dump_index));
+		Queue<Edge> s = data.searchPath(nodes.get(start_index), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 		MainWindow window = new MainWindow();
 		window.frmAAlgorithmWaste.setVisible(true);
