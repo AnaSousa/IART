@@ -447,7 +447,7 @@ public class BuildPanel extends JPanel {
 					if (checkCrossroad(x, y))
 						n = new Node(Node.CROSSROAD);
 					else if (board[x][y] == STREET_UP || board[x][y] == STREET_DOWN || board[x][y] == STREET_RIGHT
-							|| board[x][y] == STREET_LEFT)
+							|| board[x][y] == STREET_LEFT || board[x][y]==INITIAL_POSITION)
 						n = new Node(Node.SIMPLE_NODE);
 					else
 						n = new Node(mapping[board[x][y]]);
@@ -458,7 +458,7 @@ public class BuildPanel extends JPanel {
 
 					if (board[x][y] == GARBAGE_DEPOSIT)
 						dump_index = n.getIntegerId();
-					else if(board[x][y] == GARBAGE_DEPOSIT)
+					else if(board[x][y] == INITIAL_POSITION)
 						start_index=n.getIntegerId();
 				}
 			}
@@ -475,25 +475,33 @@ public class BuildPanel extends JPanel {
 		}
 		int type = -1;
 
+		/*
+		 * || !checkDeadEnd(nodes.get(i))
+						|| !(nodes.get(i).getIntegerId()==start_index))
+						|| (nodes.get(j).getType() == Node.SIMPLE_NODE
+						|| !checkDeadEnd(nodes.get(j))
+						|| !(nodes.get(j).getIntegerId()==start_index)))) {
+		 */
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = i + 1; j < nodes.size(); j++) {
 
-				if (!(nodes.get(i).getType() == Node.SIMPLE_NODE || nodes.get(j).getType() == Node.SIMPLE_NODE)) {
-					type = hasEdge(nodes.get(i).getX(), nodes.get(i).getY(),
-							nodes.get(j).getX(), nodes.get(j).getY());
+				if (nodes.get(i).getType() != Node.SIMPLE_NODE || checkDeadEnd(nodes.get(i)) || nodes.get(i).getIntegerId()==start_index)
+					if(nodes.get(j).getType() != Node.SIMPLE_NODE || checkDeadEnd(nodes.get(j)) || nodes.get(j).getIntegerId()==start_index) {
+						type = hasEdge(nodes.get(i).getX(), nodes.get(i).getY(),
+								nodes.get(j).getX(), nodes.get(j).getY());
 
-					if (type != -1) {
-						System.out.println("Aresta: "+ nodes.get(i).getIntegerId() + ", "
-								+ nodes.get(j).getIntegerId() + "," + type);
+						if (type != -1) {
+							System.out.println("Aresta: "+ nodes.get(i).getIntegerId() + ", "
+									+ nodes.get(j).getIntegerId() + "," + type);
 
-						if (type == STREET) {
-							graph.addEdge(nodes.get(i), nodes.get(j), 0, false);
-						} else if (type == STREET_DOWN || type == STREET_RIGHT)
-							graph.addEdge(nodes.get(i), nodes.get(j), 0, true);
-						else if (type == STREET_UP || type == STREET_LEFT)
-							graph.addEdge(nodes.get(j), nodes.get(i), 0, true);
+							if (type == STREET) {
+								graph.addEdge(nodes.get(i), nodes.get(j), 0, false);
+							} else if (type == STREET_DOWN || type == STREET_RIGHT)
+								graph.addEdge(nodes.get(i), nodes.get(j), 0, true);
+							else if (type == STREET_UP || type == STREET_LEFT)
+								graph.addEdge(nodes.get(j), nodes.get(i), 0, true);
+						}
 					}
-				}
 			}
 		}
 
@@ -506,6 +514,33 @@ public class BuildPanel extends JPanel {
 		data.getGraph().setTruckPath(s);
 		MainWindow window = new MainWindow();
 		window.frmAAlgorithmWaste.setVisible(true);
+	}
+
+	private boolean checkDeadEnd(Node node) {
+
+		int x=node.getX(), y=node.getY(),
+				x1 = x - 1, y1 = y, x2 = x, y2 = y - 1, x3 = x + 1, y3 = y, x4 = x, y4 = y + 1,
+				count=0;
+		
+		if(insideMap(x,y)) {
+			if(insideMap(x1,y1))
+				if(board[x1][y1]!=EMPTY)
+					count++;
+			if(insideMap(x2,y2))
+				if(board[x2][y2]!=EMPTY)
+					count++;
+			if(insideMap(x3,y3))
+				if(board[x3][y3]!=EMPTY)
+					count++;
+			if(insideMap(x4,y4))
+				if(board[x4][y4]!=EMPTY)
+					count++;
+		}
+		
+		if(count>1)
+			return true;
+		
+		return false;
 	}
 
 	private boolean checkCrossroad(int x, int y) {
