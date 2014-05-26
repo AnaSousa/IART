@@ -2,9 +2,10 @@ package logic;
 
 import graph.Node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Truck {
+public class Truck implements Serializable{
 	int weightCarried;
 	int distancePassed;
 	double fuel;

@@ -4,6 +4,7 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Queue;
 
 import org.jgrapht.graph.DefaultEdge;
 
-public class ProgramData {
+public class ProgramData implements Serializable {
 	private Graph g;
 	private Truck t;
 	private int multiple;
