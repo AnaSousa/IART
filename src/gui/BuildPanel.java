@@ -473,15 +473,8 @@ public class BuildPanel extends JPanel {
 			System.out.println("No: " + nodes.get(i).getIntegerId()	+ ", tipo: " + nodes.get(i).getType() + ", x, y: "
 					+ nodes.get(i).getX() + ", " + nodes.get(i).getY());
 		}
+		
 		int type = -1;
-
-		/*
-		 * || !checkDeadEnd(nodes.get(i))
-						|| !(nodes.get(i).getIntegerId()==start_index))
-						|| (nodes.get(j).getType() == Node.SIMPLE_NODE
-						|| !checkDeadEnd(nodes.get(j))
-						|| !(nodes.get(j).getIntegerId()==start_index)))) {
-		 */
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = i + 1; j < nodes.size(); j++) {
 
@@ -538,9 +531,9 @@ public class BuildPanel extends JPanel {
 		}
 		
 		if(count>1)
-			return true;
+			return false;
 		
-		return false;
+		return true;
 	}
 
 	private boolean checkCrossroad(int x, int y) {
