@@ -31,6 +31,7 @@ public class MainPanel extends JPanel {
 	Node [][] nodes;
 	ArrayList<Edge> edges;
 	Queue<Edge> path;
+	
 
 	private final int X = 40;
 	private final int Y = 75;
@@ -233,6 +234,7 @@ public class MainPanel extends JPanel {
 
 	Action paintTimer = new AbstractAction() { // functionality of our timer:
 		public void actionPerformed(ActionEvent event) {
+			
 			Edge e = path.peek();
 
 			if(e == null)
@@ -251,6 +253,7 @@ public class MainPanel extends JPanel {
 
 
 			if(deltay == 0) {
+				ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 				float inc = (float) (deltax < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckL : truckR;
 
@@ -262,13 +265,14 @@ public class MainPanel extends JPanel {
 					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
 						garbage += 100;
 					
-					if(e.isResetFuel())
+					if(ProgramData.getInstance().getActualIndex()==ProgramData.getInstance().getActualFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
 					
 					path.remove();
 				}
 			}
 			else if (deltax == 0) {
+				ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 				float inc = (float) (deltay < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckT : truckB;
 
@@ -280,8 +284,12 @@ public class MainPanel extends JPanel {
 					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
 						garbage += 100;
 					
-					if(e.isResetFuel())
+					if(ProgramData.getInstance().getActualIndex()==ProgramData.getInstance().getActualFuelIndex())
+					{
 						fuel = ProgramData.getInstance().getTruck().getFuel();
+						ProgramData.getInstance().incrementFuelIndex();
+					}
+						
 					
 					path.remove();
 				}

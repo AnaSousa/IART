@@ -182,7 +182,7 @@ public class AStarNode {
 			if(n.getType()==Node.GARBAGE_CONTAINER && !garbagesPassed.contains(n) && ProgramData.getInstance().getTruck().getGarbagesToPass().contains(n))
 				garbagesPassed.add(n);
 		}
-		g=distance;
+		g=distance/(garbagesPassed.size() == 0 ? 1 : garbagesPassed.size()*100);
 		this.h=((total-garbagesPassed.size())*1000);
 	}
 }

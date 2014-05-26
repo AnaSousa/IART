@@ -5,7 +5,6 @@ import graph.Graph;
 import graph.Node;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,10 @@ public class ProgramData {
 	private int multiple;
 	static ProgramData data;
 	private ArrayList<Integer> garbagesOrder;
+	private ArrayList<Integer> fuelIndex;
+	private int actualFuel;
 	private int actualGarbageIndex;
+	private int actualIndex=0;
 
 	/**
 	 * @param g
@@ -30,7 +32,9 @@ public class ProgramData {
 		this.g = new Graph(edgeClass);
 		this.t = new Truck(500, 200);
 		this.multiple = 1;
+		this.actualFuel=0;
 		garbagesOrder = new ArrayList<Integer>();
+		this.fuelIndex = new ArrayList<Integer>();
 		this.actualGarbageIndex++;
 	}
 
@@ -98,6 +102,7 @@ public class ProgramData {
 		Queue<Edge> e = AStarAlgorithm.searchAStar(g, origin, t);
 		e = garbageAnalyze(e);
 		e = gasAnalyze(e);
+		System.out.println("Fuel index="+this.fuelIndex);
 		System.out.println("Returned = " + e);
 		return e;
 	}
@@ -172,12 +177,14 @@ public class ProgramData {
 				for (int k = 0; k < e.getSource().getPathToPetrolStation()
 						.size(); k++) {
 					Edge e1 = e.getSource().getPathToPetrolStation().get(k);
-					e1.setAddedGarbage(false);
+					if (k == 0)
+						e1.setAddedGarbage(true);
+					else
+						e1.setAddedGarbage(false);
 					e1.setResetFuel(false);
 					resultArray.add(i + k, e1);
 					t.addFuelConsumption(e1.getWeight());
 				}
-
 				fuel = t.getFuel();
 				ArrayList<Node> garbages = t.getGarbagesToPass();
 
@@ -196,6 +203,7 @@ public class ProgramData {
 				i += e.getSource().getPathToPetrolStation().size();
 				List<Edge> resultList = resultArray.subList(0, i);
 				resultArray = new ArrayList<Edge>(resultList);
+				this.fuelIndex.add(resultArray.size() - 1);
 				Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
 						resultArray.get(resultArray.size() - 1).getTarget(), t);
 				tempResult = garbageAnalyze(tempResult);
@@ -222,7 +230,8 @@ public class ProgramData {
 			int actualIndex) {
 
 		double result = 0.0;
-		int actualGarbageOrder = (actualGarbageIndex>garbagesOrder.size() ? -1 :this.garbagesOrder.get(actualGarbageIndex));
+		int actualGarbageOrder = (actualGarbageIndex > garbagesOrder.size() ? -1
+				: this.garbagesOrder.get(actualGarbageIndex));
 		for (; actualIndex < actualGarbage.size(); actualIndex++) {
 			result += actualGarbage.get(actualIndex).getWeight();
 			if (actualGarbageOrder == -1) {
@@ -234,6 +243,35 @@ public class ProgramData {
 				break;
 		}
 		return result;
+	}
+	public void incrementFuelIndex()
+	{
+		this.actualFuel++;
+		if(actualFuel>this.fuelIndex.size())
+			this.actualFuel=-1;
+	}
+	
+	public Integer getActualFuelIndex()
+	{
+	/*	if(actualFuel==-1 || actualFuel == 0 && this.fuelIndex.size()==0)
+			return null;
+		return this.fuelIndex.get(actualFuel);
+		*/
+		return -1;
+	}
+
+	/**
+	 * @return the actualIndex
+	 */
+	public int getActualIndex() {
+		return actualIndex;
+	}
+
+	/**
+	 * @param actualIndex the actualIndex to set
+	 */
+	public void setActualIndex(int actualIndex) {
+		this.actualIndex = actualIndex;
 	}
 
 }
