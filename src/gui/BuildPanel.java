@@ -17,6 +17,7 @@ import java.util.Queue;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.naming.ldap.StartTlsRequest;
 import javax.swing.JPanel;
 
 import logic.ProgramData;
@@ -37,6 +38,7 @@ public class BuildPanel extends JPanel {
 	public static final int STREET_HORIZONTAL_BASE = 7;
 	public static final int STREET_RIGHT = 7;
 	public static final int STREET_LEFT = 8;
+	public static final int INITIAL_POSITION = 9;
 
 	public int[] mapping = { 0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER,
 			Node.PETROL_STATION, Node.DUMP };
@@ -44,6 +46,7 @@ public class BuildPanel extends JPanel {
 	public static final int MOUSE_BTN1 = 0;
 	public static final int MOUSE_BTN2 = 1;
 	public static final int MOUSE_BTN3 = 2;
+	
 
 	// images needed
 	private BufferedImage cell;
@@ -59,6 +62,7 @@ public class BuildPanel extends JPanel {
 	private BufferedImage bin;
 	private BufferedImage gas;
 	private BufferedImage dump;
+	private BufferedImage start;
 
 	private BufferedImage[] icons;
 
@@ -73,8 +77,9 @@ public class BuildPanel extends JPanel {
 
 	private int[][] board = null;
 	private int current;
-	
-	boolean hasDump = false;
+
+	private boolean hasDump = false;
+	private boolean hasInitialPosition = false;
 
 	// for direction purpose
 	private int horizontal_index = 0;
@@ -82,12 +87,13 @@ public class BuildPanel extends JPanel {
 	final private int[] HORIZONTAL_DIRECTIONS = { STREET_RIGHT, STREET_LEFT,
 			STREET };
 	final private int[] VERTICAL_DIRECTIONS = { STREET_UP, STREET_DOWN, STREET };
+	
 
 	private boolean isAllowed(int x, int y) {
 		int p[] = { EMPTY, EMPTY, EMPTY, EMPTY };
 		int d[] = { EMPTY, EMPTY, EMPTY, EMPTY };
 
-		if(current == GARBAGE_DEPOSIT && hasDump)
+		if((current == GARBAGE_DEPOSIT && hasDump) || (current == INITIAL_POSITION && hasInitialPosition ))
 			return false;
 		/*
 		 * 5 2 6 1 3 7 4 8
@@ -130,7 +136,7 @@ public class BuildPanel extends JPanel {
 		if (current != STREET)
 			for (int i : p)
 				if (i == GARBAGE_BIN || i == GARBAGE_DEPOSIT
-						|| i == GAS_STATION)
+				|| i == GAS_STATION)
 					return false;
 
 		/*
@@ -150,6 +156,8 @@ public class BuildPanel extends JPanel {
 		 */
 		if(current == GARBAGE_DEPOSIT)
 			hasDump = true;
+		else if (current == INITIAL_POSITION)
+			hasInitialPosition = true;
 		return true;
 	}
 
@@ -173,6 +181,8 @@ public class BuildPanel extends JPanel {
 			case MOUSE_BTN2:
 				if(board[i][j] == GARBAGE_DEPOSIT)
 					hasDump = false;
+				else if (board[i][j] == INITIAL_POSITION)
+					hasInitialPosition = false;
 				board[i][j] = EMPTY;
 				break;
 			case MOUSE_BTN3:
@@ -244,8 +254,9 @@ public class BuildPanel extends JPanel {
 			roadL = ImageIO.read(new File("resources/roadL.png"));
 			roadT = ImageIO.read(new File("resources/roadT.png"));
 			roadB = ImageIO.read(new File("resources/roadB.png"));
+			start = ImageIO.read(new File("resources/start.png"));
 
-			icons = new BufferedImage[9];
+			icons = new BufferedImage[10];
 
 			icons[STREET] = ImageIO.read(new File("resources/roadX.png"));
 			icons[GARBAGE_BIN] = ImageIO.read(new File("resources/bin.png"));
@@ -257,6 +268,7 @@ public class BuildPanel extends JPanel {
 			icons[STREET_UP] = roadT;
 			icons[STREET_LEFT] = roadL;
 			icons[STREET_RIGHT] = roadR;
+			icons[INITIAL_POSITION] = start;
 
 			roadX = icons[STREET];
 			bin = icons[GARBAGE_BIN];

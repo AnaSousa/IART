@@ -37,6 +37,7 @@ public class BuildWindow extends JFrame {
 	private JRadioButton rdbtnGarbageDeposit;
 	private JRadioButton rdbtnGarbageBin;
 	private JRadioButton rdbtnStreet;
+	private JRadioButton rdbtnInitialPosition;
 
 	/**
 	 * Launch the application.
@@ -162,12 +163,18 @@ public class BuildWindow extends JFrame {
 		rdbtnGarbageDeposit.setBounds(6, 283, 123, 23);
 		rdbtnGarbageDeposit.addItemListener(new HandlerIcon(BuildPanel.GARBAGE_DEPOSIT));
 		toolsPanel.add(rdbtnGarbageDeposit);
+		
+		rdbtnInitialPosition = new JRadioButton("Initial position");
+		rdbtnInitialPosition.setBounds(6, 309, 123, 23);
+		rdbtnInitialPosition.addItemListener(new HandlerIcon(BuildPanel.INITIAL_POSITION));
+		toolsPanel.add(rdbtnInitialPosition);
 
 		ButtonGroup options = new ButtonGroup();
 		options.add(rdbtnGarbageBin);
 		options.add(rdbtnStreet);
 		options.add(rdbtnGarbageDeposit);
 		options.add(rdbtnPetrolStation);
+		options.add(rdbtnInitialPosition);
 		
 		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
@@ -192,6 +199,8 @@ public class BuildWindow extends JFrame {
 		lblRbSet.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblRbSet.setBounds(0, 480, 202, 14);
 		toolsPanel.add(lblRbSet);
+		
+		
 
 		panel.requestFocus();
 
