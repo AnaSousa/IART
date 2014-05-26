@@ -152,7 +152,7 @@ public class MainPanel extends JPanel {
 		g.setFont(new Font("Arial", 0, 12));
 		g.setColor(Color.WHITE);
 
-		g.drawString("500", 93, 45);
+		g.drawString((int)ProgramData.getInstance().getTruck().getCapacity()+"", 93, 45);
 		//g.drawString("500", 240, 38);
 
 
@@ -267,6 +267,9 @@ public class MainPanel extends JPanel {
 					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
 					
+					if(path.peek().getTarget().getType() == Node.DUMP && garbage == ProgramData.getInstance().getTruck().getCapacity())
+						garbage = 0;
+					
 					path.remove();
 				}
 			}
@@ -286,6 +289,8 @@ public class MainPanel extends JPanel {
 					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
 						
+					if(path.peek().getTarget().getType() == Node.DUMP && garbage == ProgramData.getInstance().getTruck().getCapacity())
+						garbage = 0;
 					
 					path.remove();
 				}

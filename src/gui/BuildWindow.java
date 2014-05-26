@@ -23,6 +23,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
+import javax.swing.JTextField;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import logic.ProgramData;
 
 @SuppressWarnings("serial")
 public class BuildWindow extends JFrame {
@@ -38,6 +44,13 @@ public class BuildWindow extends JFrame {
 	private JRadioButton rdbtnGarbageBin;
 	private JRadioButton rdbtnStreet;
 	private JRadioButton rdbtnInitialPosition;
+	private JLabel lblMapsScale;
+	private JTextField textGarbage;
+	private JLabel lblTruckCapacity;
+	private JTextField textScale;
+	private JLabel lblGarbage;
+	private JLabel lblGas;
+	private JTextField textGas;
 
 	/**
 	 * Launch the application.
@@ -163,7 +176,7 @@ public class BuildWindow extends JFrame {
 		rdbtnGarbageDeposit.setBounds(6, 283, 123, 23);
 		rdbtnGarbageDeposit.addItemListener(new HandlerIcon(BuildPanel.GARBAGE_DEPOSIT));
 		toolsPanel.add(rdbtnGarbageDeposit);
-		
+
 		rdbtnInitialPosition = new JRadioButton("Initial position");
 		rdbtnInitialPosition.setBounds(6, 309, 123, 23);
 		rdbtnInitialPosition.addItemListener(new HandlerIcon(BuildPanel.INITIAL_POSITION));
@@ -175,32 +188,102 @@ public class BuildWindow extends JFrame {
 		options.add(rdbtnGarbageDeposit);
 		options.add(rdbtnPetrolStation);
 		options.add(rdbtnInitialPosition);
-		
-		JButton btnCalcular = new JButton("Calcular");
+
+		JButton btnCalcular = new JButton("Calculate");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				panel.startAlgorithm();
+				
+				try{
+					//TODO: uncomment this 
+					/*ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
+					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
+					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));*/
+					
+					panel.startAlgorithm();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+					System.out.println("ERROR");
+				}
 			}
 		});
-		btnCalcular.setBounds(10, 388, 89, 23);
+		btnCalcular.setBounds(10, 471, 89, 23);
 		toolsPanel.add(btnCalcular);
-		
+
 		JLabel lblLbAdd = new JLabel("LB - add element");
 		lblLbAdd.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblLbAdd.setBounds(0, 445, 102, 14);
+		lblLbAdd.setBounds(0, 511, 102, 14);
 		toolsPanel.add(lblLbAdd);
-		
+
 		JLabel lblMbRemove = new JLabel("MB - remove element");
 		lblMbRemove.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblMbRemove.setBounds(0, 462, 153, 14);
+		lblMbRemove.setBounds(0, 525, 153, 14);
 		toolsPanel.add(lblMbRemove);
-		
+
 		JLabel lblRbSet = new JLabel("RB - set streets direction");
 		lblRbSet.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblRbSet.setBounds(0, 480, 202, 14);
+		lblRbSet.setBounds(0, 536, 202, 14);
 		toolsPanel.add(lblRbSet);
-		
-		
+
+		lblMapsScale = new JLabel("Map's Scale");
+		lblMapsScale.setBounds(10, 354, 86, 14);
+		toolsPanel.add(lblMapsScale);
+
+		textGarbage = new JTextField();
+		textGarbage.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					arg0.consume();
+				}
+			}
+		});
+		textGarbage.setBounds(81, 395, 41, 20);
+		toolsPanel.add(textGarbage);
+		textGarbage.setColumns(10);
+
+		lblTruckCapacity = new JLabel("Truck's capacity:");
+		lblTruckCapacity.setBounds(10, 379, 128, 14);
+		toolsPanel.add(lblTruckCapacity);
+
+		textScale = new JTextField();
+		textScale.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					arg0.consume();
+				}
+			}
+		});
+		textScale.setBounds(81, 351, 41, 20);
+		toolsPanel.add(textScale);
+		textScale.setColumns(10);
+
+		lblGarbage = new JLabel("Garbage");
+		lblGarbage.setBounds(14, 398, 86, 14);
+		toolsPanel.add(lblGarbage);
+
+		lblGas = new JLabel("Gas");
+		lblGas.setBounds(14, 423, 46, 14);
+		toolsPanel.add(lblGas);
+
+		textGas = new JTextField();
+		textGas.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					arg0.consume();
+				}
+			}
+		});
+		textGas.setColumns(10);
+		textGas.setBounds(81, 420, 41, 20);
+		toolsPanel.add(textGas);
+
+
 
 		panel.requestFocus();
 
