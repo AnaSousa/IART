@@ -73,6 +73,8 @@ public class BuildPanel extends JPanel {
 
 	private int[][] board = null;
 	private int current;
+	
+	boolean hasDump = false;
 
 	// for direction purpose
 	private int horizontal_index = 0;
@@ -85,6 +87,8 @@ public class BuildPanel extends JPanel {
 		int p[] = { EMPTY, EMPTY, EMPTY, EMPTY };
 		int d[] = { EMPTY, EMPTY, EMPTY, EMPTY };
 
+		if(current == GARBAGE_DEPOSIT && hasDump)
+			return false;
 		/*
 		 * 5 2 6 1 3 7 4 8
 		 */
@@ -144,7 +148,8 @@ public class BuildPanel extends JPanel {
 		 * 
 		 * }
 		 */
-
+		if(current == GARBAGE_DEPOSIT)
+			hasDump = true;
 		return true;
 	}
 
@@ -162,10 +167,12 @@ public class BuildPanel extends JPanel {
 
 			switch (btn) {
 			case MOUSE_BTN1:
-				if (isAllowed(i, j))
+				if (isAllowed(i, j)) 
 					board[i][j] = current;
 				break;
 			case MOUSE_BTN2:
+				if(board[i][j] == GARBAGE_DEPOSIT)
+					hasDump = false;
 				board[i][j] = EMPTY;
 				break;
 			case MOUSE_BTN3:

@@ -68,7 +68,7 @@ public class BuildWindow extends JFrame {
 		});
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 610);
+		setBounds(100, 100, 750, 610);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -177,6 +177,21 @@ public class BuildWindow extends JFrame {
 		});
 		btnCalcular.setBounds(10, 388, 89, 23);
 		toolsPanel.add(btnCalcular);
+		
+		JLabel lblLbAdd = new JLabel("LB - add element");
+		lblLbAdd.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblLbAdd.setBounds(0, 445, 102, 14);
+		toolsPanel.add(lblLbAdd);
+		
+		JLabel lblMbRemove = new JLabel("MB - remove element");
+		lblMbRemove.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblMbRemove.setBounds(0, 462, 153, 14);
+		toolsPanel.add(lblMbRemove);
+		
+		JLabel lblRbSet = new JLabel("RB - set streets direction");
+		lblRbSet.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblRbSet.setBounds(0, 480, 202, 14);
+		toolsPanel.add(lblRbSet);
 
 		panel.requestFocus();
 
