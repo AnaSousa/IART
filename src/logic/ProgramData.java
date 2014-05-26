@@ -19,9 +19,9 @@ public class ProgramData {
 	static ProgramData data;
 	private ArrayList<Integer> garbagesOrder;
 	private ArrayList<Integer> fuelIndex;
-	private int actualFuel;
+	private ArrayList<Integer> garbagesIndex;
 	private int actualGarbageIndex;
-	private int actualIndex=0;
+	private int actualIndex;
 
 	/**
 	 * @param g
@@ -32,9 +32,10 @@ public class ProgramData {
 		this.g = new Graph(edgeClass);
 		this.t = new Truck(500, 200);
 		this.multiple = 1;
-		this.actualFuel=0;
+		this.actualIndex=0;
 		garbagesOrder = new ArrayList<Integer>();
 		this.fuelIndex = new ArrayList<Integer>();
+		this.garbagesIndex = new ArrayList<Integer>();
 		this.actualGarbageIndex++;
 	}
 
@@ -102,6 +103,7 @@ public class ProgramData {
 		Queue<Edge> e = AStarAlgorithm.searchAStar(g, origin, t);
 		e = garbageAnalyze(e);
 		e = gasAnalyze(e);
+		this.garbagesIndexes(e);
 		System.out.println("Fuel index="+this.fuelIndex);
 		System.out.println("Returned = " + e);
 		return e;
@@ -203,7 +205,7 @@ public class ProgramData {
 				i += e.getSource().getPathToPetrolStation().size();
 				List<Edge> resultList = resultArray.subList(0, i);
 				resultArray = new ArrayList<Edge>(resultList);
-				this.fuelIndex.add(resultArray.size() - 1);
+				this.fuelIndex.add(resultArray.size());
 				Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
 						resultArray.get(resultArray.size() - 1).getTarget(), t);
 				tempResult = garbageAnalyze(tempResult);
@@ -244,20 +246,50 @@ public class ProgramData {
 		}
 		return result;
 	}
-	public void incrementFuelIndex()
+	
+	public boolean isFuelIndex()
 	{
-		this.actualFuel++;
-		if(actualFuel>this.fuelIndex.size())
-			this.actualFuel=-1;
+		System.out.println("Fuel index=" + this.fuelIndex+";Actual Index="+this.actualIndex);
+		return this.fuelIndex.contains(this.actualIndex);
+	}
+	public boolean isGarbageIndex()
+	{
+		System.out.println("Garbage index=" + this.garbagesIndex+";Actual Index="+this.actualIndex);
+		return this.garbagesIndex.contains(this.actualIndex);
 	}
 	
-	public Integer getActualFuelIndex()
+	public void garbagesIndexes(Queue<Edge> path)
 	{
-	/*	if(actualFuel==-1 || actualFuel == 0 && this.fuelIndex.size()==0)
-			return null;
-		return this.fuelIndex.get(actualFuel);
-		*/
-		return -1;
+		ArrayList<Integer> garbagesPassedIteration = new ArrayList<Integer>();
+		int pathInt;
+		int garbage=0;
+		ArrayList<Edge> pathList = new ArrayList<Edge>();
+		while(path.size()>0)
+			pathList.add(path.poll());
+		for(pathInt=0;pathInt<pathList.size();pathInt++)
+		{
+			if(garbage<this.t.getCapacity())
+			{
+				if(pathList.get(pathInt).getSource().getType()==Node.GARBAGE_CONTAINER && !garbagesPassedIteration.contains(pathList.get(pathInt).getSource().getId()))
+				{
+					garbage+=this.multiple;
+					this.garbagesIndex.add(pathInt);
+					garbagesPassedIteration.add(pathList.get(pathInt).getSource().getId());
+				}
+			}
+			else
+			{
+				if(pathList.get(pathInt).getSource().getType()==Node.DUMP)
+				{
+					garbage=0;
+				}
+			}
+		}
+		while(pathList.size()>0)
+		{
+			path.add(pathList.get(0));
+			pathList.remove(0);
+		}
 	}
 
 	/**

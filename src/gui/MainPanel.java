@@ -253,7 +253,6 @@ public class MainPanel extends JPanel {
 
 
 			if(deltay == 0) {
-				ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 				float inc = (float) (deltax < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckL : truckR;
 
@@ -261,34 +260,31 @@ public class MainPanel extends JPanel {
 
 				if((x2 > x1 && truckX >= x2) || (x2 < x1 && truckX <= x2)) {
 					truckX = path.peek().getTarget().getX();
+					ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
+					if(ProgramData.getInstance().isGarbageIndex())
+						garbage += ProgramData.getInstance().getMultiple();
 					
-					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
-						garbage += 100;
-					
-					if(ProgramData.getInstance().getActualIndex()==ProgramData.getInstance().getActualFuelIndex())
+					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
 					
 					path.remove();
 				}
 			}
 			else if (deltax == 0) {
-				ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 				float inc = (float) (deltay < 0 ? 0.1 : -0.1);
 				truck = inc < 0 ? truckT : truckB;
 
 				truckY += inc;
 
 				if((y2 > y1 && truckY >= y2) || (y2 < y1 && truckY <= y2)) {
+					ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 					truckY = path.peek().getTarget().getY();
 					
-					if(!e.isAddedGarbage() && e.getTarget().getType() == Node.GARBAGE_CONTAINER)
-						garbage += 100;
+					if(ProgramData.getInstance().isGarbageIndex())
+						garbage += ProgramData.getInstance().getMultiple();
 					
-					if(ProgramData.getInstance().getActualIndex()==ProgramData.getInstance().getActualFuelIndex())
-					{
+					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
-						ProgramData.getInstance().incrementFuelIndex();
-					}
 						
 					
 					path.remove();
