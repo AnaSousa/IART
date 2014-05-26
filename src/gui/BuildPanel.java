@@ -586,7 +586,7 @@ public class BuildPanel extends JPanel {
 		if (y2 == y1 + 1)
 			return STREET;
 
-		if (y != y2 && insideMap(x2, y)) {
+		if (y != y2 && insideMap(x2, y) && !checkCrossroad(x2, y)) {
 			firstType = board[x2][y];
 			y++;
 		}
@@ -596,11 +596,13 @@ public class BuildPanel extends JPanel {
 				&& firstType != STREET_LEFT)
 			return -1;
 
+		
+		
 		while (y < y2) {
 
 			if (insideMap(x2, y)) {
 
-				if (board[x2][y] != firstType)
+				if (board[x2][y] != firstType || checkCrossroad(x2, y))
 					return -1;
 
 				y++;
@@ -621,7 +623,7 @@ public class BuildPanel extends JPanel {
 		if (y2 == y1 - 1)
 			return STREET;
 
-		if (y != y2 && insideMap(x2, y)) {
+		if (y != y2 && insideMap(x2, y) && !checkCrossroad(x2, y)) {
 			firstType = board[x2][y];
 			y--;
 		}
@@ -635,7 +637,7 @@ public class BuildPanel extends JPanel {
 
 			if (insideMap(x2, y)) {
 
-				if (board[x2][y] != firstType)
+				if (board[x2][y] != firstType || checkCrossroad(x2, y))
 					return -1;
 
 				y--;
@@ -656,7 +658,7 @@ public class BuildPanel extends JPanel {
 		if (x2 == x1 + 1)
 			return STREET;
 
-		if (x != x2 && insideMap(x, y2)) {
+		if (x != x2 && insideMap(x, y2) && !checkCrossroad(x, y2)) {
 			firstType = board[x][y2];
 			x++;
 		}
@@ -670,7 +672,7 @@ public class BuildPanel extends JPanel {
 
 			if (insideMap(x, y2)) {
 
-				if (board[x][y2] != firstType)
+				if (board[x][y2] != firstType || checkCrossroad(x, y2))
 					return -1;
 
 				x++;
@@ -691,7 +693,7 @@ public class BuildPanel extends JPanel {
 		if (x2 == x1 - 1)
 			return STREET;
 
-		if (x != x2 && insideMap(x, y2)) {
+		if (x != x2 && insideMap(x, y2) && !checkCrossroad(x, y2)) {
 			firstType = board[x][y2];
 			x--;
 		}
@@ -705,7 +707,7 @@ public class BuildPanel extends JPanel {
 
 			if (insideMap(x, y2)) {
 
-				if (board[x][y2] != firstType)
+				if (board[x][y2] != firstType || checkCrossroad(x, y2))
 					return -1;
 
 				x--;
