@@ -446,9 +446,7 @@ public class BuildPanel extends JPanel {
 				if (board[x][y] != EMPTY) {
 					if (checkCrossroad(x, y))
 						n = new Node(Node.CROSSROAD);
-					else if (board[x][y] == STREET_UP
-							|| board[x][y] == STREET_DOWN
-							|| board[x][y] == STREET_RIGHT
+					else if (board[x][y] == STREET_UP || board[x][y] == STREET_DOWN || board[x][y] == STREET_RIGHT
 							|| board[x][y] == STREET_LEFT)
 						n = new Node(Node.SIMPLE_NODE);
 					else
@@ -472,8 +470,7 @@ public class BuildPanel extends JPanel {
 		}
 		
 		for (int i = 0; i < nodes.size(); i++) {
-			System.out.println("No: " + nodes.get(i).getIntegerId()
-					+ ", tipo: " + nodes.get(i).getType() + ", x, y: "
+			System.out.println("No: " + nodes.get(i).getIntegerId()	+ ", tipo: " + nodes.get(i).getType() + ", x, y: "
 					+ nodes.get(i).getX() + ", " + nodes.get(i).getY());
 		}
 		int type = -1;
@@ -481,14 +478,12 @@ public class BuildPanel extends JPanel {
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = i + 1; j < nodes.size(); j++) {
 
-				if (!(nodes.get(i).getType() == Node.SIMPLE_NODE || nodes
-						.get(j).getType() == Node.SIMPLE_NODE)) {
+				if (!(nodes.get(i).getType() == Node.SIMPLE_NODE || nodes.get(j).getType() == Node.SIMPLE_NODE)) {
 					type = hasEdge(nodes.get(i).getX(), nodes.get(i).getY(),
 							nodes.get(j).getX(), nodes.get(j).getY());
 
 					if (type != -1) {
-						System.out.println("Aresta: "
-								+ nodes.get(i).getIntegerId() + ", "
+						System.out.println("Aresta: "+ nodes.get(i).getIntegerId() + ", "
 								+ nodes.get(j).getIntegerId() + "," + type);
 
 						if (type == STREET) {
@@ -501,21 +496,12 @@ public class BuildPanel extends JPanel {
 				}
 			}
 		}
-		// TODO: adicionar arestas do 1º e ultimo nos
 
-		/*
-		 * Node n1 = new Node(Node.CROSSROAD); n1.setPosition(0, 0);
-		 * graph.addVertex(n1); graph.addEdge(n1,n2,1000,false);
-		 */
 		Truck truck = new Truck(2000000, 100);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
-		/*
-		 * System.out.println("No: " + nodes.get(0).getIntegerId() + ", tipo: "
-		 * + nodes.get(0).getType() + ", x, y: " + nodes.get(0).getX() + ", " +
-		 * nodes.get(0).getY());//
-		 */
+		
 		Queue<Edge> s = data.searchPath(nodes.get(start_index), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 		MainWindow window = new MainWindow();
@@ -524,12 +510,9 @@ public class BuildPanel extends JPanel {
 
 	private boolean checkCrossroad(int x, int y) {
 
-		if (board[x][y] == GARBAGE_BIN || board[x][y] == GAS_STATION
-				|| board[x][y] == GARBAGE_DEPOSIT)
+		if (board[x][y] == GARBAGE_BIN || board[x][y] == GAS_STATION || board[x][y] == GARBAGE_DEPOSIT)
 			return false;
-		/*
-		 * 5 2 6 1 3 7 4 8
-		 */
+		
 		int x1 = x - 1, y1 = y, x2 = x, y2 = y - 1, x3 = x + 1, y3 = y, x4 = x, y4 = y + 1;
 
 		if (insideMap(x1, y1) && insideMap(x4, y4)) {
@@ -572,18 +555,6 @@ public class BuildPanel extends JPanel {
 		return type;
 	}
 
-	/*
-	 * public static final int EMPTY = 0; public static final int STREET = 1;
-	 * public static final int GARBAGE_BIN = 2; public static final int
-	 * GAS_STATION = 3; public static final int GARBAGE_DEPOSIT = 4; public
-	 * static final int STREET_UP = 5; public static final int STREET_DOWN = 6;
-	 * public static final int STREET_RIGHT = 7; public static final int
-	 * STREET_LEFT = 8;
-	 * 
-	 * public int[] mapping= {0, Node.SIMPLE_NODE, Node.GARBAGE_CONTAINER,
-	 * Node.PETROL_STATION, Node.DUMP};
-	 */
-
 	private int hasEdgeDown(int x1, int y1, int x2, int y2) {
 
 		int y = y1 + 1, firstType = -1;
@@ -603,8 +574,6 @@ public class BuildPanel extends JPanel {
 				&& firstType != STREET_DOWN && firstType != STREET_RIGHT
 				&& firstType != STREET_LEFT)
 			return -1;
-
-		
 		
 		while (y < y2) {
 
@@ -652,7 +621,6 @@ public class BuildPanel extends JPanel {
 			} else
 				return -1;
 		}
-
 		return firstType;
 	}
 
@@ -687,7 +655,6 @@ public class BuildPanel extends JPanel {
 			} else
 				return -1;
 		}
-
 		return firstType;
 	}
 
