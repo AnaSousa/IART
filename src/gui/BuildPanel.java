@@ -499,7 +499,7 @@ public class BuildPanel extends JPanel {
 		 * Node n1 = new Node(Node.CROSSROAD); n1.setPosition(0, 0);
 		 * graph.addVertex(n1); graph.addEdge(n1,n2,1000,false);
 		 */
-		Truck truck = new Truck(200, 100);
+		Truck truck = new Truck(2000000, 100);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
