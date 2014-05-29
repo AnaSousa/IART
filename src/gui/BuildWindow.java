@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -25,6 +27,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -73,6 +76,9 @@ public class BuildWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public BuildWindow() {
+		setTitle("Map Builder");
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Development\\Workspace Java\\IART\\IART\\resources\\truckIcon.png"));
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
@@ -204,16 +210,23 @@ public class BuildWindow extends JFrame {
 					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
 						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
+					
+					MainWindow window = new MainWindow();
+					window.frmAAlgorithmWaste.setVisible(true);
+					dispose();
 				}
 				catch(Exception e) {
-
-					if(e.getMessage().equals("fuelError"))
-						JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					else if (e.getMessage().equals("1"))
-						JOptionPane.showMessageDialog(null,"O mapa tem de ter um nó inicial e uma lixeira!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					if(e.getMessage() != null) {
+						if(e.getMessage().equals("fuelError"))
+							JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else if (e.getMessage().equals("1"))
+							JOptionPane.showMessageDialog(null,"The map needs an initial node, a gas station and a dump!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					}
 					else
 						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					
+
 					e.printStackTrace();
 					System.out.println("ERROR");
 					btnCalcular.setEnabled(true);
@@ -295,21 +308,22 @@ public class BuildWindow extends JFrame {
 		textGas.setColumns(10);
 		textGas.setBounds(81, 420, 41, 20);
 		toolsPanel.add(textGas);
-		
-		JButton btnSaveCalculate = new JButton("Save & calculate");
+
+		final JButton btnSaveCalculate = new JButton("Save & calculate");
 		btnSaveCalculate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc = new JFileChooser();
 				int returnVal = fc.showSaveDialog(null);
 				String path = null;
-				
+
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					path = fc.getSelectedFile().getAbsolutePath();
 				} else {
 
 				}
 
-				btnCalcular.setEnabled(false);
+				btnSaveCalculate.setEnabled(false);
+
 				try{
 					ProgramData.deleteInstance();
 
@@ -320,26 +334,32 @@ public class BuildWindow extends JFrame {
 					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
 						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
-					
-					if(path != null) {
+
+					if(path != null)
 						ProgramData.serialize(path);
-					}
-					
+
+					MainWindow window = new MainWindow();
+					window.frmAAlgorithmWaste.setVisible(true);
+					dispose();
+
 				}
 				catch(Exception e) {
-
-					if(e.getMessage().equals("fuelError"))
-						JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					else if (e.getMessage().equals("1"))
-						JOptionPane.showMessageDialog(null,"O mapa tem de ter um nó inicial e uma lixeira!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					if(e.getMessage() != null) {
+						if(e.getMessage().equals("fuelError"))
+							JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else if (e.getMessage().equals("1"))
+							JOptionPane.showMessageDialog(null,"The map needs an initial node, a gas station and a dump!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					}
 					else
 						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					
+
 					e.printStackTrace();
 					System.out.println("ERROR");
-					btnCalcular.setEnabled(true);
+					btnSaveCalculate.setEnabled(true);
 				}
-			
+
 			}
 		});
 		btnSaveCalculate.setBounds(0, 485, 138, 23);
