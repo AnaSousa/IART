@@ -262,7 +262,7 @@ public class MainPanel extends JPanel {
 					truckX = path.peek().getTarget().getX();
 					ProgramData.getInstance().setActualIndex(ProgramData.getInstance().getActualIndex()+1);
 					if(ProgramData.getInstance().isGarbageIndex())
-						garbage += ProgramData.getInstance().getMultiple();
+						garbage += 100;
 					
 					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
@@ -284,7 +284,7 @@ public class MainPanel extends JPanel {
 					truckY = path.peek().getTarget().getY();
 					
 					if(ProgramData.getInstance().isGarbageIndex())
-						garbage += ProgramData.getInstance().getMultiple();
+						garbage += 100;
 					
 					if(ProgramData.getInstance().isFuelIndex())
 						fuel = ProgramData.getInstance().getTruck().getFuel();
