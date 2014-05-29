@@ -199,6 +199,7 @@ public class BuildWindow extends JFrame {
 		final JButton btnCalcular = new JButton("Calculate");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				btnCalcular.setEnabled(false);
 				try{
 					ProgramData.deleteInstance();
@@ -210,7 +211,8 @@ public class BuildWindow extends JFrame {
 					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
 						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
-					
+
+					System.out.println("Ready to go!");
 					MainWindow window = new MainWindow();
 					window.frmAAlgorithmWaste.setVisible(true);
 					dispose();
@@ -231,6 +233,7 @@ public class BuildWindow extends JFrame {
 					System.out.println("ERROR");
 					btnCalcular.setEnabled(true);
 				}
+
 			}
 		});
 		btnCalcular.setBounds(22, 456, 93, 23);
@@ -312,6 +315,7 @@ public class BuildWindow extends JFrame {
 		final JButton btnSaveCalculate = new JButton("Save & calculate");
 		btnSaveCalculate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				JFileChooser fc = new JFileChooser();
 				int returnVal = fc.showSaveDialog(null);
 				String path = null;
@@ -335,8 +339,12 @@ public class BuildWindow extends JFrame {
 						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
 
+					System.out.println("Ready to go!");
+					System.out.print("Saving...   ");
 					if(path != null)
 						ProgramData.serialize(path);
+
+					System.out.println("Saved!");
 
 					MainWindow window = new MainWindow();
 					window.frmAAlgorithmWaste.setVisible(true);
@@ -359,7 +367,6 @@ public class BuildWindow extends JFrame {
 					System.out.println("ERROR");
 					btnSaveCalculate.setEnabled(true);
 				}
-
 			}
 		});
 		btnSaveCalculate.setBounds(0, 485, 138, 23);

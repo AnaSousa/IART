@@ -79,7 +79,7 @@ public class MainWindow {
 		frmAAlgorithmWaste = new JFrame();
 		frmAAlgorithmWaste.setIconImage(Toolkit.getDefaultToolkit().getImage("resources\\truckIcon.png"));
 		frmAAlgorithmWaste.setTitle("A* Algorithm: Waste collection problem");
-		frmAAlgorithmWaste.setBounds(100, 100, 600, 610);
+		frmAAlgorithmWaste.setBounds(100, 100, 650, 610);
 		frmAAlgorithmWaste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new MainPanel();
 		frmAAlgorithmWaste.getContentPane().add(panel);

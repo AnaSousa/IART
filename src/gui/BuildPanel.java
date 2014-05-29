@@ -18,7 +18,6 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import logic.ProgramData;
 
@@ -508,11 +507,12 @@ public class BuildPanel extends JPanel {
 			}
 		}
 		
+		System.out.println("Calculating distances...");
 		//Truck truck = new Truck(2000000, 100);
 		graph.calculateDistances();
 		//data.setTruck(truck);
 		data.setGraph(graph);
-		
+		System.out.print("Calculating path...");
 		Queue<Edge> s = data.searchPath(nodes.get(start_index), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 	}
