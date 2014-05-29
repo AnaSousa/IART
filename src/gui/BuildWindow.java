@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -16,6 +18,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,6 +27,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -72,6 +76,9 @@ public class BuildWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public BuildWindow() {
+		setTitle("Map Builder");
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Development\\Workspace Java\\IART\\IART\\resources\\truckIcon.png"));
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
@@ -89,13 +96,13 @@ public class BuildWindow extends JFrame {
 		contentPane.setLayout(null);
 
 		panel = new BuildPanel();
-		panel.setBounds(135, 11, 439, 550);
+		panel.setBounds(158, 11, 416, 550);
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(panel);
 
 		JPanel toolsPanel = new JPanel();
-		toolsPanel.setBounds(10, 11, 122, 550);
+		toolsPanel.setBounds(10, 11, 140, 550);
 		contentPane.add(toolsPanel);
 		toolsPanel.setLayout(null);
 
@@ -192,33 +199,44 @@ public class BuildWindow extends JFrame {
 		final JButton btnCalcular = new JButton("Calculate");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				btnCalcular.setEnabled(false);
 				try{
-					//TODO: uncomment this 
 					ProgramData.deleteInstance();
 
 					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
 					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
 					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));
 
+					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
+						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
+
+					System.out.println("Ready to go!");
+					MainWindow window = new MainWindow();
+					window.frmAAlgorithmWaste.setVisible(true);
+					dispose();
 				}
 				catch(Exception e) {
-
-					if(e.getMessage().equals("fuelError"))
-						JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					else if (e.getMessage().equals("1"))
-						JOptionPane.showMessageDialog(null,"O mapa tem de ter um nó inicial e uma lixeira!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					if(e.getMessage() != null) {
+						if(e.getMessage().equals("fuelError"))
+							JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else if (e.getMessage().equals("1"))
+							JOptionPane.showMessageDialog(null,"The map needs an initial node, a gas station and a dump!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					}
 					else
 						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
-					
+
 					e.printStackTrace();
 					System.out.println("ERROR");
 					btnCalcular.setEnabled(true);
 				}
+
 			}
 		});
-		btnCalcular.setBounds(10, 471, 89, 23);
+		btnCalcular.setBounds(22, 456, 93, 23);
 		toolsPanel.add(btnCalcular);
 
 		JLabel lblLbAdd = new JLabel("LB - add element");
@@ -293,6 +311,66 @@ public class BuildWindow extends JFrame {
 		textGas.setColumns(10);
 		textGas.setBounds(81, 420, 41, 20);
 		toolsPanel.add(textGas);
+
+		final JButton btnSaveCalculate = new JButton("Save & calculate");
+		btnSaveCalculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showSaveDialog(null);
+				String path = null;
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					path = fc.getSelectedFile().getAbsolutePath();
+				} else {
+
+				}
+
+				btnSaveCalculate.setEnabled(false);
+
+				try{
+					ProgramData.deleteInstance();
+
+					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
+					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
+					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));
+
+					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
+						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					panel.startAlgorithm();
+
+					System.out.println("Ready to go!");
+					System.out.print("Saving...   ");
+					if(path != null)
+						ProgramData.serialize(path);
+
+					System.out.println("Saved!");
+
+					MainWindow window = new MainWindow();
+					window.frmAAlgorithmWaste.setVisible(true);
+					dispose();
+
+				}
+				catch(Exception e) {
+					if(e.getMessage() != null) {
+						if(e.getMessage().equals("fuelError"))
+							JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else if (e.getMessage().equals("1"))
+							JOptionPane.showMessageDialog(null,"The map needs an initial node, a gas station and a dump!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					}
+					else
+						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+
+					e.printStackTrace();
+					System.out.println("ERROR");
+					btnSaveCalculate.setEnabled(true);
+				}
+			}
+		});
+		btnSaveCalculate.setBounds(0, 485, 138, 23);
+		toolsPanel.add(btnSaveCalculate);
 
 
 
