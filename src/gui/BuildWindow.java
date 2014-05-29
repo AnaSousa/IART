@@ -27,7 +27,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -78,7 +77,7 @@ public class BuildWindow extends JFrame {
 	public BuildWindow() {
 		setTitle("Map Builder");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Development\\Workspace Java\\IART\\IART\\resources\\truckIcon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("resources\\truckIcon.png"));
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
