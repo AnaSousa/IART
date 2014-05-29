@@ -1,9 +1,11 @@
 package graph;
 
+import java.io.Serializable;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 @SuppressWarnings("serial")
-public class Edge extends DefaultWeightedEdge {
+public class Edge extends DefaultWeightedEdge implements Serializable {
 
 	private Node source;
 	private Node target;

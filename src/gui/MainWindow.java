@@ -9,9 +9,11 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Queue;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -91,15 +93,32 @@ public class MainWindow {
 				panel.startSimulation();
 			}
 		});
-		
+
 		JButton btnLoadMap = new JButton("Load map");
 		btnLoadMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JFileChooser fileChooser = new JFileChooser();
+				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					String path = fileChooser.getSelectedFile().getAbsolutePath();
+					ProgramData.deleteInstance();
+					frmAAlgorithmWaste.dispose();
+
+					try {
+						ProgramData.deserialize(path);
+						MainWindow window = new MainWindow();
+						window.frmAAlgorithmWaste.setVisible(true);
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+
 			}
 		});
 		panel_1.add(btnLoadMap);
-		
+
 		JButton btnBuildMap = new JButton("Build map");
 		btnBuildMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -118,7 +137,7 @@ public class MainWindow {
 	public JFrame getFrmAAlgorithmWaste() {
 		return frmAAlgorithmWaste;
 	}
-	
+
 
 	private void test3() {
 

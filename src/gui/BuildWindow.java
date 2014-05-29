@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -89,13 +90,13 @@ public class BuildWindow extends JFrame {
 		contentPane.setLayout(null);
 
 		panel = new BuildPanel();
-		panel.setBounds(135, 11, 439, 550);
+		panel.setBounds(158, 11, 416, 550);
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(panel);
 
 		JPanel toolsPanel = new JPanel();
-		toolsPanel.setBounds(10, 11, 122, 550);
+		toolsPanel.setBounds(10, 11, 140, 550);
 		contentPane.add(toolsPanel);
 		toolsPanel.setLayout(null);
 
@@ -194,13 +195,14 @@ public class BuildWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				btnCalcular.setEnabled(false);
 				try{
-					//TODO: uncomment this 
 					ProgramData.deleteInstance();
 
 					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
 					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
 					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));
 
+					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
+						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					panel.startAlgorithm();
 				}
 				catch(Exception e) {
@@ -218,7 +220,7 @@ public class BuildWindow extends JFrame {
 				}
 			}
 		});
-		btnCalcular.setBounds(10, 471, 89, 23);
+		btnCalcular.setBounds(22, 456, 93, 23);
 		toolsPanel.add(btnCalcular);
 
 		JLabel lblLbAdd = new JLabel("LB - add element");
@@ -293,6 +295,55 @@ public class BuildWindow extends JFrame {
 		textGas.setColumns(10);
 		textGas.setBounds(81, 420, 41, 20);
 		toolsPanel.add(textGas);
+		
+		JButton btnSaveCalculate = new JButton("Save & calculate");
+		btnSaveCalculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showSaveDialog(null);
+				String path = null;
+				
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					path = fc.getSelectedFile().getAbsolutePath();
+				} else {
+
+				}
+
+				btnCalcular.setEnabled(false);
+				try{
+					ProgramData.deleteInstance();
+
+					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
+					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
+					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));
+
+					if(ProgramData.getInstance().getTruck().getCapacity() < 100)
+						JOptionPane.showMessageDialog(null,"Minimum garbage capacity is 100!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					panel.startAlgorithm();
+					
+					if(path != null) {
+						ProgramData.serialize(path);
+					}
+					
+				}
+				catch(Exception e) {
+
+					if(e.getMessage().equals("fuelError"))
+						JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					else if (e.getMessage().equals("1"))
+						JOptionPane.showMessageDialog(null,"O mapa tem de ter um nó inicial e uma lixeira!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					
+					e.printStackTrace();
+					System.out.println("ERROR");
+					btnCalcular.setEnabled(true);
+				}
+			
+			}
+		});
+		btnSaveCalculate.setBounds(0, 485, 138, 23);
+		toolsPanel.add(btnSaveCalculate);
 
 
 

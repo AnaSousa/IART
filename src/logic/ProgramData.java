@@ -4,6 +4,11 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -314,6 +319,25 @@ public class ProgramData implements Serializable {
 	 */
 	public void setActualIndex(int actualIndex) {
 		this.actualIndex = actualIndex;
+	}
+
+	public static void deserialize(String fileName) throws IOException,
+	ClassNotFoundException {
+		FileInputStream fis = new FileInputStream(fileName);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		Object obj = ois.readObject();
+		ois.close();
+		data = (ProgramData) obj;
+	}
+
+	// serialize the given object and save it to file
+	public static void serialize(String fileName)
+			throws IOException {
+		FileOutputStream fos = new FileOutputStream(fileName);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(data);
+
+		fos.close();
 	}
 
 }
