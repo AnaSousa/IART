@@ -116,9 +116,10 @@ public class AStarAlgorithm {
 				for (int i = 0; i < finalNode.getPathToDump().size(); i++) {
 					edges.add(finalNode.getPathToDump().get(i));
 				}
+			System.out.println("A* calculation passed");
 			return edges;
 		}
-
+		System.out.println("A* calculation failed");
 		return null;
 	}
 

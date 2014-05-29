@@ -145,6 +145,7 @@ public class ProgramData implements Serializable {
 		for (int i = 0; i < resultArray.size(); i++) {
 			Edge e = resultArray.get(i);
 			if (t.getActualGarbage() >= t.getCapacity()) {
+				System.out.println("In garbage cycle");
 				for (int k = 0; k < e.getSource().getPathToDump().size(); k++) {
 					Edge e1 = e.getSource().getPathToDump().get(k);
 					e1.setAddedGarbage(false);
@@ -188,6 +189,7 @@ public class ProgramData implements Serializable {
 			resultArray.remove(0);
 		}
 		t.setGarbagesToPass(copyHash);
+		System.out.println("Ended garbage cycle");
 		return result;
 
 	}
@@ -203,6 +205,7 @@ public class ProgramData implements Serializable {
 			Edge e = resultArray.get(i);
 			if ((fuel - this.calculateDistanceToNextGarbage(resultArray, i)) <= e
 					.getSource().getDistanceToPetrolStation()) {
+				System.out.println("In gas cycle");
 				for (int k = 0; k < e.getSource().getPathToPetrolStation()
 						.size(); k++) {
 					Edge e1 = e.getSource().getPathToPetrolStation().get(k);
@@ -257,6 +260,7 @@ public class ProgramData implements Serializable {
 			resultArray.remove(0);
 		}
 		t.setGarbagesToPass(copyHash);
+		System.out.println("Ended gas cycle");
 		return result;
 	}
 
