@@ -21,6 +21,7 @@ public class ProgramData implements Serializable {
 	private Graph g;
 	private Truck t;
 	private int multiple;
+	private int garbageCapacity;
 	static ProgramData data;
 	private ArrayList<Integer> garbagesOrder;
 	private ArrayList<Integer> fuelIndex;
@@ -37,11 +38,12 @@ public class ProgramData implements Serializable {
 		this.g = new Graph(edgeClass);
 		this.t = new Truck(500, 200);
 		this.multiple = 1;
-		this.actualIndex=0;
+		this.actualIndex = 0;
 		garbagesOrder = new ArrayList<Integer>();
 		this.fuelIndex = new ArrayList<Integer>();
 		this.garbagesIndex = new ArrayList<Integer>();
 		this.actualGarbageIndex++;
+		this.garbageCapacity = 100;
 	}
 
 	/**
@@ -103,6 +105,21 @@ public class ProgramData implements Serializable {
 		this.multiple = multiple;
 	}
 
+	/**
+	 * @return the garbageCapacity
+	 */
+	public int getGarbageCapacity() {
+		return garbageCapacity;
+	}
+
+	/**
+	 * @param garbageCapacity
+	 *            the garbageCapacity to set
+	 */
+	public void setGarbageCapacity(int garbageCapacity) {
+		this.garbageCapacity = garbageCapacity;
+	}
+
 	public Queue<Edge> searchPath(Node origin, Node destination) {
 
 		for (Map.Entry<Integer, Node> entry : g.getNodes().entrySet()) {
@@ -114,7 +131,7 @@ public class ProgramData implements Serializable {
 		e = garbageAnalyze(e);
 		e = gasAnalyze(e);
 		this.garbagesIndexes(e);
-		System.out.println("Fuel index="+this.fuelIndex);
+		System.out.println("Fuel index=" + this.fuelIndex);
 		System.out.println("Returned = " + e);
 		return e;
 	}
@@ -162,7 +179,7 @@ public class ProgramData implements Serializable {
 					this.actualGarbageIndex++;
 					this.garbagesOrder.add(e.getTarget().getId());
 					t.setActualGarbage(t.getActualGarbage()
-							+ ProgramData.getInstance().getMultiple());
+							+ ProgramData.getInstance().getGarbageCapacity());
 				}
 			}
 		}
@@ -199,18 +216,26 @@ public class ProgramData implements Serializable {
 				}
 				fuel = t.getFuel();
 				ArrayList<Node> garbages = t.getGarbagesToPass();
-
+				double trucksDeleting = t.getCapacity()
+						/ ProgramData.getInstance().getGarbageCapacity();
 				for (int j = 0; j <= i; j++) {
 					if (j == 0) {
 						if (resultArray.get(j).getSource().getType() == Node.GARBAGE_CONTAINER) {
-							garbages.remove(resultArray.get(j).getSource());
+							if (trucksDeleting > 0) {
+								garbages.remove(resultArray.get(j).getSource());
+								trucksDeleting--;
+							} else
+								break;
 						}
 					}
 					if (resultArray.get(j).getTarget().getType() == Node.GARBAGE_CONTAINER) {
-						garbages.remove(resultArray.get(j).getTarget());
+						if (trucksDeleting > 0) {
+							garbages.remove(resultArray.get(j).getTarget());
+							trucksDeleting--;
+						} else
+							break;
 					}
 				}
-				System.out.println("Garbages=" + garbages);
 				t.setGarbagesToPass(garbages);
 				i += e.getSource().getPathToPetrolStation().size();
 				List<Edge> resultList = resultArray.subList(0, i);
@@ -219,7 +244,6 @@ public class ProgramData implements Serializable {
 				Queue<Edge> tempResult = AStarAlgorithm.searchAStar(g,
 						resultArray.get(resultArray.size() - 1).getTarget(), t);
 				tempResult = garbageAnalyze(tempResult);
-				System.out.println("Result array fuel=" + tempResult);
 				while (tempResult.size() > 0)
 					resultArray.add(tempResult.poll());
 
@@ -233,8 +257,6 @@ public class ProgramData implements Serializable {
 			resultArray.remove(0);
 		}
 		t.setGarbagesToPass(copyHash);
-		System.out.println("Teste");
-		System.out.println(result);
 		return result;
 	}
 
@@ -251,52 +273,48 @@ public class ProgramData implements Serializable {
 					break;
 			} else if (actualGarbage.get(actualIndex).getTarget().getType() == Node.GARBAGE_CONTAINER
 					&& actualGarbage.get(actualIndex).getTarget().getId() == this.garbagesOrder
-					.get(actualGarbageIndex))
+							.get(actualGarbageIndex))
 				break;
 		}
 		return result;
 	}
 
-	public boolean isFuelIndex()
-	{
-		System.out.println("Fuel index=" + this.fuelIndex+";Actual Index="+this.actualIndex);
+	public boolean isFuelIndex() {
+		System.out.println("Fuel index=" + this.fuelIndex + ";Actual Index="
+				+ this.actualIndex);
 		return this.fuelIndex.contains(this.actualIndex);
 	}
-	public boolean isGarbageIndex()
-	{
-		System.out.println("Garbage index=" + this.garbagesIndex+";Actual Index="+this.actualIndex);
+
+	public boolean isGarbageIndex() {
+		System.out.println("Garbage index=" + this.garbagesIndex
+				+ ";Actual Index=" + this.actualIndex);
 		return this.garbagesIndex.contains(this.actualIndex);
 	}
 
-	public void garbagesIndexes(Queue<Edge> path)
-	{
+	public void garbagesIndexes(Queue<Edge> path) {
 		ArrayList<Integer> garbagesPassedIteration = new ArrayList<Integer>();
 		int pathInt;
-		int garbage=0;
+		int garbage = 0;
 		ArrayList<Edge> pathList = new ArrayList<Edge>();
-		while(path.size()>0)
+		while (path.size() > 0)
 			pathList.add(path.poll());
-		for(pathInt=0;pathInt<pathList.size();pathInt++)
-		{
-			if(garbage<this.t.getCapacity())
-			{
-				if(pathList.get(pathInt).getSource().getType()==Node.GARBAGE_CONTAINER && !garbagesPassedIteration.contains(pathList.get(pathInt).getSource().getId()))
-				{
-					garbage+=this.multiple;
+		for (pathInt = 0; pathInt < pathList.size(); pathInt++) {
+			if (garbage < this.t.getCapacity()) {
+				if (pathList.get(pathInt).getSource().getType() == Node.GARBAGE_CONTAINER
+						&& !garbagesPassedIteration.contains(pathList
+								.get(pathInt).getSource().getId())) {
+					garbage += this.multiple;
 					this.garbagesIndex.add(pathInt);
-					garbagesPassedIteration.add(pathList.get(pathInt).getSource().getId());
+					garbagesPassedIteration.add(pathList.get(pathInt)
+							.getSource().getId());
 				}
-			}
-			else
-			{
-				if(pathList.get(pathInt).getSource().getType()==Node.DUMP)
-				{
-					garbage=0;
+			} else {
+				if (pathList.get(pathInt).getSource().getType() == Node.DUMP) {
+					garbage = 0;
 				}
 			}
 		}
-		while(pathList.size()>0)
-		{
+		while (pathList.size() > 0) {
 			path.add(pathList.get(0));
 			pathList.remove(0);
 		}
@@ -310,10 +328,10 @@ public class ProgramData implements Serializable {
 	}
 
 	/**
-	 * @param actualIndex the actualIndex to set
+	 * @param actualIndex
+	 *            the actualIndex to set
 	 */
 	public void setActualIndex(int actualIndex) {
 		this.actualIndex = actualIndex;
 	}
-
 }
