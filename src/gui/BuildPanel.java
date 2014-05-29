@@ -451,59 +451,79 @@ public class BuildPanel extends JPanel {
 			for (int y = 0; y < board[x].length; y++) {
 
 				if (board[x][y] != EMPTY) {
-					if (checkCrossroad(x, y))
+					if (checkCrossroad(x, y)) {
+
 						n = new Node(Node.CROSSROAD);
-					else if (board[x][y] == STREET_UP || board[x][y] == STREET_DOWN || board[x][y] == STREET_RIGHT
-							|| board[x][y] == STREET_LEFT || board[x][y]==INITIAL_POSITION)
+						n.setPosition(x, y);
+						graph.addVertex(n);
+						nodes.addElement(n);
+					}
+					else if (board[x][y]==INITIAL_POSITION) {
+
 						n = new Node(Node.SIMPLE_NODE);
-					else
-						n = new Node(mapping[board[x][y]]);
+						n.setPosition(x, y);
+						graph.addVertex(n);
+						nodes.addElement(n);
 
-					n.setPosition(x, y);
-					graph.addVertex(n);
-					nodes.addElement(n);
-
-					if (board[x][y] == GARBAGE_DEPOSIT)
-						dump_index = n.getIntegerId();
-					else if(board[x][y] == INITIAL_POSITION)
 						start_index=n.getIntegerId();
-					else if(board[x][y] == GAS_STATION)
-						gas_index=n.getIntegerId();
+
+					} 
+					else if(board[x][y]==GARBAGE_BIN || board[x][y]==GAS_STATION || board[x][y]==GARBAGE_DEPOSIT) {
+
+						n = new Node(mapping[board[x][y]]);
+						n.setPosition(x, y);
+						graph.addVertex(n);
+						nodes.addElement(n);
+
+						if (board[x][y] == GARBAGE_DEPOSIT)
+							dump_index = n.getIntegerId();
+						else if (board[x][y] == GAS_STATION)
+							gas_index=n.getIntegerId();
+					}
+					else if(checkDeadEnd(x,y)) {
+
+						n = new Node(Node.SIMPLE_NODE);
+						n.setPosition(x, y);
+						graph.addVertex(n);
+						nodes.addElement(n);
+					}
 				}
 			}
 		}
 		
-		if(start_index==-1 || dump_index==-1 || gas_index==-1) {
-			System.out.println("O mapa tem de ter um nó inicial, uma lixeira e uma bomba!");
-			throw new Exception("1");
-		}
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			System.out.println("No: " + nodes.get(i).getIntegerId()	+ ", tipo: " + nodes.get(i).getType() + ", x, y: "
 					+ nodes.get(i).getX() + ", " + nodes.get(i).getY());
 		}
 		
+		System.out.println("start " + start_index + " dump " + dump_index + " gas " + gas_index);
+		if(start_index==-1 || dump_index==-1 || gas_index==-1) {
+			System.out.println("O mapa tem de ter um nó inicial, uma lixeira e uma bomba!");
+			throw new Exception("1");
+		}
+		
 		int type = -1;
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = i + 1; j < nodes.size(); j++) {
 
-				if (nodes.get(i).getType() != Node.SIMPLE_NODE || checkDeadEnd(nodes.get(i)) || nodes.get(i).getIntegerId()==start_index)
+				/*if (nodes.get(i).getType() != Node.SIMPLE_NODE || checkDeadEnd(nodes.get(i)) || nodes.get(i).getIntegerId()==start_index)
 					if(nodes.get(j).getType() != Node.SIMPLE_NODE || checkDeadEnd(nodes.get(j)) || nodes.get(j).getIntegerId()==start_index) {
-						type = hasEdge(nodes.get(i).getX(), nodes.get(i).getY(),
-								nodes.get(j).getX(), nodes.get(j).getY());
+				 */type = hasEdge(nodes.get(i).getX(), nodes.get(i).getY(),
+						 nodes.get(j).getX(), nodes.get(j).getY());
 
-						if (type != -1) {
-							System.out.println("Aresta: "+ nodes.get(i).getIntegerId() + ", "
-									+ nodes.get(j).getIntegerId() + "," + type);
+				 if (type != -1) {
+					 System.out.println("Aresta: "+ nodes.get(i).getIntegerId() + ", "
+							 + nodes.get(j).getIntegerId() + "," + type);
 
-							if (type == STREET) {
-								graph.addEdge(nodes.get(i), nodes.get(j), 0, false);
-							} else if (type == STREET_DOWN || type == STREET_RIGHT)
-								graph.addEdge(nodes.get(i), nodes.get(j), 0, true);
-							else if (type == STREET_UP || type == STREET_LEFT)
-								graph.addEdge(nodes.get(j), nodes.get(i), 0, true);
-						}
-					}
+					 if (type == STREET) {
+						 graph.addEdge(nodes.get(i), nodes.get(j), 0, false);
+					 } else if (type == STREET_DOWN || type == STREET_RIGHT)
+						 graph.addEdge(nodes.get(i), nodes.get(j), 0, true);
+					 else if (type == STREET_UP || type == STREET_LEFT)
+						 graph.addEdge(nodes.get(j), nodes.get(i), 0, true);
+				 }
+				 //}
 			}
 		}
 		
@@ -517,10 +537,9 @@ public class BuildPanel extends JPanel {
 		data.getGraph().setTruckPath(s);
 	}
 
-	private boolean checkDeadEnd(Node node) {
+	private boolean checkDeadEnd(int x, int y) {
 
-		int x=node.getX(), y=node.getY(),
-				x1 = x - 1, y1 = y, x2 = x, y2 = y - 1, x3 = x + 1, y3 = y, x4 = x, y4 = y + 1,
+		int x1 = x - 1, y1 = y, x2 = x, y2 = y - 1, x3 = x + 1, y3 = y, x4 = x, y4 = y + 1,
 				count=0;
 		
 		if(insideMap(x,y)) {
