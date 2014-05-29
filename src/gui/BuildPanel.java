@@ -451,14 +451,7 @@ public class BuildPanel extends JPanel {
 			for (int y = 0; y < board[x].length; y++) {
 
 				if (board[x][y] != EMPTY) {
-					if (checkCrossroad(x, y)) {
-
-						n = new Node(Node.CROSSROAD);
-						n.setPosition(x, y);
-						graph.addVertex(n);
-						nodes.addElement(n);
-					}
-					else if (board[x][y]==INITIAL_POSITION) {
+					if (board[x][y]==INITIAL_POSITION) {
 
 						n = new Node(Node.SIMPLE_NODE);
 						n.setPosition(x, y);
@@ -479,6 +472,13 @@ public class BuildPanel extends JPanel {
 							dump_index = n.getIntegerId();
 						else if (board[x][y] == GAS_STATION)
 							gas_index=n.getIntegerId();
+					}
+					else if (checkCrossroad(x, y)) {
+
+						n = new Node(Node.CROSSROAD);
+						n.setPosition(x, y);
+						graph.addVertex(n);
+						nodes.addElement(n);
 					}
 					else if(checkDeadEnd(x,y)) {
 
