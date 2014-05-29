@@ -48,17 +48,24 @@ public class BuildPanel extends JPanel {
 
 	// images needed
 	private BufferedImage cell;
+	@SuppressWarnings("unused")
 	private BufferedImage currentImg;
 
+	@SuppressWarnings("unused")
 	private BufferedImage roadV;
+	@SuppressWarnings("unused")
 	private BufferedImage roadH;
 	private BufferedImage roadL;
 	private BufferedImage roadR;
 	private BufferedImage roadT;
 	private BufferedImage roadB;
+	@SuppressWarnings("unused")
 	private BufferedImage roadX;
+	@SuppressWarnings("unused")
 	private BufferedImage bin;
+	@SuppressWarnings("unused")
 	private BufferedImage gas;
+	@SuppressWarnings("unused")
 	private BufferedImage dump;
 	private BufferedImage start;
 
@@ -108,10 +115,11 @@ public class BuildPanel extends JPanel {
 		int y5 = y - 1;
 		int x6 = x + 1;
 		int y6 = y - 1;
-		int x7 = x - 1;
+		//comented this warning not used
+		/*int x7 = x - 1;
 		int y7 = y + 1;
 		int x8 = x + 1;
-		int y8 = y + 1;
+		int y8 = y + 1;*/
 
 		if (0 <= x1 && x1 < mapSizeH && 0 <= y1 && y1 < mapSizeV)
 			p[0] = board[x1][y1];
@@ -365,11 +373,12 @@ public class BuildPanel extends JPanel {
 		if (0 <= x4 && x4 < mapSizeH && 0 <= y4 && y4 < mapSizeV)
 			p[3] = board[x4][y4];
 
-		int cont = 0;
+		//Commented this - warning not used
+	/*	int cont = 0;
 
 		for (int i : p)
 			if (i == STREET || (STREET_UP <= i && i <= STREET_LEFT))
-				cont++;
+				cont++;*/
 
 		if (isEmpty(p[1]) && isEmpty(p[3])) {
 			int i = x;
