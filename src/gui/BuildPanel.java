@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import logic.ProgramData;
 
@@ -436,7 +437,7 @@ public class BuildPanel extends JPanel {
 
 		Vector<Node> nodes = new Vector<Node>();
 		Node n = null;
-		int dump_index = -1, start_index=-1, gas_index=-1;
+		int dump_index = -1, start_index=-1;
 		
 		int squares = 0;
 		for (int x = 0; x < board.length; x++) 
@@ -467,14 +468,12 @@ public class BuildPanel extends JPanel {
 						dump_index = n.getIntegerId();
 					else if(board[x][y] == INITIAL_POSITION)
 						start_index=n.getIntegerId();
-					else if(board[x][y] == GAS_STATION)
-						gas_index=n.getIntegerId();
 				}
 			}
 		}
 		
-		if(start_index==-1 || dump_index==-1 || gas_index==-1) {
-			System.out.println("O mapa tem de ter um nó inicial, uma lixeira e uma bomba!");
+		if(start_index==-1 || dump_index==-1) {
+			System.out.println("O mapa tem de ter um nó inicial e uma lixeira!");
 			throw new Exception("1");
 		}
 		
@@ -507,14 +506,17 @@ public class BuildPanel extends JPanel {
 			}
 		}
 		
-		System.out.println("Calculating distances...");
 		//Truck truck = new Truck(2000000, 100);
 		graph.calculateDistances();
 		//data.setTruck(truck);
 		data.setGraph(graph);
-		System.out.print("Calculating path...");
+		
 		Queue<Edge> s = data.searchPath(nodes.get(start_index), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
+		MainWindow window = new MainWindow();
+		window.frmAAlgorithmWaste.setVisible(true);
+		SwingUtilities.getWindowAncestor(this).dispose();
+		
 	}
 
 	private boolean checkDeadEnd(Node node) {

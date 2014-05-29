@@ -1,11 +1,10 @@
 package graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
-public class Node implements Comparable<Node>, Serializable{
+public class Node implements Comparable<Node> {
+
 	public static final int SIMPLE_NODE = 0;
 	public static final int CROSSROAD = 1;
 	public static final int GARBAGE_CONTAINER = 2;

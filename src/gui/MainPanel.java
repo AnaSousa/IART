@@ -296,7 +296,7 @@ public class MainPanel extends JPanel {
 				}
 			}
 
-			distance += 0.1*ProgramData.getInstance().getMultiple();
+			distance += 0.1;
 			fuel -= 0.1*ProgramData.getInstance().getMultiple();
 
 			repaint();
