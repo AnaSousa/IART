@@ -11,22 +11,22 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import logic.ProgramData;
 
@@ -189,21 +189,32 @@ public class BuildWindow extends JFrame {
 		options.add(rdbtnPetrolStation);
 		options.add(rdbtnInitialPosition);
 
-		JButton btnCalcular = new JButton("Calculate");
+		final JButton btnCalcular = new JButton("Calculate");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				btnCalcular.setEnabled(false);
 				try{
 					//TODO: uncomment this 
-					/*ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
+					ProgramData.deleteInstance();
+
+					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
 					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
-					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));*/
-					
+					ProgramData.getInstance().getTruck().setFuel(Integer.parseInt(textGas.getText()));
+
 					panel.startAlgorithm();
 				}
 				catch(Exception e) {
+
+					if(e.getMessage().equals("fuelError"))
+						JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					else if (e.getMessage().equals("1"))
+						JOptionPane.showMessageDialog(null,"O mapa tem de ter um nó inicial e uma lixeira!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					
 					e.printStackTrace();
 					System.out.println("ERROR");
+					btnCalcular.setEnabled(true);
 				}
 			}
 		});

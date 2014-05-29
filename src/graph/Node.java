@@ -157,6 +157,10 @@ public class Node implements Comparable<Node> {
 		return Integer.compare(id, arg0.getId());
 	}
 	
+	public static void resetId() {
+		currentId = 0;
+	}
+	
 	
 
 	/* (non-Javadoc)

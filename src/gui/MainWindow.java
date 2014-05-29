@@ -91,6 +91,24 @@ public class MainWindow {
 				panel.startSimulation();
 			}
 		});
+		
+		JButton btnLoadMap = new JButton("Load map");
+		btnLoadMap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		panel_1.add(btnLoadMap);
+		
+		JButton btnBuildMap = new JButton("Build map");
+		btnBuildMap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				BuildWindow window = new BuildWindow();
+				window.setVisible(true);
+				frmAAlgorithmWaste.dispose();
+			}
+		});
+		panel_1.add(btnBuildMap);
 		panel_1.add(btnStartSimulation);
 	}
 
@@ -100,7 +118,6 @@ public class MainWindow {
 	public JFrame getFrmAAlgorithmWaste() {
 		return frmAAlgorithmWaste;
 	}
-	
 	
 
 	private void test3() {

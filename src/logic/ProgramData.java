@@ -14,6 +14,10 @@ import java.util.Queue;
 import org.jgrapht.graph.DefaultEdge;
 
 public class ProgramData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Graph g;
 	private Truck t;
 	private int multiple;
@@ -77,6 +81,11 @@ public class ProgramData implements Serializable {
 		if (data == null)
 			data = new ProgramData();
 		return data;
+	}
+
+	public static void deleteInstance() {
+		Node.resetId();
+		data = null;
 	}
 
 	/**
@@ -242,12 +251,12 @@ public class ProgramData implements Serializable {
 					break;
 			} else if (actualGarbage.get(actualIndex).getTarget().getType() == Node.GARBAGE_CONTAINER
 					&& actualGarbage.get(actualIndex).getTarget().getId() == this.garbagesOrder
-							.get(actualGarbageIndex))
+					.get(actualGarbageIndex))
 				break;
 		}
 		return result;
 	}
-	
+
 	public boolean isFuelIndex()
 	{
 		System.out.println("Fuel index=" + this.fuelIndex+";Actual Index="+this.actualIndex);
@@ -258,7 +267,7 @@ public class ProgramData implements Serializable {
 		System.out.println("Garbage index=" + this.garbagesIndex+";Actual Index="+this.actualIndex);
 		return this.garbagesIndex.contains(this.actualIndex);
 	}
-	
+
 	public void garbagesIndexes(Queue<Edge> path)
 	{
 		ArrayList<Integer> garbagesPassedIteration = new ArrayList<Integer>();

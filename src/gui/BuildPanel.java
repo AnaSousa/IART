@@ -17,11 +17,10 @@ import java.util.Queue;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.naming.ldap.StartTlsRequest;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import logic.ProgramData;
-import logic.Truck;
 
 import org.jgrapht.graph.DefaultEdge;
 
@@ -429,16 +428,25 @@ public class BuildPanel extends JPanel {
 		currentImg = icons[modo];
 	}
 
-	public void startAlgorithm() {
+	public void startAlgorithm() throws Exception {
 
 		Class<? extends DefaultEdge> edgeClass = null;
 		ProgramData data = ProgramData.getInstance();
-		data.setMultiple(100);
+		//data.setMultiple(100);
 		Graph graph = new Graph(edgeClass);
 
 		Vector<Node> nodes = new Vector<Node>();
 		Node n = null;
 		int dump_index = -1, start_index=-1;
+		
+		int squares = 0;
+		for (int x = 0; x < board.length; x++) 
+			for (int y = 0; y < board[x].length; y++)
+				if(board[x][y] != EMPTY)
+					squares++;
+		
+		if(squares * data.getMultiple() > data.getTruck().getFuel())
+			throw new Exception("fuelError");
 
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board[x].length; y++) {
@@ -466,7 +474,7 @@ public class BuildPanel extends JPanel {
 		
 		if(start_index==-1 || dump_index==-1) {
 			System.out.println("O mapa tem de ter um nó inicial e uma lixeira!");
-			System.exit(-1);
+			throw new Exception("1");
 		}
 		
 		for (int i = 0; i < nodes.size(); i++) {
@@ -497,16 +505,18 @@ public class BuildPanel extends JPanel {
 					}
 			}
 		}
-
-		Truck truck = new Truck(2000000, 100);
+		
+		//Truck truck = new Truck(2000000, 100);
 		graph.calculateDistances();
-		data.setTruck(truck);
+		//data.setTruck(truck);
 		data.setGraph(graph);
 		
 		Queue<Edge> s = data.searchPath(nodes.get(start_index), nodes.get(dump_index));
 		data.getGraph().setTruckPath(s);
 		MainWindow window = new MainWindow();
 		window.frmAAlgorithmWaste.setVisible(true);
+		SwingUtilities.getWindowAncestor(this).dispose();
+		
 	}
 
 	private boolean checkDeadEnd(Node node) {
