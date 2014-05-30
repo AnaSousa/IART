@@ -5,9 +5,6 @@ import graph.Node;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- * Created by Joao Nadais on 17/04/2014.
- */
 public class AStarNode {
 	private Node node;
 	private AStarNode cameFrom;
@@ -24,6 +21,7 @@ public class AStarNode {
 	public HashSet<Node> getGarbagesPassed() {
 		return garbagesPassed;
 	}
+	
 	public AStarNode(Node node, AStarNode cameFrom, double g,
 			double h) {
 		this.node = node;

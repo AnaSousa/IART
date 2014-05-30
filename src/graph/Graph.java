@@ -121,7 +121,7 @@ public class Graph extends DirectedWeightedPseudograph<Node, Edge> {
 		return new ArrayList<Edge>(getSetEdges());
 	}
 
-	public void calculateDistances() { // TODO
+	public void calculateDistances() {
 		HashMap<Integer, Node> nodes = getNodes();
 
 		calculateDistanceDump(nodes);

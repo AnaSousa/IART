@@ -12,8 +12,9 @@ public class Edge extends DefaultWeightedEdge implements Serializable {
 	private int weight=0;
 	
 	private boolean directed;
-	private boolean resetFuel; //TODO: add fuel
+	private boolean resetFuel; //add fuel
 	private boolean addedGarbage; //IF false not sum
+	
 	public Edge(Node from, Node to) {
 		this.source=from;
 		this.target=to;
