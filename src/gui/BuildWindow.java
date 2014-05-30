@@ -77,7 +77,7 @@ public class BuildWindow extends JFrame {
 	public BuildWindow() {
 		setTitle("Map Builder");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("resources\\truckIcon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("resources/truckIcon.png"));
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
@@ -202,6 +202,9 @@ public class BuildWindow extends JFrame {
 				btnCalcular.setEnabled(false);
 				try{
 					ProgramData.deleteInstance();
+					
+					if(Integer.parseInt(textScale.getText()) < 10)
+						throw new Exception("3");
 
 					ProgramData.getInstance().setMultiple(Integer.parseInt(textScale.getText()));
 					ProgramData.getInstance().getTruck().setCapacity(Integer.parseInt(textGarbage.getText()));
@@ -222,6 +225,8 @@ public class BuildWindow extends JFrame {
 							JOptionPane.showMessageDialog(null,"It isn't enough gas!", "ERROR",JOptionPane.ERROR_MESSAGE);
 						else if (e.getMessage().equals("1"))
 							JOptionPane.showMessageDialog(null,"The map needs an initial node, a gas station and a dump!", "ERROR",JOptionPane.ERROR_MESSAGE);
+						else if (e.getMessage().equals("3"))
+							JOptionPane.showMessageDialog(null,"The multiplier needs to be greater than 10!", "ERROR",JOptionPane.ERROR_MESSAGE);
 						else
 							JOptionPane.showMessageDialog(null,"You need to fill all fields!", "ERROR",JOptionPane.ERROR_MESSAGE);
 					}

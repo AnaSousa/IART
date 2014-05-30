@@ -34,7 +34,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow(2);
+					MainWindow window = new MainWindow(1);
 					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -380,7 +380,7 @@ public class MainWindow {
 
 		DijkstraShortestPath<Node, Edge> b = new DijkstraShortestPath<Node, Edge>(graph, n1, n12);
 		DijkstraShortestPath<Node, Edge> c = new DijkstraShortestPath<Node, Edge>(graph, n4, n8);
-		Truck truck = new Truck(3000,200);
+		Truck truck = new Truck(3500,200);
 		graph.calculateDistances();
 		data.setTruck(truck);
 		data.setGraph(graph);
