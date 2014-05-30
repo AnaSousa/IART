@@ -34,7 +34,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow(1);
+					MainWindow window = new MainWindow(2);
 					window.frmAAlgorithmWaste.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,9 +62,6 @@ public class MainWindow {
 			break;
 		case 2:
 			test2();
-			break;
-		case 3:
-			test3();
 			break;
 		}
 
@@ -136,86 +133,6 @@ public class MainWindow {
 	 */
 	public JFrame getFrmAAlgorithmWaste() {
 		return frmAAlgorithmWaste;
-	}
-
-
-	private void test3() {
-
-		Class<? extends DefaultEdge> edgeClass = null;
-		ProgramData data = ProgramData.getInstance();
-		data.setMultiple(1000);
-		Graph graph = new Graph(edgeClass);
-
-		Node n1 = new Node(Node.CROSSROAD);
-		n1.setPosition(1, 0);
-		Node n2 = new Node(Node.PETROL_STATION);
-		n2.setPosition(4, 0);
-		Node n3 = new Node(Node.CROSSROAD);
-		n3.setPosition(7, 0);
-		Node n4 = new Node(Node.CROSSROAD);
-		n4.setPosition(9, 0);
-		Node n5 = new Node(Node.PETROL_STATION);
-		n5.setPosition(10, 0);
-
-		Node n6 = new Node(Node.GARBAGE_CONTAINER);
-		n6.setPosition(4, 2);
-
-		Node n7 = new Node(Node.CROSSROAD);
-		n7.setPosition(4, 3);
-		Node n8 = new Node(Node.GARBAGE_CONTAINER);
-		n8.setPosition(5, 3);
-		Node n9 = new Node(Node.CROSSROAD);
-		n9.setPosition(7, 3);
-
-		Node n10 = new Node(Node.GARBAGE_CONTAINER);
-		n10.setPosition(1, 5);
-		Node n11 = new Node(Node.CROSSROAD);
-		n11.setPosition(4, 5);
-		Node n12 = new Node(Node.GARBAGE_CONTAINER);
-		n12.setPosition(9, 5);
-
-		Node n13 = new Node(Node.GARBAGE_CONTAINER);
-		n13.setPosition(6, 7);
-		Node n14 = new Node(Node.CROSSROAD);
-		n14.setPosition(9, 7);
-		Node n15 = new Node(Node.CROSSROAD);
-		n15.setPosition(4, 7);
-
-		Node n16 = new Node(Node.DUMP);
-		n16.setPosition(4, 8);
-		graph.addVertex(n1); graph.addVertex(n2);
-		graph.addVertex(n3); graph.addVertex(n4);
-		graph.addVertex(n5); graph.addVertex(n6);
-		graph.addVertex(n7); graph.addVertex(n8);
-		graph.addVertex(n9); graph.addVertex(n10);
-		graph.addVertex(n11); graph.addVertex(n12);
-		graph.addVertex(n13); graph.addVertex(n14);
-		graph.addVertex(n15); graph.addVertex(n16); 
-
-		graph.addEdge(n1,n2,2000,false);
-		graph.addEdge(n1,n10,2000,true);
-		graph.addEdge(n2,n6,1500,false);
-		graph.addEdge(n6,n7,500,false);
-		graph.addEdge(n10,n11,2000,true);
-		graph.addEdge(n11,n15,1000,false);
-		graph.addEdge(n15,n16,500,false);
-		graph.addEdge(n15,n13,2000,false);
-		graph.addEdge(n13,n14,3000,false);
-		graph.addEdge(n7,n8,2000,false);
-		graph.addEdge(n8,n9,1000,false);
-		graph.addEdge(n9,n3,2000,false);
-		graph.addEdge(n3,n4,2000,false);
-		graph.addEdge(n4,n5,1000,false);
-		graph.addEdge(n4,n12,2000,false);
-		graph.addEdge(n12,n14,2000,false);
-		graph.addEdge(n7,n11,1000,false);
-
-		Truck truck = new Truck(50000,2000);
-		graph.calculateDistances();
-		data.setTruck(truck);
-		data.setGraph(graph);
-		Queue<Edge> s = data.searchPath( n1, n16);
-		data.getGraph().setTruckPath(s);
 	}
 
 	private void test2() {
